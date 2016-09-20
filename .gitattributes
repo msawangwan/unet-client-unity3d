@@ -1,0 +1,2 @@
+# source code should default to linefeed (windows defaults to carriage returns)
+*.cs eol=lf
