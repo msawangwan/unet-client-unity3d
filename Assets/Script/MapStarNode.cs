@@ -3,13 +3,29 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(CircleCollider2D))]
 public class MapStarNode : MonoBehaviour {
-    static public List<GameObject> MapStarNodes = new List<GameObject>();
+    class StarNode {
+        public string Name = "star node";
 
-    void Start () {
-        MapStarNodes.Add(gameObject);
+        public StarNode(string name) {
+            Name = name;
+        }
     }
 
-    void OnMouseEnter () {
-        Debug.LogFormat(gameObject, "mouse entered {0}", gameObject.name);
+    static public List<GameObject> MapStarNodes = new List<GameObject>();
+    
+    System.Action Selected;
+
+    public string Name { get { return starNode.Name; } }
+
+    private StarNode starNode = null;
+
+    void Start () {
+        string debugName = string.Format ("star {0}", Random.Range(0, 10000));
+        starNode = new StarNode (debugName);
+        MapStarNodes.Add (gameObject);
+    }
+
+    void OnMouseDown () {
+        MapStarSelector.s.OnStarNodeSelect (this);
     }
 }
