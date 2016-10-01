@@ -6,7 +6,7 @@ public class PlasmaChainCannon : MonoBehaviour {
     public GameObject baseFaceUp = null;
     public GameObject baseFaceDown = null;
 
-    SpriteRenderer turretSpriteRenderer = null; // swap sprites or enable disable gameobjects?
+    //SpriteRenderer turretSpriteRenderer = null; // swap sprites or enable disable gameobjects?
     bool isIdle = true;
 
     void TrackTarget(Transform t, Vector3 target, float turnSpeed=215f) {

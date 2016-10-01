@@ -26,6 +26,6 @@ public class MapStarNode : MonoBehaviour {
     }
 
     void OnMouseDown () {
-        MapStarSelector.s.OnStarNodeSelect (this);
+        MapStarSelector.S.OnStarNodeSelect (this);
     }
 }

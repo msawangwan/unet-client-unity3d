@@ -1,12 +1,36 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class MapStarSelector : MonoBehaviour {
-    public static MapStarSelector s = null;
+    private static MapStarSelector s = null;
+    private static bool isApplicationRunning = true;
+    private static readonly object padlock = new Object();
+
+    private MapStarSelector() {}
+
+    public static MapStarSelector S {
+        get {
+            if (isApplicationRunning) {
+                lock (padlock) {
+                    if (s == null) {
+                        s = GameObject.FindObjectOfType<MapStarSelector>();
+                        if (s == null) {
+                            GameObject instance = new GameObject("map_star-selector");
+                            instance.GameObjectComponent<MapStarSelector>();
+                        }
+                        DontDestroyOnLoad(s);
+                    }
+                    return s;
+                }   
+            } else {
+                Debug.LogWarningFormat(s, "[singleton err] attempted to call a singleton while application wasn't running")
+                return null;
+            }
+        }
+    }
 
     public GameObject SelectedTitle = null;
-    public event Action OnStarNodeSelected = null;
+    //public event Action OnStarNodeSelected = null;
 
     private Text TitleText = null;
 
@@ -15,7 +39,6 @@ public class MapStarSelector : MonoBehaviour {
             gameObject.SetActive(false);
         }
 
-        s = this;
         DontDestroyOnLoad(gameObject);
 
         TitleText = SelectedTitle.GetComponent<Text> ();
