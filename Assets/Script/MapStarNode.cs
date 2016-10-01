@@ -27,5 +27,6 @@ public class MapStarNode : MonoBehaviour {
 
     void OnMouseDown () {
         MapStarSelector.S.OnStarNodeSelect (this);
+        CameraController.S.CenterOnSelected (transform.position);
     }
 }

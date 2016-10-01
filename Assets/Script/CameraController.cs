@@ -18,34 +18,35 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    public float SmoothTime = 1.0f;
-    public float MaxSpeed = 5.0f;
+    public float SmoothTime = 0.3f;
+    public float MaxSpeed = 20.0f;
+    public float KillZoneThreshold = 0.5f;
     public float CameraDefaultZ = -10.0f;
 
-    Vector3 startPosition = Vector3.zero;
     Vector3 endPosition = Vector3.zero;
     Vector3 cameraVelocity = Vector3.zero;
 
     bool lerpEnabled = false;
 
-    Vector3 cameraCurrentPosition { get { return new Vector3 ( transform.position.x, transform.position.y, CameraDefaultZ ); } }
-
     public void CenterOnSelected (Vector3 targetPosition) {
         cameraVelocity = Vector3.zero;
-        startPosition = cameraCurrentPosition;
-        endPosition = targetPosition;
+        endPosition = targetPosition + new Vector3 ( 0f, 0f, CameraDefaultZ );
         lerpEnabled = true;
     }
 
-    void LateUpdate () {
-        if (lerpEnabled == false) {
-            return;
-        }
+    private void Start () {
+        s = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
-        transform.position = Vector3.SmoothDamp(startPosition, endPosition, ref cameraVelocity, SmoothTime, MaxSpeed);
-
-        if (cameraCurrentPosition - endPosition == Vector3.zero) {
-            lerpEnabled = false;
+    private void LateUpdate () {
+        if (lerpEnabled == true) {
+            if ( ( cameraCurrentPosition - endPosition ) == Vector3.zero ) {
+                lerpEnabled = false;
+            }
+            transform.position = Vector3.SmoothDamp ( cameraCurrentPosition, endPosition, ref cameraVelocity, SmoothTime, MaxSpeed );
         }
     }
+
+    private Vector3 cameraCurrentPosition { get { return new Vector3 ( transform.position.x, transform.position.y, CameraDefaultZ ); } }
 }

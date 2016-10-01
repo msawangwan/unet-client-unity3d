@@ -719,6 +719,7 @@ GameObject:
   - 92: {fileID: 1819843375}
   - 124: {fileID: 1819843374}
   - 81: {fileID: 1819843373}
+  - 114: {fileID: 1819843378}
   m_Layer: 0
   m_Name: main_camera
   m_TagString: MainCamera
@@ -794,6 +795,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &1819843378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1819843372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3ab17ddc1e48f4a8c8bd04a6d00cc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SmoothTime: 1.18
+  MaxSpeed: 150
+  KillZoneThreshold: 0.5
+  CameraDefaultZ: -10
 --- !u!1 &1896033008
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,9 +933,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StarSymbolPrefab: {fileID: 1000012199378946, guid: b12c464cf4a72f648b021575d2b0b8fd,
     type: 2}
-  NumberOfStars: 30
+  NumberOfStars: 15
   MaxSpawnAttempts: 20
-  StarMapRadius: 15
+  StarMapRadius: 20
   NodeSpacing: 1.5
 --- !u!4 &2092460899
 Transform:

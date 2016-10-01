@@ -3,28 +3,17 @@ using UnityEngine.UI;
 
 public class MapStarSelector : MonoBehaviour {
     private static MapStarSelector s = null;
-    private static bool isApplicationRunning = true;
     private static readonly object padlock = new Object();
 
     private MapStarSelector() {}
 
     public static MapStarSelector S {
         get {
-            if (isApplicationRunning) {
-                lock (padlock) {
-                    if (s == null) {
-                        s = GameObject.FindObjectOfType<MapStarSelector>();
-                        if (s == null) {
-                            GameObject instance = new GameObject("map_star-selector");
-                            instance.GameObjectComponent<MapStarSelector>();
-                        }
-                        DontDestroyOnLoad(s);
-                    }
-                    return s;
-                }   
-            } else {
-                Debug.LogWarningFormat(s, "[singleton err] attempted to call a singleton while application wasn't running")
-                return null;
+            lock (padlock) {
+                if (s == null) {
+                    s = GameObject.FindObjectOfType<MapStarSelector>();
+                }
+                return s;
             }
         }
     }
@@ -35,14 +24,19 @@ public class MapStarSelector : MonoBehaviour {
     private Text TitleText = null;
 
     void Start () {
+        s = this;
+        DontDestroyOnLoad(gameObject);
+
         if (gameObject.activeInHierarchy == true) {
             gameObject.SetActive(false);
         }
 
-        DontDestroyOnLoad(gameObject);
-
         TitleText = SelectedTitle.GetComponent<Text> ();
         Debug.AssertFormat(gameObject, "text component reference {0}", TitleText == null);
+    }
+
+    void OnDisable () {
+        //gameObject.transform.parent = null;
     }
 
     public void OnStarNodeSelect (MapStarNode starNode) {
