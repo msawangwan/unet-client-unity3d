@@ -27,15 +27,21 @@ public class CameraPanController : MonoBehaviour {
 
     bool lerpEnabled = false;
 
-    public void CenterOnSelected (Vector3 targetPosition) {
+    void CenterOnSelected (Vector3 targetPosition) {
         cameraVelocity = Vector3.zero;
         endPosition = targetPosition + new Vector3 ( 0f, 0f, CameraDefaultZ );
         lerpEnabled = true;
     }
 
+    void OnNodeSelect (MapStarNode starNode) {
+        CenterOnSelected(starNode.gameObject.transform.position);
+    }
+
     private void Start () {
         s = this;
         DontDestroyOnLoad(gameObject);
+
+        MapStarController.S.RaiseNodeSelected += OnNodeSelect;
     }
 
     private void LateUpdate () {

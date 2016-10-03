@@ -25,13 +25,11 @@ public class MapStarSelector : MonoBehaviour {
 
     private Text TitleText = null;
 
-    public void OnNullNodeSelect () {
+    void OnNullSelection () {
         gameObject.SetActive(false);
-        EventController.SafeInvoke(RaiseSelectorDisabled);
-        TitleText.text = "";
     }
 
-    public void SetNodeAsCurrentSelection (MapStarNode starNode) {
+    void OnNodeSelection (MapStarNode starNode) {
         if (starNode == null) {
             return;
         } else {
@@ -48,10 +46,10 @@ public class MapStarSelector : MonoBehaviour {
         s = this;
         DontDestroyOnLoad(gameObject);
 
-        SelectionArea.S.RaiseSelectionAreaDownEvent += OnNullNodeSelect;
+        MapStarController.S.RaiseNodeSelected += OnNodeSelection;
+        MapStarController.S.RaiseNodeDeselected += OnNullSelection;
 
         TitleText = SelectedTitle.GetComponent<Text> ();
-        Debug.AssertFormat(gameObject, "text component reference {0}", TitleText == null);
 
         if (gameObject.activeInHierarchy == true) {
             gameObject.SetActive(false);

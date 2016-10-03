@@ -3,25 +3,24 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(CircleCollider2D))]
 public class MapStarNode : MonoBehaviour {
-    class StarNode {
-        public string Name = "star node";
-    }
 
     public static List<GameObject> MapStarNodes = new List<GameObject>();
-    public static bool HasSelected = false;
 
-    public string Name { get { return starNode.Name; } set { starNode.Name = value; } }
-
-    private StarNode starNode = null;
+    public Star StarNode = null;
+    public string Name { get; set; }
 
     void Awake () {
-        starNode = new StarNode ();
         MapStarNodes.Add (gameObject);
     }
 
+    void Start () {
+        StarNode = ScriptableObject.CreateInstance<Star>();
+        StarNode.Name = Name;
+        StarNode.Fuel = Random.Range(0, 100);
+        StarNode.Oxygen = Random.Range(0, 100);
+    }
+
     void OnMouseDown () {
-        MapStarSelector.S.SetNodeAsCurrentSelection (this);
-        CameraPanController.S.CenterOnSelected (transform.position);
-        HasSelected = true;
+        MapStarController.S.NotifyNodeSelected(this);
     }
 }
