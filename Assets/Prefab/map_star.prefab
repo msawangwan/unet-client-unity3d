@@ -23,7 +23,7 @@ GameObject:
   - 58: {fileID: 58000012372739380}
   - 114: {fileID: 114000010000931168}
   - 114: {fileID: 114000012503426430}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: map_star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012199378946}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 6.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe46796f352c91b44a40824e84947108, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsColliderDrawEnabled: 0
+  IsColliderDrawEnabled: 1
   IsColliderContactDrawEnabled: 1
   ContactColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &114000012503426430

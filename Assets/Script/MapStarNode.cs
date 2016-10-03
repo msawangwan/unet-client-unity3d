@@ -5,28 +5,23 @@ using System.Collections.Generic;
 public class MapStarNode : MonoBehaviour {
     class StarNode {
         public string Name = "star node";
-
-        public StarNode(string name) {
-            Name = name;
-        }
     }
 
-    static public List<GameObject> MapStarNodes = new List<GameObject>();
-    
-    System.Action Selected;
+    public static List<GameObject> MapStarNodes = new List<GameObject>();
+    public static bool HasSelected = false;
 
-    public string Name { get { return starNode.Name; } }
+    public string Name { get { return starNode.Name; } set { starNode.Name = value; } }
 
     private StarNode starNode = null;
 
-    void Start () {
-        string debugName = string.Format ("star {0}", Random.Range(0, 10000));
-        starNode = new StarNode (debugName);
+    void Awake () {
+        starNode = new StarNode ();
         MapStarNodes.Add (gameObject);
     }
 
     void OnMouseDown () {
-        MapStarSelector.S.OnStarNodeSelect (this);
-        CameraController.S.CenterOnSelected (transform.position);
+        MapStarSelector.S.SetNodeAsCurrentSelection (this);
+        CameraPanController.S.CenterOnSelected (transform.position);
+        HasSelected = true;
     }
 }

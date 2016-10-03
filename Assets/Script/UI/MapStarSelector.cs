@@ -19,30 +19,42 @@ public class MapStarSelector : MonoBehaviour {
     }
 
     public GameObject SelectedTitle = null;
-    //public event Action OnStarNodeSelected = null;
+
+    public System.Action RaiseSelectorEnabled { get; set; }
+    public System.Action RaiseSelectorDisabled { get; set; }
 
     private Text TitleText = null;
+
+    public void OnNullNodeSelect () {
+        gameObject.SetActive(false);
+        EventController.SafeInvoke(RaiseSelectorDisabled);
+        TitleText.text = "";
+    }
+
+    public void SetNodeAsCurrentSelection (MapStarNode starNode) {
+        if (starNode == null) {
+            return;
+        } else {
+            if ( TitleText != null ) {
+                TitleText.text = starNode.Name;
+                gameObject.transform.position = starNode.transform.position;
+                gameObject.SetActive(true);
+                EventController.SafeInvoke(RaiseSelectorEnabled);
+            }
+        }
+    }
 
     void Start () {
         s = this;
         DontDestroyOnLoad(gameObject);
 
-        if (gameObject.activeInHierarchy == true) {
-            gameObject.SetActive(false);
-        }
+        SelectionArea.S.RaiseSelectionAreaDownEvent += OnNullNodeSelect;
 
         TitleText = SelectedTitle.GetComponent<Text> ();
         Debug.AssertFormat(gameObject, "text component reference {0}", TitleText == null);
-    }
 
-    void OnDisable () {
-        //gameObject.transform.parent = null;
-    }
-
-    public void OnStarNodeSelect (MapStarNode starNode) {
-        TitleText.text = starNode.Name;
-        gameObject.transform.parent = starNode.transform;
-        gameObject.transform.position = starNode.transform.position;
-        gameObject.SetActive(true);
+        if (gameObject.activeInHierarchy == true) {
+            gameObject.SetActive(false);
+        }
     }
 }

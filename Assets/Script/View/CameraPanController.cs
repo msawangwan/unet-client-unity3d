@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Camera))]
-public class CameraController : MonoBehaviour {
-    private static CameraController s = null;
+public class CameraPanController : MonoBehaviour {
+    private static CameraPanController s = null;
     private static readonly object padlock = new Object();
 
-    private CameraController() {}
+    private CameraPanController() {}
 
-    public static CameraController S {
+    public static CameraPanController S {
         get {
             lock (padlock) {
                 if (s == null) {
-                    s = GameObject.FindObjectOfType<CameraController>();
+                    s = GameObject.FindObjectOfType<CameraPanController>();
                 }
                 return s;
             }
