@@ -2,49 +2,45 @@
 
 public class CameraPanController : MonoBehaviour {
     private static CameraPanController s = null;
-    private static readonly object padlock = new Object();
-
-    private CameraPanController() {}
-
     public static CameraPanController S {
         get {
-            lock (padlock) {
-                if (s == null) {
-                    s = GameObject.FindObjectOfType<CameraPanController>();
-                }
-                return s;
+            if (s == null) {
+                s = GameObject.FindObjectOfType<CameraPanController> ();
+                DontDestroyOnLoad ( s.gameObject );
+                MapStarController.RaiseNodeSelected += OnNodeSelect;
             }
+            return s;
         }
     }
 
     public float SmoothTime = 0.3f;
     public float MaxSpeed = 20.0f;
     public float KillZoneThreshold = 0.5f;
-    public float CameraDefaultZ = -10.0f;
 
-    Vector3 endPosition = Vector3.zero;
-    Vector3 cameraVelocity = Vector3.zero;
+    private static Vector3 endPosition = Vector3.zero;
+    private static Vector3 cameraVelocity = Vector3.zero;
+    private static bool lerpEnabled = false;
 
-    bool lerpEnabled = false;
-
-    void CenterOnSelected (Vector3 targetPosition) {
+    private static void CenterOnSelected ( Vector3 targetPosition, float z = -10.0f ) {
         cameraVelocity = Vector3.zero;
-        endPosition = targetPosition + new Vector3 ( 0f, 0f, CameraDefaultZ );
+        endPosition = targetPosition + new Vector3 ( 0f, 0f, z );
         lerpEnabled = true;
     }
 
-    void OnNodeSelect (MapStarNode starNode) {
+    private static void OnNodeSelect (MapStarNode starNode) {
         CenterOnSelected(starNode.gameObject.transform.position);
     }
 
-    private void Start () {
-        s = this;
-        DontDestroyOnLoad(gameObject);
+    private void LoadSingletonInstance() { // make sure the property is called at least once
+        Debug.LogFormat ( gameObject, "loaded {0}", gameObject.name ); 
+    }
 
-        MapStarController.S.RaiseNodeSelected += OnNodeSelect;
+    private void Start () {
+        CameraPanController.S.LoadSingletonInstance ();
     }
 
     private void LateUpdate () {
+        Vector3 cameraCurrentPosition = transform.position;
         if (lerpEnabled == true) {
             if ( ( cameraCurrentPosition - endPosition ) == Vector3.zero ) {
                 lerpEnabled = false;
@@ -52,6 +48,4 @@ public class CameraPanController : MonoBehaviour {
             transform.position = Vector3.SmoothDamp ( cameraCurrentPosition, endPosition, ref cameraVelocity, SmoothTime, MaxSpeed );
         }
     }
-
-    private Vector3 cameraCurrentPosition { get { return new Vector3 ( transform.position.x, transform.position.y, CameraDefaultZ ); } }
 }

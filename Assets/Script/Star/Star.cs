@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenuAttribute]
+[CreateAssetMenuAttribute (menuName = StringConstant.AssetMenu.Map, order = 0)]
 public class Star : ScriptableObject {
     public string Name = "star";
-    public int Fuel = 100;
-    public int Oxygen = 100;
+    public int FuelSupply = 100;
+    public int OxygenSupply = 100;
 }

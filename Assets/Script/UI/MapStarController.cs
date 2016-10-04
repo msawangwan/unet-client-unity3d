@@ -2,23 +2,34 @@
 using System;
 
 public class MapStarController : MonoBehaviour {
-    public static MapStarController S = null;
-
-	public Action<MapStarNode> RaiseNodeSelected { get; set; }
-	public Action RaiseNodeDeselected { get; set; }
-
-    void Start () {
-        S = this;
-        DontDestroyOnLoad(gameObject);
-
-        SelectionArea.S.RaiseSelectionAreaDownEvent += NotifyNodeDeselect;
+    private static MapStarController s = null;
+    public static MapStarController S { 
+        get {
+            if ( s == null ) {
+                s = GameObject.FindObjectOfType<MapStarController> ();
+                DontDestroyOnLoad ( s.gameObject );
+                SelectionArea.S.RaiseSelectionAreaDownEvent += NotifyNodeDeselect;
+            }
+            return s;
+        }
     }
 
-	public void NotifyNodeSelected(MapStarNode starNode) {
+	public static Action<MapStarNode> RaiseNodeSelected { get; set; }
+	public static Action RaiseNodeDeselected { get; set; }
+
+	public static void NotifyNodeSelected (MapStarNode starNode) {
         EventController.SafeInvoke(RaiseNodeSelected, starNode);
     }
 
-	public void NotifyNodeDeselect() {
+	private static void NotifyNodeDeselect () {
         EventController.SafeInvoke(RaiseNodeDeselected);
+    }
+
+    private void LoadSingletonInstance() {
+        Debug.LogFormat ( gameObject, "loaded {0}", gameObject.name );
+    }
+
+    private void Start () {
+        MapStarController.S.LoadSingletonInstance ();
     }
 }

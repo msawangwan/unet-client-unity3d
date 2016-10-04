@@ -2,32 +2,44 @@
 using UnityEngine.UI;
 
 public class MapStarInformation : MonoBehaviour {
-	public static MapStarInformation S = null;
+    private static MapStarInformation s = null;
+    public static MapStarInformation S { 
+        get {
+            if ( s == null ) {
+                s = GameObject.FindObjectOfType<MapStarInformation>();
+                DontDestroyOnLoad(s.gameObject);
+            }
+            return s;
+        }
+    }
 
     public GameObject TextParentGameObject = null;
 
     private Text infoText = null;
 
-    void OnNodeSelectDisplayInfo (MapStarNode star) {
+    private void OnNodeSelectDisplayInfo (MapStarNode star) {
 		if (infoText == null) {
             return;
         } else {
-            infoText.text = string.Format("star name: {0}\nfuel supply: {1}\no2 supply: {2}", star.StarNode.Name, star.StarNode.Fuel, star.StarNode.Oxygen);
+            infoText.text = string.Format("star name: {0}\nfuel supply: {1}\no2 supply: {2}", star.StarNode.Name, star.StarNode.FuelSupply, star.StarNode.OxygenSupply);
             gameObject.transform.position = star.transform.position + new Vector3(4f, 0f, 0f);
             gameObject.SetActive(true);
         }
 	}
 
-	void OnNullSelection () {
+	private void OnNullSelection () {
         gameObject.SetActive(false);
     }
 
-	void Start () {
-        S = this;
-        DontDestroyOnLoad(gameObject);
+    private void LoadSingletonInstance() {
+        Debug.LogFormat ( gameObject, "loaded {0}", gameObject.name );
+    }
 
-        MapStarController.S.RaiseNodeSelected += OnNodeSelectDisplayInfo;
-        MapStarController.S.RaiseNodeDeselected += OnNullSelection;
+	private void Start () {
+        MapStarInformation.S.LoadSingletonInstance();
+
+        MapStarController.RaiseNodeSelected += OnNodeSelectDisplayInfo;
+        MapStarController.RaiseNodeDeselected += OnNullSelection;
 
         infoText = TextParentGameObject.GetComponent<Text>();
 

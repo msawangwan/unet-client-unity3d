@@ -16,11 +16,11 @@ public class MapStarNode : MonoBehaviour {
     void Start () {
         StarNode = ScriptableObject.CreateInstance<Star>();
         StarNode.Name = Name;
-        StarNode.Fuel = Random.Range(0, 100);
-        StarNode.Oxygen = Random.Range(0, 100);
+        StarNode.FuelSupply = Random.Range(0, 100);
+        StarNode.OxygenSupply = Random.Range(0, 100);
     }
 
     void OnMouseDown () {
-        MapStarController.S.NotifyNodeSelected(this);
+        MapStarController.NotifyNodeSelected(this);
     }
 }
