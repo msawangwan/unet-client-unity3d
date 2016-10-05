@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 public class GenerateStarMap : MonoBehaviour {
+    public Transform StarMapTransform = null;
     public GameObject StarSymbolPrefab = null;
 
     public bool UseUniqueSeed = true;
@@ -34,7 +35,9 @@ public class GenerateStarMap : MonoBehaviour {
 
         starMapSeedState = RandomUtil.SetSeedState ( StarMapSeed ); // see line 47
 
-        Transform container = new GameObject("map_star-symbols").transform;
+        Transform container = new GameObject("map_star-nodes").transform;
+        container.SetParent(StarMapTransform);
+
         float surroundingArea = StarSymbolPrefab.GetComponent<CircleCollider2D> ().radius * NodeSpacing; // todo: this getcomponent call ain't robust
         int attempts = 0;
         int i = 0;

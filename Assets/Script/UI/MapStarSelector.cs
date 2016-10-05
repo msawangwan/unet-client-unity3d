@@ -2,21 +2,12 @@
 using UnityEngine.UI;
 
 public class MapStarSelector : MonoBehaviour {
-    private static MapStarSelector s = null;
-    public static MapStarSelector S {
-        get {
-            if (s == null) {
-                s = GameObject.FindObjectOfType<MapStarSelector>();
-                DontDestroyOnLoad(s.gameObject);
-            }
-            return s;
-        }
-    }
+    public static MapStarSelector Instance = null;
 
     public GameObject SelectedTitle = null;
 
-    public System.Action RaiseSelectorEnabled { get; set; } // todo: make static
-    public System.Action RaiseSelectorDisabled { get; set; }
+    public static System.Action RaiseSelectorEnabled { get; set; } // todo: make static
+    public static System.Action RaiseSelectorDisabled { get; set; }
 
     private Text TitleText = null;
 
@@ -38,6 +29,8 @@ public class MapStarSelector : MonoBehaviour {
     }
 
     void Start () {
+        Instance = CommonUtil.EnablePersistance ( this, gameObject );
+
         MapStarController.RaiseNodeSelected += OnNodeSelection;
         MapStarController.RaiseNodeDeselected += OnNullSelection;
 

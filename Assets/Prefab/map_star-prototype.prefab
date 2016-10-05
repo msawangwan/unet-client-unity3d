@@ -24,7 +24,7 @@ GameObject:
   - 114: {fileID: 114000010000931168}
   - 114: {fileID: 114000012503426430}
   m_Layer: 20
-  m_Name: map_star
+  m_Name: map_star-prototype
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
