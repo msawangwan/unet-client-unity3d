@@ -2,12 +2,12 @@
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class SelectionArea : MonoBehaviour {
-    public static SelectionArea S = null; // todo: lock pattern
+    public static SelectionArea Instance = null; // todo: lock pattern
 
     public float SafeBufferAmount = 20.0f;
 
-    public System.Action RaiseSelectionAreaDownEvent { get; set; } // todo: send position
-    public System.Action RaiseSelectionAreaUpEvent { get; set; }
+    public static System.Action RaiseSelectionAreaDownEvent { get; set; } // todo: send position
+    public static System.Action RaiseSelectionAreaUpEvent { get; set; }
 
     private BoxCollider2D deselectionTriggerArea = null;
     private bool isHolding = false;
@@ -24,9 +24,7 @@ public class SelectionArea : MonoBehaviour {
     }
 
     void Awake () {
-        S = this;
-        DontDestroyOnLoad(gameObject);
-
+        Instance = CommonUtil.EnablePersistance(this, gameObject);
         CalculateSelectionArea ();
     }
 

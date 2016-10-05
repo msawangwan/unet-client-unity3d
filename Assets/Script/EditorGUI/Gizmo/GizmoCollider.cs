@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class DebugCollider : MonoBehaviour {
+public class GizmoCollider : MonoBehaviour {
     public bool IsColliderDrawEnabled = false;
     public bool IsColliderContactDrawEnabled = false;
     public Color ContactColor = Color.red;
@@ -10,6 +10,7 @@ public class DebugCollider : MonoBehaviour {
         Physics2D.showColliderContacts = IsColliderContactDrawEnabled;
         Physics2D.colliderContactColor = ContactColor;
     }
+
     void OnDrawGizmos () {
 
     }

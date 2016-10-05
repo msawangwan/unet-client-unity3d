@@ -8,16 +8,16 @@ public class MapStarController : MonoBehaviour {
             if ( s == null ) {
                 s = GameObject.FindObjectOfType<MapStarController> ();
                 DontDestroyOnLoad ( s.gameObject );
-                SelectionArea.S.RaiseSelectionAreaDownEvent += NotifyNodeDeselect;
+                SelectionArea.RaiseSelectionAreaDownEvent += NotifyNodeDeselect;
             }
             return s;
         }
     }
 
-	public static Action<MapStarNode> RaiseNodeSelected { get; set; }
+	public static Action<StarMapNode> RaiseNodeSelected { get; set; }
 	public static Action RaiseNodeDeselected { get; set; }
 
-	public static void NotifyNodeSelected (MapStarNode starNode) {
+	public static void NotifyNodeSelected (StarMapNode starNode) {
         EventController.SafeInvoke(RaiseNodeSelected, starNode);
     }
 

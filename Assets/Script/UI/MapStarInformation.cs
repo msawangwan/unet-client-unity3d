@@ -17,7 +17,7 @@ public class MapStarInformation : MonoBehaviour {
 
     private Text infoText = null;
 
-    private void OnNodeSelectDisplayInfo (MapStarNode star) {
+    private void OnNodeSelectDisplayInfo (StarMapNode star) {
 		if (infoText == null) {
             return;
         } else {

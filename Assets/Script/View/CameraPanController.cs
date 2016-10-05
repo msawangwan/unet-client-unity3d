@@ -27,7 +27,7 @@ public class CameraPanController : MonoBehaviour {
         lerpEnabled = true;
     }
 
-    private static void OnNodeSelect (MapStarNode starNode) {
+    private static void OnNodeSelect ( StarMapNode starNode ) {
         CenterOnSelected(starNode.gameObject.transform.position);
     }
 

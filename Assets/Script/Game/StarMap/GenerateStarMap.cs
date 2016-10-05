@@ -15,8 +15,19 @@ public class GenerateStarMap : MonoBehaviour {
     private static Random.State starMapSeedState;
     private const int nodeLayer = 1 << 20;
 
+    private static GameObject CreateStarNode (GameObject nodePrefab, Transform nodeParent, Vector3 nodePosition, string nodeName, float nodeRotationOffset = 0.0f) {
+        Quaternion nodeRotation = Quaternion.Euler ( 0f, 0f, nodeRotationOffset );
+        GameObject nodeObject = Instantiate ( nodePrefab, nodePosition, nodeRotation, nodeParent ) as GameObject;
+        StarMapNode starNode = nodeObject.GameObjectComponent<StarMapNode> ();
+        nodeObject.name = starNode.Name = nodeName;
+        return nodeObject;
+    }
+
+    void SpawnHomeStar () {
+        CreateStarNode(StarSymbolPrefab, null, Vector3.zero, "home-star");
+    }
     // seed is being manipulated in this method
-    void SpawnStarMapSymbols () {
+    void SpawnStarGalaxy () {
         if ( UseUniqueSeed == true ) {
             StarMapSeed = System.Environment.TickCount;
         }
@@ -33,11 +44,10 @@ public class GenerateStarMap : MonoBehaviour {
                 spawnPoint.z = 0.0f; // todo: set sort order
                 RaycastHit2D contact = Physics2D.CircleCast( spawnPoint, surroundingArea, Vector3.zero, Mathf.Infinity, nodeLayer );
                 if ( contact.collider == null ) {
-                    Quaternion rotationVariance = Quaternion.Euler ( 0f, 0f, Random.Range ( 35.0f, 55.0f ) );
-                    GameObject curr = Instantiate ( StarSymbolPrefab, spawnPoint, rotationVariance, container ) as GameObject;
-                    MapStarNode node = curr.GameObjectComponent<MapStarNode>();
-                    node.Name = string.Format ("star {0}", Random.Range(0, 10000));
-                    curr.name = node.Name;
+                    float rotationVariance = Random.Range(35.0f, 55.0f);
+                    float starID = Random.Range(0, 10000);
+                    string starName = string.Format ("star {0}", starID);
+                    CreateStarNode(StarSymbolPrefab, container, spawnPoint, starName, rotationVariance);
                     attempts = 0;
                     break;
                 }
@@ -49,12 +59,12 @@ public class GenerateStarMap : MonoBehaviour {
         RandomUtil.SetSeedStateDefault ();
     }
 
-
     void Start () {
         if ( StarSymbolPrefab == null ) {
             Debug.LogAssertionFormat ( gameObject, "map star symbol prefab is null: {0}", StarSymbolPrefab == null );
         } else {
-            SpawnStarMapSymbols ();
+            SpawnHomeStar ();
+            SpawnStarGalaxy ();
         }
     }
 }

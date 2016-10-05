@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 
 [RequireComponent(typeof(CircleCollider2D))]
-public class MapStarNode : MonoBehaviour {
+public class StarMapNode : MonoBehaviour {
 
-    public static List<GameObject> MapStarNodes = new List<GameObject>();
+    public static List<GameObject> StarMapNodes = new List<GameObject>();
 
     public Star StarNode = null;
     public string Name { get; set; }
 
     void Awake () {
-        MapStarNodes.Add (gameObject);
+        StarMapNodes.Add (gameObject);
     }
 
     void Start () {

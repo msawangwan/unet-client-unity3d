@@ -24,7 +24,7 @@ public class MapStarSelector : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    void OnNodeSelection (MapStarNode starNode) {
+    void OnNodeSelection (StarMapNode starNode) {
         if (starNode == null) {
             return;
         } else {
