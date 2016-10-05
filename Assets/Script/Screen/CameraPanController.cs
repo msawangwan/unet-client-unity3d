@@ -1,17 +1,7 @@
 ﻿using UnityEngine;
 
 public class CameraPanController : MonoBehaviour {
-    private static CameraPanController s = null;
-    public static CameraPanController S {
-        get {
-            if (s == null) {
-                s = GameObject.FindObjectOfType<CameraPanController> ();
-                DontDestroyOnLoad ( s.gameObject );
-                MapStarController.RaiseNodeSelected += OnNodeSelect;
-            }
-            return s;
-        }
-    }
+    public static CameraPanController Instance = null;
 
     public float SmoothTime = 0.3f;
     public float MaxSpeed = 20.0f;
@@ -31,12 +21,9 @@ public class CameraPanController : MonoBehaviour {
         CenterOnSelected(starNode.gameObject.transform.position);
     }
 
-    private void LoadSingletonInstance() { // make sure the property is called at least once
-        Debug.LogFormat ( gameObject, "loaded {0}", gameObject.name ); 
-    }
-
     private void Start () {
-        CameraPanController.S.LoadSingletonInstance ();
+        Instance = CommonUtil.EnablePersistance(this, gameObject);
+        StarMapController.RaiseNodeSelected += OnNodeSelect;
     }
 
     private void LateUpdate () {

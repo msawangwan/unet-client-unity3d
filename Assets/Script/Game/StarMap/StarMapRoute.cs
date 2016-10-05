@@ -13,6 +13,11 @@ public class StarMapRoute : MonoBehaviour {
 
     public void DrawRoute (Vector3 s, Vector3 e) {
         Vector3[] nodes = new Vector3[] { s, e };
+        lr.SetVertexCount(nodes.Length);
         lr.SetPositions(nodes);
+    }
+
+    public void ClearRoute () {
+        lr.SetVertexCount(0);
     }
 }

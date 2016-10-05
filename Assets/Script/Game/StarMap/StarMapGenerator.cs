@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class GenerateStarMap : MonoBehaviour {
+public class StarMapGenerator : MonoBehaviour {
     public Transform StarMapTransform = null;
     public GameObject StarSymbolPrefab = null;
 
