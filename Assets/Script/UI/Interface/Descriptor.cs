@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
 public interface Descriptor {
-    string NameTextField { get; set; }
-    string DescriptionTextField { get; set; }
+    string NameField { get; set; } // todo: prepend UI prefix
+    string DescriptionField { get; set; }
 }

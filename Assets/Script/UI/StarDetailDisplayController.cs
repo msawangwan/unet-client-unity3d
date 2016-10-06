@@ -38,7 +38,7 @@ public class StarDetailDisplayController : MonoBehaviour {
         if ( selected != null ) {
             if (WorldCanvas.PredicateAreNull == false && WorldText.PredicateAreNull == false) {
                 GameObject go = GameObjectUtil.GameObjectFromInterface ( selected );
-                UpdateUI ( selected.NameTextField, selected.DescriptionTextField );
+                UpdateUI ( selected.NameField, selected.DescriptionField );
                 UpdatePosition ( go.transform.position );
                 ToggleCanvasGameObjectActiveState ( false );
             }

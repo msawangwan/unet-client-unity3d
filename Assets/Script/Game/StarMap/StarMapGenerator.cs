@@ -20,7 +20,7 @@ public class StarMapGenerator : MonoBehaviour {
         Quaternion nodeRotation = Quaternion.Euler ( 0f, 0f, nodeRotationOffset );
         GameObject nodeObject = Instantiate ( nodePrefab, nodePosition, nodeRotation, nodeParent ) as GameObject;
         StarMapNode starNode = nodeObject.GameObjectComponent<StarMapNode> ();
-        nodeObject.name = starNode.Name = nodeName;
+        nodeObject.name = starNode.NameField = nodeName;
         return nodeObject;
     }
 
