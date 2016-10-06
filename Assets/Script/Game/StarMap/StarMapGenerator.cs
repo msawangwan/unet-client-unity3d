@@ -35,8 +35,8 @@ public class StarMapGenerator : MonoBehaviour {
 
         starMapSeedState = RandomUtil.SetSeedState ( StarMapSeed ); // see line 47
 
-        Transform container = new GameObject("map_star-nodes").transform;
-        container.SetParent(StarMapTransform);
+        Transform NodeContainerTransform = new GameObject("map_star-nodes").transform;
+        NodeContainerTransform.SetParent(StarMapTransform);
 
         float surroundingArea = StarSymbolPrefab.GetComponent<CircleCollider2D> ().radius * NodeSpacing; // todo: this getcomponent call ain't robust
         int attempts = 0;
@@ -50,7 +50,7 @@ public class StarMapGenerator : MonoBehaviour {
                     float rotationVariance = Random.Range(35.0f, 55.0f);
                     float starID = Random.Range(0, 10000);
                     string starName = string.Format ("star {0}", starID);
-                    CreateStarNode(StarSymbolPrefab, container, spawnPoint, starName, rotationVariance);
+                    CreateStarNode(StarSymbolPrefab, NodeContainerTransform, spawnPoint, starName, rotationVariance);
                     attempts = 0;
                     break;
                 }

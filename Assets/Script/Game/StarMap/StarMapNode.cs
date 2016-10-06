@@ -6,7 +6,7 @@ public class StarMapNode : MonoBehaviour, Descriptor {
 
     public static List<GameObject> StarMapNodes = new List<GameObject>();
 
-    public Star StarNode = null;
+    public Star_deprecated_so StarNode = null;
     public string Name { get; set; }
 
     public string NameTextField { get; set; }
@@ -17,7 +17,7 @@ public class StarMapNode : MonoBehaviour, Descriptor {
     }
 
     void Start () {
-        StarNode = ScriptableObject.CreateInstance<Star>();
+        StarNode = ScriptableObject.CreateInstance<Star_deprecated_so>();
         StarNode.Name = Name;
         StarNode.FuelSupply = Random.Range (0, 100);
         StarNode.OxygenSupply = Random.Range (0, 100);

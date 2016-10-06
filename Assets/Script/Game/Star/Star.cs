@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenuAttribute (menuName = StringConstant.AssetMenu.Map, order = 0)]
-public class Star : ScriptableObject {
-    public string Name = "star";
-    public int FuelSupply = 100;
-    public int OxygenSupply = 100;
+public class Star {
+    public LinkedList<Star>.Node NodeLink = null;
+
+    public Star () {
+        NodeLink = StarMap.Stars.Add ( this );
+    }
 }
