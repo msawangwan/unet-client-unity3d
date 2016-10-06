@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
-public class StarMapNode : MonoBehaviour, Descriptor {
-    public static LinkedList<StarMapNode> StarMapNodes = new LinkedList<StarMapNode>();
-    public LinkedList<StarMapNode>.Node NodeLink = null;
+public class StarNode : MonoBehaviour, Descriptor {
+    public static LinkedList<StarNode> StarNodes = new LinkedList<StarNode>();
+    public LinkedList<StarNode>.Node NodeLink = null;
 
     public string NameField { get; set; }
     public string DescriptionField { get; set; }
 
     void Awake () {
-        NodeLink = StarMapNodes.Add (this);
+        NodeLink = StarNodes.Add (this);
     }
 
     void Start () {

@@ -15,7 +15,8 @@ public static class StringConstant {
     }
 
     public static class AssetMenu {
-        public const string Map = "Map/Star";
+        public const string Map = "Map/Node";
+        public const string Star = "Star/Node";
     }
 
     public static class WindowMenu {

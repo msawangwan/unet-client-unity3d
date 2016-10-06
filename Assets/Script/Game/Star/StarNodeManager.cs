@@ -5,7 +5,7 @@ public class StarNodeManager : MonoBehaviour {
     //public static StarNode CurrentNode = null;
     //public static StarNode TargetNode = null;
 
-    private void OnTargetNodeSelected (StarMapNode starNode) {
+    private void OnTargetNodeSelected (StarNode starNode) {
 
     }
 

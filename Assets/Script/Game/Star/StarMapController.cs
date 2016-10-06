@@ -4,10 +4,10 @@ using System;
 public class StarMapController : MonoBehaviour {
     public static StarMapController Instance = null;
 
-	public static Action<StarMapNode> RaiseNodeSelected { get; set; }
+	public static Action<StarNode> RaiseNodeSelected { get; set; }
 	public static Action RaiseNodeDeselected { get; set; }
 
-    public static void NotifyNodeSelected (StarMapNode starNode) {
+    public static void NotifyNodeSelected (StarNode starNode) {
         EventController.SafeInvoke(RaiseNodeSelected, starNode);
     }
 
