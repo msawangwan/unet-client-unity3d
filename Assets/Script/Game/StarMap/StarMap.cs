@@ -3,10 +3,18 @@
 public class StarMap : MonoBehaviour {
     [System.Serializable]
     public class GeneratorParameters {
+        [System.Serializable]
+        public class PrefabLinks {
+            public Transform StarMapTransform = null;
+            public Transform StarNodeContainerTransform = null;
+            public GameObject StarPrefab = null;
+        }
+
+        public GeneratorParameters.PrefabLinks Prefabs = null;
         public bool UseRandomSeed = true;
         public int UniqueSeed = 0;
         public int MaxRetryAttempts = 20;
-        public float MapRadius = 20.0f;
+        public float GalaxyScale = 20.0f; // ie, map radius
         public float StarDensity = 1.5f; // ie, node spacing
     }
 
