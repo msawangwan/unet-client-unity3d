@@ -5,8 +5,19 @@
 */
 
 public static class StringConstant {
+    public static class Input {
+        public const string MouseLeftButton = "Fire 1";
+        public const string MouseRightButton = "Fire 2";
+        public const string MouseMiddleButton = "Fire 3";
+        public const string MouseScrollWheel = "Mouse ScrollWheel";
+    }
+
     public static class Tag {
         public const string Player = "Player";
+    }
+
+    public static class Layer {
+
     }
 
     public static class Path {

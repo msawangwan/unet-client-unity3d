@@ -2,7 +2,7 @@
 
 public static class ExtensionGameObject {
     /* get or add a component, see: http://wiki.unity3d.com/index.php/GetOrAddComponent */
-    public static T GameObjectComponent<T> ( this GameObject go ) where T : Component {
+    public static T GetComponentSafe<T> ( this GameObject go ) where T : Component {
         T c = go.GetComponent<T> ();
         if ( c == null ) {
             c = go.gameObject.AddComponent<T>();

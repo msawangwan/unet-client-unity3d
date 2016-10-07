@@ -24,7 +24,7 @@ GameObject:
   - 124: {fileID: 124000012339927822}
   - 81: {fileID: 81000012778768712}
   m_Layer: 0
-  m_Name: main_camera
+  m_Name: camera-main
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,8 +38,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000010219422650}
-  - 114: {fileID: 114000010760993380}
+  - 114: {fileID: 114000014107705004}
   - 114: {fileID: 114000011848503116}
+  - 114: {fileID: 114000011165499754}
+  - 114: {fileID: 114000010760993380}
   m_Layer: 0
   m_Name: camera-rig
   m_TagString: Untagged
@@ -58,7 +60,7 @@ GameObject:
   - 61: {fileID: 61000011568443906}
   - 114: {fileID: 114000013853237940}
   m_Layer: 0
-  m_Name: de-selection-trigger-area
+  m_Name: selection-detect-area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -180,6 +182,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetWidth: 16
   TargetHeight: 9
+--- !u!114 &114000011165499754
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010229629200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd6068a793a095c449d9c58cef331948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000011848503116
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -193,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SmoothTime: 0.3
   MaxSpeed: 20
-  KillZoneThreshold: 0.5
+  KillZoneThreshold: 0.1
 --- !u!114 &114000013853237940
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -206,6 +219,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SafeBufferAmount: 20
+--- !u!114 &114000014107705004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010229629200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f03b24c8276f8ff4eb972b842cf72669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!124 &124000012339927822
 Behaviour:
   m_ObjectHideFlags: 1

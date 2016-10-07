@@ -1,5 +1,15 @@
 ﻿using UnityEngine;
 
 public class GameController : MonoBehaviour {
-    public StarMap Map = null;
+/*    private void Awake () {
+
+    }
+
+    private void Start () {
+
+    }
+
+    private void Update () {
+
+    }*/
 }

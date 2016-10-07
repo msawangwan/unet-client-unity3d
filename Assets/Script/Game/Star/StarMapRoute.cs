@@ -8,7 +8,7 @@ public class StarMapRoute : MonoBehaviour {
 
     void Start () {
         Instance = CommonUtil.EnablePersistance(this, gameObject);
-        lr = gameObject.GameObjectComponent<LineRenderer>();
+        lr = gameObject.GetComponentSafe<LineRenderer>();
     }
 
     public void DrawRoute (Vector3 s, Vector3 e) {

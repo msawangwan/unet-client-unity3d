@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerState : MonoBehaviour {
-
+[System.Serializable]
+public class PlayerState {
+    public StarMap StarMapInstance = null;
 }

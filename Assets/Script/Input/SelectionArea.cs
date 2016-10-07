@@ -17,7 +17,7 @@ public class SelectionArea : MonoBehaviour {
         float verticalSize = camOrthoSize * Screen.width / Screen.height * 2f;
         float horizontalSize = camOrthoSize * 2f;
 
-        deselectionTriggerArea = gameObject.GameObjectComponent<BoxCollider2D> ();
+        deselectionTriggerArea = gameObject.GetComponentSafe<BoxCollider2D> ();
         deselectionTriggerArea.size = new Vector2 ( verticalSize + SafeBufferAmount, horizontalSize + SafeBufferAmount);
 
         transform.position = new Vector3 ( transform.position.x, transform.position.y, 100f );
@@ -29,12 +29,12 @@ public class SelectionArea : MonoBehaviour {
     }
 
 	void OnMouseDown () {
-        EventController.SafeInvoke(RaiseSelectionAreaDownEvent);
+        EventController.InvokeSafe(RaiseSelectionAreaDownEvent);
         isHolding = true;
     }
 
     void OnMouseUp () {
-        EventController.SafeInvoke(RaiseSelectionAreaUpEvent);
+        EventController.InvokeSafe(RaiseSelectionAreaUpEvent);
         isHolding = false;
     }
 }

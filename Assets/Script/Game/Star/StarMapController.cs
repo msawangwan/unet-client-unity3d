@@ -8,11 +8,11 @@ public class StarMapController : MonoBehaviour {
 	public static Action RaiseNodeDeselected { get; set; }
 
     public static void NotifyNodeSelected (StarNode starNode) {
-        EventController.SafeInvoke(RaiseNodeSelected, starNode);
+        EventController.InvokeSafe(RaiseNodeSelected, starNode);
     }
 
 	private static void NotifyNodeDeselect () {
-        EventController.SafeInvoke(RaiseNodeDeselected);
+        EventController.InvokeSafe(RaiseNodeDeselected);
     }
 
     void Start () {

@@ -2,6 +2,17 @@
 
 public class StarMap : MonoBehaviour {
     [System.Serializable]
+    public class SaveData {
+        public bool IsNew = false;
+        public int SeedValue = 0;
+    }
+
+    [System.Serializable]
+    public class State {
+        
+    }
+
+    [System.Serializable]
     public class GeneratorParameters {
         [System.Serializable]
         public class PrefabLinks {
@@ -36,9 +47,17 @@ public class StarMap : MonoBehaviour {
     public StarMap.GeneratorParameters GeneratorOptions = null;
     public StarMap.MapStateParameters MapState = null;
 
+    public int StarMapInstanceID { get; set;}
+
+    public void InitialiseNewMapWithRandomParameters () {
+
+    }
+
+    public void InitialiseSavedMapWithLoadedParameters () {
+
+    }
+
     private void Awake () {
         StaticInstance = CommonUtil.EnablePersistance (this, gameObject);
-        MapState = StarGenerator.SpawnStarField (GeneratorOptions);
-        StarGenerator.SpawnStartNode(GeneratorOptions.Prefabs.StarPrefab);
     }
 }

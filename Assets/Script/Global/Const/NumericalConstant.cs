@@ -11,4 +11,6 @@ public static class NumericalConstant {
         public static readonly Rect BottomLeftRect = new Rect(0, Screen.height - 50, 100, 50);
         public static readonly Rect BottomRightRect = new Rect(Screen.width - 100, Screen.height - 50, 100, 50);
     }
+
+    public static readonly int UniqueValue = System.Environment.TickCount;
 }
