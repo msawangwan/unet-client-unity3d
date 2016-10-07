@@ -2,8 +2,6 @@
 
 public class StarNodeManager : MonoBehaviour {
     public static StarNodeManager Instance = null;
-    //public static StarNode CurrentNode = null;
-    //public static StarNode TargetNode = null;
 
     private void OnTargetNodeSelected (StarNode starNode) {
 

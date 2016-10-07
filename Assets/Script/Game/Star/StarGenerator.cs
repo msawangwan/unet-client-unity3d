@@ -25,6 +25,7 @@ public static class StarGenerator {
         star.StarProperties.ID = Random.Range (0, 10000);
         star.StarProperties.Designation = string.Format ("star {0}", star.StarProperties.ID);
         star.StarProperties.RotationOffset = Random.Range (35.0f, 55.0f);
+        StateSerializer.Save(star);
         return star;
     }
 

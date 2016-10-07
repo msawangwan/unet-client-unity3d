@@ -39,6 +39,3 @@ Plugins.meta
 # macOS files
 .DS_Store
 .DS_Store?
-
-# Because JB commits tmp files
-README.md~

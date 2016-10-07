@@ -12,11 +12,6 @@ public class StarNode : MonoBehaviour, Descriptor {
         NodeLink = StarNodes.Add (this);
     }
 
-    void Start () {
-        NameField = "star-node";
-        DescriptionField = string.Format("description");
-    }
-
     void OnMouseDown () {
         StarMapController.NotifyNodeSelected (this);
     }
