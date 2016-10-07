@@ -10,8 +10,19 @@ public static class StringConstant {
     }
 
     public static class Path {
-        public const string RootDir = "Assets/";
+        public const string Root = "Assets/";
         public const string AssetDB = "Assets/AssetDB";
+        public const string SaveLoad_debug = "Assets/Save";
+        public static readonly string SaveLoad = Application.persistentDataPath;
+    }
+
+    public static class Filename {
+        public const string Save = "game.save";
+    }
+
+    public static class SaveToLocation {
+        public static readonly string Save = System.IO.Path.Combine(Path.SaveLoad, Filename.Save);
+        public static readonly string Save_debug = System.IO.Path.Combine(Path.SaveLoad_debug, Filename.Save);
     }
 
     public static class AssetMenu {
