@@ -2,7 +2,10 @@
 using System.Collections.Generic; 
 using System.Runtime.Serialization.Formatters.Binary; 
 using System.IO;
-
+/*
+https://gamedevelopment.tutsplus.com/tutorials/how-to-save-and-load-your-players-progress-in-unity--cms-20934
+https://www.sitepoint.com/mastering-save-and-load-functionality-in-unity-5/
+*/
 public static class StateSerializer {
     public static List<string> JSONObjectGraph = new List<string>();
 
