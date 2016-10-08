@@ -3,6 +3,6 @@
 public class DebugController : MonoBehaviour {
 
 	public void DebugButtonToggle() {
-        StateSerializer.Load();
+        //StateSerializer.Load();
     }
 }
