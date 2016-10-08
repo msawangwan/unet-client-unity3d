@@ -18,8 +18,8 @@ public class Game {
         if (starMapSaveData.IsNew == true) {
             StarMapLocalInstance.InitialiseNewMapWithRandomParameters();
         } else {
-            StarMapLocalInstance.GeneratorOptions.UseCustomSeedValue = true;
-            StarMapLocalInstance.GeneratorOptions.CustomSeedValue = starMapSaveData.SeedValue;
+            //StarMapLocalInstance.GeneratorOptions.UseCustomSeedValue = true;
+            //StarMapLocalInstance.GeneratorOptions.CustomSeedValue = starMapSaveData.SeedValue;
             StarMapLocalInstance.InitialiseSavedMapWithLoadedParameters();
         }
     }

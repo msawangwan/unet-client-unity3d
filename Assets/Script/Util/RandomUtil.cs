@@ -2,7 +2,7 @@
 
 public static class RandomUtil {
 
-	public static Random.State SetSeedState (int seedValue) {
+	public static Random.State SetSeedStateWithValue (int seedValue) {
 		Random.InitState (seedValue); // seed the pRNG
         return Random.state; // return a state if we want to save for later
     }

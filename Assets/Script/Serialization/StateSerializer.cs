@@ -1,7 +1,5 @@
 ﻿using UnityEngine; 
-using System;
 using System.IO;
-using System.Collections.Generic; 
 using System.Runtime.Serialization.Formatters.Binary;
 
 /*
@@ -10,40 +8,35 @@ https://www.sitepoint.com/mastering-save-and-load-functionality-in-unity-5/
 */
 
 public static class StateSerializer {
-    public class Data {
-        public string FileToWrite = string.Empty;
-        public List<string> CollectionToWrite = null;
-        
-        public Data(string fileToWrite) {
-            FileToWrite = fileToWrite;
-        }
+    private const string extension = ".save";
 
-        public Data(List<string> collectionToWrite) {
-            CollectionToWrite = collectionToWrite;
+    public static void WriteSave(object obj, string fileDescriptor, int fileID = 0) {
+        string json = JsonUtility.ToJson(obj, true);
+        string path = PathFromFileName(fileDescriptor);
+        StateSerializer.Save(obj, path, fileID);
+    }
+
+    public static T LoadFromSave<T>(string fileDescriptor, int fileID = 0) where T : class {
+        string path = PathFromFileName(fileDescriptor);
+        if (File.Exists(path)) {
+            BinaryFormatter deserializer = new BinaryFormatter();
+            FileStream fs = File.Open(path, FileMode.Open);
+            string json = deserializer.Deserialize(fs) as string;
+            fs.Close();
+            return JsonUtility.FromJson<T>(json);
+        } else {
+            return null;
         }
     }
 
-    public static List<string> JSONObjectGraph = new List<string>();
-    public static Action<StateSerializer.Data> OnRaiseNewSaveGameWrite { get; set; }
-
-    public static void Save (object o) {
-        string json = JsonUtility.ToJson(o, true);
-        Debug.LogFormat("{0}", json);
+    private static void Save (object o, string filename, int id) {
         BinaryFormatter serializer = new BinaryFormatter();
-        FileStream fs = File.Create(StringConstant.SaveToLocation.Save_debug);
-        serializer.Serialize(fs, json);
+        FileStream fs = File.Create(filename);
+        serializer.Serialize(fs, o);
         fs.Close();
     }
 
-    public static void Load () {
-        if (File.Exists(StringConstant.SaveToLocation.Save_debug)) {
-            BinaryFormatter deserializer = new BinaryFormatter();
-            FileStream fs = File.Open(StringConstant.SaveToLocation.Save_debug, FileMode.Open);
-            //JSONObjectGraph = deserializer.Deserialize(fs) as List<string>;
-            string json = deserializer.Deserialize(fs) as string;
-            Star star = JsonUtility.FromJson<Star>(json);
-            Debug.LogFormat("{0}", star.StarProperties.Designation);
-            fs.Close();
-        }
+    private static string PathFromFileName(string name) {
+        return Path.Combine (StringConstant.Path.SaveLoad_debug, string.Concat(name, extension) );
     }
 }

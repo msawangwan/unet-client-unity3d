@@ -9,7 +9,12 @@ public class StarMap : MonoBehaviour {
 
     [System.Serializable]
     public class State {
-        
+        public Random.State SeedState { get; set; }
+        public int SeedValue { get; set; }
+        public int InstanceID { get; set; }
+        public int NodeCount { get; set; }
+        public float Scale { get; set; }
+        public float Density { get; set; }
     }
 
     [System.Serializable]
@@ -20,8 +25,6 @@ public class StarMap : MonoBehaviour {
             public Transform StarNodeContainerTransform = null;
             public GameObject StarPrefab = null;
         }
-
-        public const int NodeLayer = 1 << 20;
 
         public GeneratorParameters.PrefabLinks Prefabs = null;
         public bool UseCustomSeedValue = false;
@@ -34,23 +37,25 @@ public class StarMap : MonoBehaviour {
         public int UniqueSeedValue { get { return System.Environment.TickCount; } }
     }
 
-    [System.Serializable]
-    public class MapStateParameters {
-        public Random.State SeedState;
-        public int SeedValue = 0;
-        public int StarCount = 0;
-        public Star CurrentLocation = null;
-    }
-
     public static StarMap StaticInstance = null;
 
-    public StarMap.GeneratorParameters GeneratorOptions = null;
-    public StarMap.MapStateParameters MapState = null;
+    public StarMap.GeneratorParameters StarMapGeneratorParameters = null;
+    private StarGenerator.Parameters GeneratorParameterData = null;
 
+    public StarMap.State StarMapState { get; private set; }
     public int StarMapInstanceID { get; set;}
 
     public void InitialiseNewMapWithRandomParameters () {
+        GeneratorParameterData = new StarGenerator.Parameters(
+            StarMapGeneratorParameters.Prefabs.StarPrefab,
+            StarMapGeneratorParameters.Prefabs.StarNodeContainerTransform,
+            StarMapGeneratorParameters.UseCustomSeedValue,
+            StarMapGeneratorParameters.CustomSeedValue,
+            StarMapGeneratorParameters.NumberOfStars,
+            StarMapGeneratorParameters.GalaxyScale,
+            StarMapGeneratorParameters.StarDensity);
 
+        StarMapState = StarGenerator.GenerateStarMapState(GeneratorParameterData);
     }
 
     public void InitialiseSavedMapWithLoadedParameters () {
