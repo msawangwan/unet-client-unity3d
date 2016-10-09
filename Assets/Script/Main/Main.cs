@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 public class Main : MonoBehaviour {
-    public static Main Instance = null;
+    public static Main StaticInstance = null;
 
     private void Awake () {
-        Instance = CommonUtil.EnablePersistance ( this, gameObject );
+        StaticInstance = CommonUtil.EnablePersistance ( this, gameObject );
     }
 }
