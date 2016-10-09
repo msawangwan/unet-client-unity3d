@@ -2,19 +2,13 @@
 
 public class StarMap : MonoBehaviour {
     [System.Serializable]
-    public class SaveData {
-        public bool IsNew = false;
-        public int SeedValue = 0;
-    }
-
-    [System.Serializable]
     public class State {
-        public Random.State SeedState { get; set; }
-        public int SeedValue { get; set; }
-        public int InstanceID { get; set; }
-        public int NodeCount { get; set; }
-        public float Scale { get; set; }
-        public float Density { get; set; }
+        public Random.State SeedState;
+        public int SeedValue;
+        public int InstanceID;
+        public int NodeCount;
+        public float Scale;
+        public float Density;
     }
 
     [System.Serializable]
@@ -45,7 +39,7 @@ public class StarMap : MonoBehaviour {
     public StarMap.State StarMapState { get; private set; }
     public int StarMapInstanceID { get; set;}
 
-    public void InitialiseNewMapWithRandomParameters () {
+    public StarMap.State InitialiseNewMapWithRandomParameters () {
         GeneratorParameterData = new StarGenerator.Parameters(
             StarMapGeneratorParameters.Prefabs.StarPrefab,
             StarMapGeneratorParameters.Prefabs.StarNodeContainerTransform,
@@ -56,10 +50,22 @@ public class StarMap : MonoBehaviour {
             StarMapGeneratorParameters.StarDensity);
 
         StarMapState = StarGenerator.GenerateStarMapState(GeneratorParameterData);
+        return StarMapState;
     }
 
-    public void InitialiseSavedMapWithLoadedParameters () {
-
+    public StarMap.State InitialiseSavedMapWithLoadedParameters (StarMap.State state) {
+        //Debug.LogFormat("seed state is {0}", state.SeedValue);
+        GeneratorParameterData = new StarGenerator.Parameters(
+            StarMapGeneratorParameters.Prefabs.StarPrefab,
+            StarMapGeneratorParameters.Prefabs.StarNodeContainerTransform,
+            true,
+            state.SeedValue,
+            state.NodeCount,
+            state.Scale,
+            state.Density
+        );
+        StarMapState = StarGenerator.GenerateStarMapState(GeneratorParameterData);
+        return StarMapState;
     }
 
     private void Awake () {

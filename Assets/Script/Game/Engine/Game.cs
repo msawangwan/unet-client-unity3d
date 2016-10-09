@@ -10,17 +10,15 @@ public class Game {
         Players = players;
     }
 
-    public void Setup () {
-
+    public StarMap.State Setup (bool isNewGame, StarMap.State mapState) {
+        return InitialiseStarMap(isNewGame, mapState);
     }
 
-    private void InitialiseStarMap ( StarMap.SaveData starMapSaveData ) {
-        if (starMapSaveData.IsNew == true) {
-            StarMapLocalInstance.InitialiseNewMapWithRandomParameters();
+    private StarMap.State InitialiseStarMap ( bool isNewGame, StarMap.State starMapState ) {
+        if (isNewGame == true && starMapState == null) {
+            return StarMap.StaticInstance.InitialiseNewMapWithRandomParameters();
         } else {
-            //StarMapLocalInstance.GeneratorOptions.UseCustomSeedValue = true;
-            //StarMapLocalInstance.GeneratorOptions.CustomSeedValue = starMapSaveData.SeedValue;
-            StarMapLocalInstance.InitialiseSavedMapWithLoadedParameters();
+            return StarMap.StaticInstance.InitialiseSavedMapWithLoadedParameters(starMapState);
         }
     }
 

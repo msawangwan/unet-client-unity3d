@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d555313f1177731448ff52257f0c9e04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GeneratorOptions:
+  StarMapGeneratorParameters:
     Prefabs:
       StarMapTransform: {fileID: 4000011761730454}
       StarNodeContainerTransform: {fileID: 4000010615642178}
@@ -142,18 +142,10 @@ MonoBehaviour:
         type: 2}
     UseCustomSeedValue: 0
     CustomSeedValue: 0
-    NumberOfStars: 30
+    NumberOfStars: 0
     MaxRetryAttemptsAllowed: 20
     GalaxyScale: 20
     StarDensity: 1.5
-  MapOptions:
-    SeedState:
-      s0: 0
-      s1: 0
-      s2: 0
-      s3: 0
-    SeedValue: 0
-    StarCount: 0
 --- !u!120 &120000010421360406
 LineRenderer:
   m_ObjectHideFlags: 1

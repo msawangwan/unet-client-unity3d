@@ -27,6 +27,10 @@ public static class StringConstant {
         public static readonly string SaveLoad = Application.persistentDataPath;
     }
 
+    public static class SaveFile {
+        public const string StarMap = "starmap";
+    }
+
     public static class Filename {
         public const string Save = "game.save";
     }
