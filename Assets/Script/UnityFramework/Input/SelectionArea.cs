@@ -10,7 +10,7 @@ public class SelectionArea : MonoBehaviour {
     public static System.Action RaiseSelectionAreaUpEvent { get; set; }
 
     private BoxCollider2D deselectionTriggerArea = null;
-    private bool isHolding = false;
+    // private bool isHolding = false;
 
     private void CalculateSelectionArea () {
         float camOrthoSize = Camera.main.orthographicSize;
@@ -30,11 +30,11 @@ public class SelectionArea : MonoBehaviour {
 
 	void OnMouseDown () {
         EventController.InvokeSafe(RaiseSelectionAreaDownEvent);
-        isHolding = true;
+        // isHolding = true;
     }
 
     void OnMouseUp () {
         EventController.InvokeSafe(RaiseSelectionAreaUpEvent);
-        isHolding = false;
+        // isHolding = false;
     }
 }
