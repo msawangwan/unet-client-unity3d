@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityFramework.Net.Util;
 using System;
+using System.IO;
 using System.Net;
+using System.Text;
 
 namespace UnityFramework.Net.Client {
     public class ClientHandler : MonoBehaviour {
@@ -18,7 +20,35 @@ namespace UnityFramework.Net.Client {
 
         [SerializeField] private Configuration clientConfiguration = null;
 
-        public static Action<string> info = msg => Debug.LogFormat("[ClientHandler][INFO][{0}]", msg);
+        public static Action<string> info = msg => Debug.LogFormat(
+            "[ClientHandler][INFO][{0}]",
+            msg
+        );
+
+        private void GET(Uri uri) { // todo: make asynchronous
+            info("new GET req to remote addr: " + uri.OriginalString);
+
+            try {
+                WebRequest req = WebRequest.Create(uri);
+                WebResponse res = req.GetResponse();
+
+                req.Method = "GET";
+
+                Stream dataStream = res.GetResponseStream();
+                res.Close();
+
+                using (var sr = new StreamReader(dataStream)) {
+                    string resParsed = sr.ReadToEnd();
+                    info(resParsed); // <- debug
+                }
+
+                dataStream.Close();
+            } catch (WebException we) {
+                info(NetUtil.PrintfWebException(we));
+            } catch (Exception e) {
+                info(NetUtil.PrintfException(e));
+            }
+        }
 
         private void OnEnable() {
             Uri remoteAddr = NetUtil.NewUriFrom(
@@ -26,7 +56,8 @@ namespace UnityFramework.Net.Client {
                 clientConfiguration.host,
                 clientConfiguration.port
             );
-            info("host addr: " + remoteAddr.OriginalString);
+
+            GET(remoteAddr);
         }
     }
 }

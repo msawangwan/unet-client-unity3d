@@ -20,6 +20,20 @@ namespace UnityFramework.Net.Util {
 
         public static Uri NewUriFrom(string scheme, string host, int port) {
             return new UriBuilder(scheme, host, port).Uri;
-        } 
+        }
+
+        public static string PrintfWebException(WebException we) {
+            string err = "client caught web exception: [" + we.ToString() + "]";
+
+            if (we.Status == WebExceptionStatus.ProtocolError) {
+                err += "[" + ((int)((HttpWebResponse)we.Response).StatusCode).ToString() + " " + ((HttpWebResponse)we.Response).StatusCode + "]";
+            }
+
+            return err;
+        }
+
+        public static string PrintfException(Exception e) {
+            return "client caught exception: [" + e.ToString() + "]";
+        }
     }
 }
