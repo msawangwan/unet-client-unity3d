@@ -47,14 +47,14 @@ public class StarMap : MonoBehaviour {
             StarMapGeneratorParameters.CustomSeedValue,
             StarMapGeneratorParameters.NumberOfStars,
             StarMapGeneratorParameters.GalaxyScale,
-            StarMapGeneratorParameters.StarDensity);
+            StarMapGeneratorParameters.StarDensity
+        );
 
         StarMapState = StarGenerator.GenerateStarMapState(GeneratorParameterData);
         return StarMapState;
     }
 
     public StarMap.State InitialiseSavedMapWithLoadedParameters (StarMap.State state) {
-        //Debug.LogFormat("seed state is {0}", state.SeedValue);
         GeneratorParameterData = new StarGenerator.Parameters(
             StarMapGeneratorParameters.Prefabs.StarPrefab,
             StarMapGeneratorParameters.Prefabs.StarNodeContainerTransform,
@@ -64,6 +64,7 @@ public class StarMap : MonoBehaviour {
             state.Scale,
             state.Density
         );
+
         StarMapState = StarGenerator.GenerateStarMapState(GeneratorParameterData);
         return StarMapState;
     }
