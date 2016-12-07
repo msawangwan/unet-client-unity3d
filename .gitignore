@@ -34,6 +34,7 @@ Plugins.meta
 
 # Save and log file
 *.save
+*.save.meta
 *.log
 
 # macOS files
