@@ -27,10 +27,10 @@ public class Game {
     }
 
     private void InitialisePlayer ( Player player ) {
-        if (player != null) {
-            if (player.State.StarMapInstance == null) {
+        // if (player != null) {
+        //     if (player.State.StarMapInstance == null) {
                 
-            }
-        }
+        //     }
+        // }
     }
 }

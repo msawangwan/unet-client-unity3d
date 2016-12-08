@@ -56,8 +56,6 @@ namespace UnityFramework.Net.Client {
                 clientConfiguration.host,
                 clientConfiguration.port
             );
-
-            GET(remoteAddr);
         }
     }
 }
