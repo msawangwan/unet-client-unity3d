@@ -5,10 +5,26 @@ using System.Collections.Generic;
 
 namespace UnityFramework.UI.Model {
     public abstract class MenuPanel : InstanceBehaviour {
-        private MenuManager menu = null;
+        public class Node {
+            public readonly Node Next;
+
+            public Node(Node next) {
+                Next = next;
+            }
+        }
+
+        protected MenuManager menu = null;
+        protected MenuPanel.Node link = null;
+
         private bool hasRegisteredWithManager = false;
 
         public abstract bool isDefaultView { get; }
+
+        public void LinkMenuNode(MenuPanel.Node next) {
+            if (link == null) {
+                link = new MenuPanel.Node(next);
+            }
+        }
 
         protected virtual void Start() {
             if (!menu) {

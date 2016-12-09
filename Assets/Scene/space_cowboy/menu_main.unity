@@ -1870,6 +1870,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4af0a266809948941b54635858966e93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NewGameButton: {fileID: 1293688423}
+  LoadGameButton: {fileID: 872604586}
 --- !u!1 &960708250
 GameObject:
   m_ObjectHideFlags: 0
@@ -2038,7 +2040,7 @@ GameObject:
   - component: {fileID: 992965186}
   - component: {fileID: 992965188}
   m_Layer: 0
-  m_Name: panel_profile_select
+  m_Name: panel_select_profile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2104,7 +2106,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 992965184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4af0a266809948941b54635858966e93, type: 3}
+  m_Script: {fileID: 11500000, guid: ea1b86d5fadea154a8b8e70f84862e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1198419922
@@ -3600,7 +3602,7 @@ GameObject:
   - component: {fileID: 2018950735}
   - component: {fileID: 2018950737}
   m_Layer: 0
-  m_Name: panel_profile_create
+  m_Name: panel_create_profile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3666,7 +3668,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2018950733}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4af0a266809948941b54635858966e93, type: 3}
+  m_Script: {fileID: 11500000, guid: 61289973140602648bab387f196d9319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2065540756
