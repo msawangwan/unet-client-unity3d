@@ -11,6 +11,9 @@ namespace UnityFramework.UI.Model {
 
         private HomeMenuManager homeMenu = null;
 
+        private MenuPanel.Node linksToSelect = null;
+        private MenuPanel.Node linksToCreate = null;
+
         public override bool isDefaultView { get { return true; } }
 
         public override void MapDependencies() {

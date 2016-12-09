@@ -14,18 +14,18 @@ namespace UnityFramework.UI.Model {
         }
 
         protected MenuManager menu = null;
-        protected MenuPanel.Node link = null;
+        // protected MenuPanel.Node link = null;
 
         private bool hasRegisteredWithManager = false;
 
         public abstract bool isDefaultView { get; }
         public abstract void MapDependencies();
 
-        public void LinkMenuNode(MenuPanel.Node next) {
-            if (link == null) {
-                link = new MenuPanel.Node(next);
-            }
-        }
+        // public void LinkMenuNode(MenuPanel.Node next) {
+        //     if (link == null) {
+        //         link = new MenuPanel.Node(next);
+        //     }
+        // }
 
         protected virtual void Start() {
             if (!menu) {
