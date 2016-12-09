@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+// using UnityFramework.Global
 using System.Collections;
 
 namespace UnityFramework {

@@ -1035,26 +1035,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 2117866061}
-  - component: {fileID: 887110178}
   m_Layer: 0
-  m_Name: main
+  m_Name: global
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &887110178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114000011779942202, guid: 3c491ee7b5e35754b981d6317782dff7,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 887110177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0c0189da7072134ba3ad1122d46867d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &893704015
 GameObject:
   m_ObjectHideFlags: 0
@@ -2299,7 +2286,7 @@ GameObject:
   - component: {fileID: 1774707636}
   - component: {fileID: 1774707635}
   m_Layer: 0
-  m_Name: EventSystem
+  m_Name: eventsys
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
