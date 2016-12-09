@@ -19,8 +19,6 @@ namespace UnityFramework.UI.Manager {
                     }
                 }
             }
-
-            Debug.LogFormat("[{0}] MenuManager registered: {1} {2}", Time.time, panel.name, panelIID);
         }
 
         protected override bool HandleInitialisation() {

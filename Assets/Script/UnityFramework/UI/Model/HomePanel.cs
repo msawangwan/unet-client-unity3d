@@ -13,19 +13,20 @@ namespace UnityFramework.UI.Model {
 
         public override bool isDefaultView { get { return true; } }
 
+        public override void RunSetup() {
+            Debug.LogFormat("mapped buttons {0}", gameObject.name);
+            MapButtons();
+        }
+
         protected override void Start() {
             base.Start();
 
             if (!homeMenu) {
-                Debug.Log("get home menu");
                 homeMenu = base.menu.gameObject.GetComponent<HomeMenuManager>();
-                if (homeMenu) {
-                    Debug.Log("got home menu");
-                }
             }
         }
 
-        private void OnEnable() {
+        private void MapButtons() {
             NewGameButton.onClick.RemoveAllListeners();
             NewGameButton.onClick.AddListener(
                 () => {

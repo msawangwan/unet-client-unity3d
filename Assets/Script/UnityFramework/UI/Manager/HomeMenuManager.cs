@@ -32,6 +32,8 @@ namespace UnityFramework.UI.Manager {
                 } else {
                     panel.gameObject.SetActive(false);
                 }
+
+                p.RunSetup();
             }
         }
 
@@ -44,6 +46,7 @@ namespace UnityFramework.UI.Manager {
 
             foreach (int id in base.panels.Keys) { // then link them togethor
                 MenuPanel p = base.panels[id].GetComponent<MenuPanel>();
+                Debug.LogFormat("MY TYPE: {0}", p.GetType().Name);
                 if (p is HomePanel) {
                     Debug.Log("HOME PANEL!");
                 } else if (p is CreateProfilePanel) {

@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
-// using UnityFramework.Global
+using System;
 using System.Collections;
 
 namespace UnityFramework {
     public abstract class ManagerBehaviour : MonoBehaviour {
-        private System.Func<bool> onInitialisationCompleted;
         private bool isInitialised = false;
+        private Func<bool> onInitialisationCompleted = null;
+
+        protected Action onStart = null;
 
         public bool completedInitialisation {
             get {

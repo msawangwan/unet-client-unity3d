@@ -34,8 +34,6 @@ namespace UnityFramework {
                 isInitialised = true;
                 instanceID = NextAvailableInstanceID;
             }
-
-            Debug.LogFormat("[{2}]{0} initialised with instance id: {1}", gameObject.name, instanceID, Time.time);
         }
 
         protected virtual void Awake() {
