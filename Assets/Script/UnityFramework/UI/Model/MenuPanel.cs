@@ -19,7 +19,7 @@ namespace UnityFramework.UI.Model {
         private bool hasRegisteredWithManager = false;
 
         public abstract bool isDefaultView { get; }
-        public abstract void RunSetup();
+        public abstract void MapDependencies();
 
         public void LinkMenuNode(MenuPanel.Node next) {
             if (link == null) {

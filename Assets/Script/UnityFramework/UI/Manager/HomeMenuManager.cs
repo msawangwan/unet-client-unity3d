@@ -33,16 +33,22 @@ namespace UnityFramework.UI.Manager {
                     panel.gameObject.SetActive(false);
                 }
 
-                p.RunSetup();
+                p.MapDependencies();
             }
         }
 
         private void OnEnable() {
             base.onPanelRegistered += HandleOnMenuLoaded;
+            Debug.Log("onenable HomeMenuManager");
 
             for (int i = 0; i < transform.childCount; i++) { // register each panel in the set
                 transform.GetChild(i).gameObject.SetActive(true);
+                Debug.Log("activated: " + transform.GetChild(i));
+                // Debug.Log(panels[i]);
             }
+
+            Debug.Log("finished activating: " + gameObject.name);
+            Debug.Log("start foreach: " + gameObject.name);
 
             foreach (int id in base.panels.Keys) { // then link them togethor
                 MenuPanel p = base.panels[id].GetComponent<MenuPanel>();
@@ -57,6 +63,8 @@ namespace UnityFramework.UI.Manager {
                     continue;
                 }
             }
+
+            Debug.Log("end foreach: " + gameObject.name);
         }
 
         private void OnTransformChildrenChanged() {

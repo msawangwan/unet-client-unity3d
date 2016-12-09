@@ -13,8 +13,10 @@ namespace UnityFramework.UI.Manager {
             } else {
                 if (!panels.ContainsKey(panelIID)) {
                     panels.Add(panelIID, panel);
+                    Debug.Log("added to panels: " + panelIID);
 
                     if (onPanelRegistered != null) {
+                        Debug.Log("raised listener: " + panelIID);
                         onPanelRegistered(panelIID, panel);
                     }
                 }
