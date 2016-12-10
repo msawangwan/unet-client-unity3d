@@ -21,35 +21,37 @@ namespace UnityFramework.UI.Manager {
             }
         }
 
-        private void newhandleonmenu(int panelIID, GameObject panel) {
-            var menu = panel.GetComponent<MenuPanel<HomeMenuManager>>();
+        private void HandleOnMenuLoaded(int panelIID, GameObject menuGameObject) {
+            var menu = menuGameObject.GetComponent<MenuPanel<HomeMenuManager>>();
 
             if (menu.isRootMenu) {
-                
+                menuGameObject.SetActive(true);
+            } else {
+                menuGameObject.SetActive(false);
             }
         }
         
-        private void HandleOnMenuLoaded(int panelIID, GameObject panel) {
-            var p = panel.GetComponent<MenuPanel<HomeMenuManager>>();
-            if (p) {
-                if (currentActivePanel == null) {
-                    currentActivePanel = p;
-                    // menuPath.Push(currentActivePanel);
-                } else if (p.isRootMenu) { // technically, this could be more than 1 panel if we forget to set it
-                    currentActivePanel.gameObject.SetActive(false);
-                    currentActivePanel = p;
+        // private void HandleOnMenuLoaded(int panelIID, GameObject panel) {
+        //     var p = panel.GetComponent<MenuPanel<HomeMenuManager>>();
+        //     if (p) {
+        //         if (currentActivePanel == null) {
+        //             currentActivePanel = p;
+        //             // menuPath.Push(currentActivePanel);
+        //         } else if (p.isRootMenu) { // technically, this could be more than 1 panel if we forget to set it
+        //             currentActivePanel.gameObject.SetActive(false);
+        //             currentActivePanel = p;
 
-                    panel.gameObject.SetActive(true);
+        //             panel.gameObject.SetActive(true);
 
-                    // menuPath.Pop();
-                    // menuPath.Push(currentActivePanel); // should always be the 'default' panel of a menu set
-                } else {
-                    panel.gameObject.SetActive(false);
-                }
+        //             // menuPath.Pop();
+        //             // menuPath.Push(currentActivePanel); // should always be the 'default' panel of a menu set
+        //         } else {
+        //             panel.gameObject.SetActive(false);
+        //         }
 
-                p.MapUIDependencies();
-            }
-        }
+        //         p.MapUIDependencies();
+        //     }
+        // }
 
         private void OnEnable() {
             base.onMenuCached += HandleOnMenuLoaded;
