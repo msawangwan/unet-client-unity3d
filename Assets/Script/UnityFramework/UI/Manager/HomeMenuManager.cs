@@ -3,20 +3,22 @@ using UnityFramework.UI.Model;
 using System.Collections.Generic;
 
 namespace UnityFramework.UI.Manager {
-    public class HomeMenuManager : MenuManager {
-        private Stack<MenuPanel> menuPath = new Stack<MenuPanel>();
-        private MenuPanel currentActivePanel = null;
+    public class HomeMenuManager : MenuManager<HomeMenuManager> {
+        private Stack<MenuPanel<HomeMenuManager>> menuPath = new Stack<MenuPanel<HomeMenuManager>>();
+        private MenuPanel<HomeMenuManager> currentActivePanel = null;
 
-        public void DownOneLevel(MenuPanel mp, int id) {
+        public void DownOneLevel(MenuPanel<HomeMenuManager> mp, int id) {
             menuPath.Push(mp);
         }
 
-        public void UpOneLevel(MenuPanel mp, int id) {
+        public void UpOneLevel(MenuPanel<HomeMenuManager> mp, int id) {
 
         }
+
+        protected override int menuCount { get { return 3; } }
         
         private void HandleOnMenuLoaded(int panelIID, GameObject panel) {
-            MenuPanel p = panel.GetComponent<MenuPanel>();
+            var p = panel.GetComponent<MenuPanel<HomeMenuManager>>();
             if (p) {
                 if (currentActivePanel == null) {
                     currentActivePanel = p;

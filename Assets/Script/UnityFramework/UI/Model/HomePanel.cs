@@ -4,7 +4,7 @@ using UnityFramework.UI.Manager;
 using System.Collections;
 
 namespace UnityFramework.UI.Model {
-    public class HomePanel : MenuPanel {
+    public class HomePanel : MenuPanel<HomeMenuManager> {
         [SerializeField] private Button NewGameButton = null;
         [SerializeField] private Button LoadGameButton = null;
 
@@ -29,7 +29,7 @@ namespace UnityFramework.UI.Model {
             );
         }
 
-        protected override void MapParentMenu(MenuManager parentMenu) {
+        protected override void MapParentMenu(MenuManager<HomeMenuManager> parentMenu) {
             homeMenu = parentMenu as HomeMenuManager;
         }
 

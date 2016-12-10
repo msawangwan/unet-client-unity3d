@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityFramework.UI.Model;
 
 namespace UnityFramework.UI.Manager {
-    public abstract class MenuManager : ManagerBehaviour {
+    public abstract class MenuManager<T> : ManagerBehaviour where T : class {
         protected List<int[]> menuGraph = new List<int[]>();
         protected Stack<int> menuHistory = new Stack<int>();
-        protected Dictionary<int, MenuPanel> menuCache = new Dictionary<int, MenuPanel>();
+        protected Dictionary<int, T> menuCache = new Dictionary<int, T>();
         protected System.Action<int, GameObject> onMenuRegistered = null;
 
-        protected abstract int subMenuCount { get; }
+        protected abstract int menuCount { get; }
 
-        public MenuPanel this[int key] {
+        public T this[int key] {
             get {
                 return menuCache[key];
             }
@@ -38,7 +36,7 @@ namespace UnityFramework.UI.Manager {
         public bool CacheMenuWithManager(GameObject menuGameObject, int menuInstanceID, int submenuCount) {
             if (menuGameObject) {
                 if (!menuCache.ContainsKey(menuInstanceID)) {
-                    MenuPanel m = menuGameObject.GetComponent<MenuPanel>();
+                    T m = menuGameObject.GetComponent<T>();
                     menuCache.Add(menuInstanceID, m);
                     menuGraph.Add(new int[submenuCount]);
                     if (onMenuRegistered != null) {
