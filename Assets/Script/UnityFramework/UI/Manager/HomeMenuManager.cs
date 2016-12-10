@@ -15,7 +15,7 @@ namespace UnityFramework.UI.Manager {
         }
 
         protected override int menuCount { 
-            get { 
+            get {
                 return 3;
             }
         }
@@ -45,6 +45,7 @@ namespace UnityFramework.UI.Manager {
         }
 
         private void OnDisable() {
+            isRootSet = false;
             base.onMenuCached -= HandleOnMenuLoaded;
         }
     }
