@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace UnityFramework.UI.Manager {
     public class HomeMenuManager : MenuManager<HomeMenuManager> {
-        // private Stack<MenuPanel<HomeMenuManager>> menuPath = new Stack<MenuPanel<HomeMenuManager>>();
         private MenuPanel<HomeMenuManager> currentActivePanel = null;
 
         public void DownOneLevel(MenuPanel<HomeMenuManager> mp, int id) {
@@ -21,15 +20,16 @@ namespace UnityFramework.UI.Manager {
             }
         }
 
+        protected override bool isRootSet { get; set; }
+
         private void HandleOnMenuLoaded(int panelIID, GameObject menuGameObject) {
             var menu = menuGameObject.GetComponent<MenuPanel<HomeMenuManager>>();
 
             if (menu) {
-                if (menu.isRootMenu) {
-                    Debug.LogFormat("set active: {0}", true);
+                if (menu.isRootMenu && !isRootSet) {
                     menuGameObject.SetActive(true);
+                    isRootSet = true;
                 } else {
-                    Debug.LogFormat("set active: {0}", false);
                     menuGameObject.SetActive(false);
                 }
                 menu.MapUIDependencies();
@@ -40,7 +40,6 @@ namespace UnityFramework.UI.Manager {
             base.onMenuCached += HandleOnMenuLoaded;
 
             for (int i = 0; i < transform.childCount; i++) { // register each panel in the set
-                Debug.LogFormat("enable menu #{0}", i);
                 transform.GetChild(i).gameObject.SetActive(true);
             }
         }

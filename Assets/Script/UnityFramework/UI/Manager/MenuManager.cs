@@ -9,6 +9,7 @@ namespace UnityFramework.UI.Manager {
         protected System.Action<int, GameObject> onMenuCached = null;
 
         protected abstract int menuCount { get; }
+        protected abstract bool isRootSet { get; set; }
 
         public T this[int key] {
             get {
