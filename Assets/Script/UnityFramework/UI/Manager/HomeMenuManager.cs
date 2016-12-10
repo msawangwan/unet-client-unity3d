@@ -35,28 +35,6 @@ namespace UnityFramework.UI.Manager {
                 menu.MapUIDependencies();
             }
         }
-        
-        // private void HandleOnMenuLoaded(int panelIID, GameObject panel) {
-        //     var p = panel.GetComponent<MenuPanel<HomeMenuManager>>();
-        //     if (p) {
-        //         if (currentActivePanel == null) {
-        //             currentActivePanel = p;
-        //             // menuPath.Push(currentActivePanel);
-        //         } else if (p.isRootMenu) { // technically, this could be more than 1 panel if we forget to set it
-        //             currentActivePanel.gameObject.SetActive(false);
-        //             currentActivePanel = p;
-
-        //             panel.gameObject.SetActive(true);
-
-        //             // menuPath.Pop();
-        //             // menuPath.Push(currentActivePanel); // should always be the 'default' panel of a menu set
-        //         } else {
-        //             panel.gameObject.SetActive(false);
-        //         }
-
-        //         p.MapUIDependencies();
-        //     }
-        // }
 
         private void OnEnable() {
             base.onMenuCached += HandleOnMenuLoaded;
