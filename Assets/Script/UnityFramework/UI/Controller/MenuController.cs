@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+// using UnityFramework.UI.Model;
 
 namespace UnityFramework.UI.Manager {
-    public abstract class MenuManager<T> : ManagerBehaviour where T : class {
+    public abstract class MenuController<T> : ControllerBehaviour where T : class {
         protected List<int[]> menuGraph = new List<int[]>();
         protected Stack<int> menuHistory = new Stack<int>();
         protected Dictionary<int, T> menuCache = new Dictionary<int, T>();
@@ -40,7 +41,7 @@ namespace UnityFramework.UI.Manager {
             return menuCache.ContainsKey(menuID);
         }
 
-        public bool CacheMenuWithManager(GameObject menuGameObject, int menuInstanceID, int submenuCount) {
+        public bool Cache(GameObject menuGameObject, int menuInstanceID, int submenuCount) {
             bool cachedSuccessfully = false;
             if (menuGameObject) {
                 if (!menuCache.ContainsKey(menuInstanceID)) {

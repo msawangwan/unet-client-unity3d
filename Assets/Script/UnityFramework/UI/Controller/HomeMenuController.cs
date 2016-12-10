@@ -3,14 +3,14 @@ using UnityFramework.UI.Model;
 using System.Collections.Generic;
 
 namespace UnityFramework.UI.Manager {
-    public class HomeMenuManager : MenuManager<HomeMenuManager> {
-        private MenuPanel<HomeMenuManager> currentActivePanel = null;
+    public class HomeMenuController : MenuController<HomeMenuController> {
+        private MenuPanel<HomeMenuController> currentActivePanel = null;
 
-        public void DownOneLevel(MenuPanel<HomeMenuManager> mp, int id) {
+        public void DownOneLevel(MenuPanel<HomeMenuController> mp, int id) {
 
         }
 
-        public void UpOneLevel(MenuPanel<HomeMenuManager> mp, int id) {
+        public void UpOneLevel(MenuPanel<HomeMenuController> mp, int id) {
 
         }
 
@@ -23,7 +23,7 @@ namespace UnityFramework.UI.Manager {
         protected override bool isRootSet { get; set; }
 
         private void HandleOnMenuLoaded(int panelIID, GameObject menuGameObject) {
-            var menu = menuGameObject.GetComponent<MenuPanel<HomeMenuManager>>();
+            var menu = menuGameObject.GetComponent<MenuPanel<HomeMenuController>>();
 
             if (menu) {
                 if (menu.isRootMenu && !isRootSet) {
@@ -41,6 +41,8 @@ namespace UnityFramework.UI.Manager {
 
             for (int i = 0; i < transform.childCount; i++) { // register each panel in the set
                 transform.GetChild(i).gameObject.SetActive(true);
+                // register
+                
             }
         }
 

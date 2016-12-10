@@ -1,10 +1,13 @@
 ﻿using UnityFramework.UI.Manager;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace UnityFramework.UI.Model {
     public abstract class MenuPanel<T> : InstanceBehaviour where T : class {
-        protected MenuManager<T> menu = null;
+        protected MenuController<T> menu = null;
         protected MenuPanel<T>[] submenus = null;
+
+        // public int MenuKey {get { return 0; } }
 
         private bool executeSetupComplete = false;
         private IEnumerator onLoadRoutine = null;
@@ -15,8 +18,18 @@ namespace UnityFramework.UI.Model {
         protected abstract int submenuCount { get; }
 
         public abstract void MapUIDependencies();
-        protected abstract void MapParentMenu(MenuManager<T> parentMenu);
+
+        protected abstract void MapParentMenu(MenuController<T> parentMenu);
         protected abstract IEnumerator onLoadMapSubMenus();
+
+        public IEnumerator MapDependenciesAsync(IEnumerable<MenuPanel<T>> a, System.Predicate<MenuPanel<T>> pred) {
+            foreach (MenuPanel<T> item in a) {
+                if (pred(item)) {
+                    yield break;
+                }
+                yield return item;
+            }
+        }
 
         protected virtual void OnEnable() {
             if (onLoadRoutine == null) { // the first time this thing comes to life we do this
@@ -30,11 +43,11 @@ namespace UnityFramework.UI.Model {
 
         protected virtual void Start() {
             if (!executeSetupComplete) {
-                menu = Global.Globals.S.homeMenuManager as MenuManager<T>;
+                menu = Global.Globals.S.homeMenuManager as MenuController<T>;
 
                 MapParentMenu(menu);
                 
-                executeSetupComplete = menu.CacheMenuWithManager(gameObject, base.instanceID, submenuCount);
+                executeSetupComplete = menu.Cache(gameObject, base.instanceID, submenuCount);
                 submenus = new MenuPanel<T>[submenuCount];
             }
         }

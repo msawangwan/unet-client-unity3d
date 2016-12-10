@@ -4,8 +4,8 @@ using UnityFramework.UI.Manager;
 using System.Collections;
 
 namespace UnityFramework.UI.Model {
-    public class SelectProfilePanel : MenuPanel<HomeMenuManager> {
-        private HomeMenuManager homeMenu = null;
+    public class SelectProfilePanel : MenuPanel<HomeMenuController> {
+        private HomeMenuController homeMenu = null;
 
         public override bool isRootMenu { get { return false; } }
         protected override int submenuCount { get { return 1; } }
@@ -14,8 +14,8 @@ namespace UnityFramework.UI.Model {
             Debug.LogFormat("map dependencies: {0}", gameObject.name);
         }
 
-        protected override void MapParentMenu(MenuManager<HomeMenuManager> parentMenu) {
-            homeMenu = parentMenu as HomeMenuManager;
+        protected override void MapParentMenu(MenuController<HomeMenuController> parentMenu) {
+            homeMenu = parentMenu as HomeMenuController;
         }
 
         protected override IEnumerator onLoadMapSubMenus() {

@@ -4,6 +4,6 @@ using UnityEngine;
 
 namespace UnityFramework.Global {
     public class Globals : SingletonBehaviour<Globals> {
-        public ManagerBehaviour homeMenuManager = null;
+        public ControllerBehaviour homeMenuManager = null;
     }
 }

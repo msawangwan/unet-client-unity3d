@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 
 namespace UnityFramework {
-    public abstract class ManagerBehaviour : MonoBehaviour {
+    public abstract class ControllerBehaviour : MonoBehaviour {
         private bool isInitialised = false;
         private Func<bool> onInitialisationCompleted = null;
 

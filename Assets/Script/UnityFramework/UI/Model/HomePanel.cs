@@ -4,11 +4,11 @@ using UnityFramework.UI.Manager;
 using System.Collections;
 
 namespace UnityFramework.UI.Model {
-    public class HomePanel : MenuPanel<HomeMenuManager> {
+    public class HomePanel : MenuPanel<HomeMenuController> {
         [SerializeField] private Button NewGameButton = null;
         [SerializeField] private Button LoadGameButton = null;
 
-        private HomeMenuManager homeMenu = null;
+        private HomeMenuController homeMenu = null;
 
         public override bool isRootMenu { get { return true; } }
         protected override int submenuCount { get { return 2; } }
@@ -31,8 +31,8 @@ namespace UnityFramework.UI.Model {
             Debug.LogFormat("map dependencies: {0}", gameObject.name);
         }
 
-        protected override void MapParentMenu(MenuManager<HomeMenuManager> parentMenu) {
-            homeMenu = parentMenu as HomeMenuManager;
+        protected override void MapParentMenu(MenuController<HomeMenuController> parentMenu) {
+            homeMenu = parentMenu as HomeMenuController;
         }
 
         protected override IEnumerator onLoadMapSubMenus() {
