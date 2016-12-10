@@ -6,13 +6,19 @@ namespace UnityFramework.UI.Manager {
         protected List<int[]> menuGraph = new List<int[]>();
         protected Stack<int> menuHistory = new Stack<int>();
         protected Dictionary<int, T> menuCache = new Dictionary<int, T>();
-        protected System.Action<int, GameObject> onMenuRegistered = null;
+        protected System.Action<int, GameObject> onMenuCached = null;
 
         protected abstract int menuCount { get; }
 
         public T this[int key] {
             get {
                 return menuCache[key];
+            }
+        }
+
+        protected int[] menuRoot {
+            get {
+                return menuGraph[0];
             }
         }
 
@@ -34,18 +40,22 @@ namespace UnityFramework.UI.Manager {
         }
 
         public bool CacheMenuWithManager(GameObject menuGameObject, int menuInstanceID, int submenuCount) {
+            bool cachedSuccessfully = false;
             if (menuGameObject) {
                 if (!menuCache.ContainsKey(menuInstanceID)) {
                     T m = menuGameObject.GetComponent<T>();
+
                     menuCache.Add(menuInstanceID, m);
                     menuGraph.Add(new int[submenuCount]);
-                    if (onMenuRegistered != null) {
-                        onMenuRegistered(menuInstanceID, menuGameObject);
+
+                    if (onMenuCached != null) {
+                        onMenuCached(menuInstanceID, menuGameObject);
                     }
-                    return true;
+
+                    cachedSuccessfully = true;
                 }
             }
-            return false;
+            return cachedSuccessfully;
         }
 
         protected override bool HandleInitialisation() {

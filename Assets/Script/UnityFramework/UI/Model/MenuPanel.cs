@@ -6,8 +6,7 @@ namespace UnityFramework.UI.Model {
         protected MenuManager<T> menu = null;
         protected MenuPanel<T>[] submenus = null;
 
-        private bool hasRegisteredWithManager = false;
-        private bool hasCompletedLinkingSubmenus = false;
+        private bool executeSetupComplete = false;
 
         public bool isCurrentView { get; private set; }
 
@@ -19,21 +18,16 @@ namespace UnityFramework.UI.Model {
         protected abstract IEnumerator onLoadMapSubMenus();
 
         protected virtual void Start() {
-            if (!menu) {
+            if (!executeSetupComplete) {
                 menu = Global.Globals.S.homeMenuManager as MenuManager<T>;
                 MapParentMenu(menu);
-            }
-
-            if (menu.isCached(base.instanceID)) { // id not assigned yet..
-                hasRegisteredWithManager = menu.CacheMenuWithManager(gameObject, base.instanceID, submenuCount);
-            }
-
-            if (submenus == null) {
+                
+                menu.CacheMenuWithManager(gameObject, base.instanceID, submenuCount);
                 submenus = new MenuPanel<T>[submenuCount];
-            }
 
-            if (!hasCompletedLinkingSubmenus) {
                 StartCoroutine(onLoadMapSubMenus());
+
+                executeSetupComplete = true;
             }
         }
     }

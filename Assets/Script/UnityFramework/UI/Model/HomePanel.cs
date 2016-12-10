@@ -27,6 +27,8 @@ namespace UnityFramework.UI.Model {
                     homeMenu.DownOneLevel(this, base.instanceID);
                 }
             );
+
+            Debug.LogFormat("map dependencies: {0}", gameObject.name);
         }
 
         protected override void MapParentMenu(MenuManager<HomeMenuManager> parentMenu) {
