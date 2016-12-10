@@ -7,7 +7,7 @@ namespace UnityFramework.UI.Model {
     public class SelectProfilePanel : MenuPanel<HomeMenuManager> {
         private HomeMenuManager homeMenu = null;
 
-        public override bool isRootMenu { get { return true; } }
+        public override bool isRootMenu { get { return false; } }
         protected override int submenuCount { get { return 1; } }
 
         public override void MapUIDependencies() {

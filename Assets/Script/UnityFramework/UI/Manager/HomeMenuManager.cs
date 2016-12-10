@@ -24,10 +24,15 @@ namespace UnityFramework.UI.Manager {
         private void HandleOnMenuLoaded(int panelIID, GameObject menuGameObject) {
             var menu = menuGameObject.GetComponent<MenuPanel<HomeMenuManager>>();
 
-            if (menu.isRootMenu) {
-                menuGameObject.SetActive(true);
-            } else {
-                menuGameObject.SetActive(false);
+            if (menu) {
+                if (menu.isRootMenu) {
+                    Debug.LogFormat("set active: {0}", true);
+                    menuGameObject.SetActive(true);
+                } else {
+                    Debug.LogFormat("set active: {0}", false);
+                    menuGameObject.SetActive(false);
+                }
+                menu.MapUIDependencies();
             }
         }
         
@@ -57,6 +62,7 @@ namespace UnityFramework.UI.Manager {
             base.onMenuCached += HandleOnMenuLoaded;
 
             for (int i = 0; i < transform.childCount; i++) { // register each panel in the set
+                Debug.LogFormat("enable menu #{0}", i);
                 transform.GetChild(i).gameObject.SetActive(true);
             }
         }
