@@ -21,7 +21,7 @@ namespace UnityFramework.UI.Manager {
                 if (currentActivePanel == null) {
                     currentActivePanel = p;
                     menuPath.Push(currentActivePanel);
-                } else if (p.isDefaultView) { // technically, this could be more than 1 panel if we forget to set it
+                } else if (p.isRootMenu) { // technically, this could be more than 1 panel if we forget to set it
                     currentActivePanel.gameObject.SetActive(false);
                     currentActivePanel = p;
 
@@ -33,38 +33,16 @@ namespace UnityFramework.UI.Manager {
                     panel.gameObject.SetActive(false);
                 }
 
-                p.MapDependencies();
+                p.MapUIDependencies();
             }
         }
 
         private void OnEnable() {
-            base.onPanelRegistered += HandleOnMenuLoaded;
-            Debug.Log("onenable HomeMenuManager");
+            base.onMenuRegistered += HandleOnMenuLoaded;
 
             for (int i = 0; i < transform.childCount; i++) { // register each panel in the set
                 transform.GetChild(i).gameObject.SetActive(true);
-                Debug.Log("activated: " + transform.GetChild(i));
-                // Debug.Log(panels[i]);
             }
-
-            Debug.Log("finished activating: " + gameObject.name);
-            Debug.Log("start foreach: " + gameObject.name);
-
-            foreach (int id in base.panels.Keys) { // then link them togethor
-                MenuPanel p = base.panels[id].GetComponent<MenuPanel>();
-                Debug.LogFormat("MY TYPE: {0}", p.GetType().Name);
-                if (p is HomePanel) {
-                    Debug.Log("HOME PANEL!");
-                } else if (p is CreateProfilePanel) {
-                    Debug.Log("CREATE PROFILE PANEL!");
-                } else if (p is SelectProfilePanel) {
-                    Debug.Log("SELECT PROFILE PANEL!");
-                } else {
-                    continue;
-                }
-            }
-
-            Debug.Log("end foreach: " + gameObject.name);
         }
 
         private void OnTransformChildrenChanged() {
@@ -72,7 +50,7 @@ namespace UnityFramework.UI.Manager {
         }
 
         private void OnDisable() {
-            base.onPanelRegistered -= HandleOnMenuLoaded;
+            base.onMenuRegistered -= HandleOnMenuLoaded;
         }
     }
 }

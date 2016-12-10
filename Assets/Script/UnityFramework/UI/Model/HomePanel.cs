@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityFramework.UI.Manager;
+using System.Collections;
 
 namespace UnityFramework.UI.Model {
     public class HomePanel : MenuPanel {
@@ -11,12 +10,10 @@ namespace UnityFramework.UI.Model {
 
         private HomeMenuManager homeMenu = null;
 
-        private MenuPanel.Node linksToSelect = null;
-        private MenuPanel.Node linksToCreate = null;
+        public override bool isRootMenu { get { return true; } }
+        protected override int submenuCount { get { return 2; } }
 
-        public override bool isDefaultView { get { return true; } }
-
-        public override void MapDependencies() {
+        public override void MapUIDependencies() {
             NewGameButton.onClick.RemoveAllListeners();
             NewGameButton.onClick.AddListener(
                 () => {
@@ -32,11 +29,13 @@ namespace UnityFramework.UI.Model {
             );
         }
 
-        protected override void Start() {
-            base.Start();
+        protected override void MapParentMenu(MenuManager parentMenu) {
+            homeMenu = parentMenu as HomeMenuManager;
+        }
 
-            if (!homeMenu) {
-                homeMenu = base.menu.gameObject.GetComponent<HomeMenuManager>();
+        protected override IEnumerator onLoadMapSubMenus() {
+            while (true) {
+                yield return null;
             }
         }
     }

@@ -1,39 +1,39 @@
-﻿using UnityEngine;
-using UnityFramework.UI.Manager;
+﻿using UnityFramework.UI.Manager;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace UnityFramework.UI.Model {
     public abstract class MenuPanel : InstanceBehaviour {
-        public class Node {
-            public readonly Node Next;
-
-            public Node(Node next) {
-                Next = next;
-            }
-        }
-
         protected MenuManager menu = null;
-        // protected MenuPanel.Node link = null;
+        protected MenuPanel[] submenus = null;
 
         private bool hasRegisteredWithManager = false;
+        private bool hasCompletedLinkingSubmenus = false;
 
-        public abstract bool isDefaultView { get; }
-        public abstract void MapDependencies();
+        public bool isCurrentView { get; private set; }
 
-        // public void LinkMenuNode(MenuPanel.Node next) {
-        //     if (link == null) {
-        //         link = new MenuPanel.Node(next);
-        //     }
-        // }
+        public abstract bool isRootMenu { get; }
+        protected abstract int submenuCount { get; }
+
+        public abstract void MapUIDependencies();
+        protected abstract void MapParentMenu(MenuManager parentMenu);
+        protected abstract IEnumerator onLoadMapSubMenus();
 
         protected virtual void Start() {
             if (!menu) {
                 menu = Global.Globals.S.homeMenuManager as MenuManager;
+                MapParentMenu(menu);
             }
 
-            if (!hasRegisteredWithManager) { // id not assigned yet..
-                menu.RegisterWithManager(gameObject, base.instanceID);
+            if (menu.isCached(base.instanceID)) { // id not assigned yet..
+                hasRegisteredWithManager = menu.CacheMenuWithManager(gameObject, base.instanceID, submenuCount);
+            }
+
+            if (submenus == null) {
+                submenus = new MenuPanel[submenuCount];
+            }
+
+            if (!hasCompletedLinkingSubmenus) {
+                StartCoroutine(onLoadMapSubMenus());
             }
         }
     }

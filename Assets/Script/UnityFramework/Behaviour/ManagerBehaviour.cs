@@ -17,11 +17,7 @@ namespace UnityFramework {
 
         protected abstract bool HandleInitialisation();
 
-        // Awake()
-        // OnEnable()
-        // Start()
-
-        private IEnumerator Start() {
+        protected virtual IEnumerator Start() {
             onInitialisationCompleted += HandleInitialisation;
 
             do {

@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace UnityFramework.UI.Model {
     public class SelectProfilePanel : MenuPanel {
-        public override bool isDefaultView { get { return false; } }
+        public override bool isRootMenu { get { return false; } }
 
-        public override void MapDependencies() {
+        public override void MapUIDependencies() {
             Debug.Log("select profile runned settup");
         }
     }
