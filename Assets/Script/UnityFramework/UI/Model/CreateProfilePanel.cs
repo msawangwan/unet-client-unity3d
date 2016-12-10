@@ -11,7 +11,7 @@ namespace UnityFramework.UI.Model {
         protected override int submenuCount { get { return 1; } }
 
         public override void MapUIDependencies() {
-            Debug.Log("create profile runned settup");
+            Debug.LogFormat("map dependencies: {0}", gameObject.name);
         }
 
         protected override void MapParentMenu(MenuManager<HomeMenuManager> parentMenu) {
