@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using UnityFramework.Net.Util;
+using UnityAPI.Net.Util;
 using System;
 using System.IO;
 using System.Net;
 using System.Text;
 
-namespace UnityFramework.Net.Client {
+namespace UnityAPI.Net.Client {
     public class ClientHandler : MonoBehaviour {
         [Serializable]
         public class Configuration {

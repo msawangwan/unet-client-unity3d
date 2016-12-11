@@ -2,7 +2,7 @@
 using System;
 using System.Net;
 
-namespace UnityFramework.Net.Util {
+namespace UnityAPI.Net.Util {
     public static class NetUtil {
         public static string UrlCombinePath(string url1, string url2) {
             if (url1.Length == 0) {

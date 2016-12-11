@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityFramework {
+namespace UnityAPI {
     public abstract class SingletonBehaviour<T> : MonoBehaviour where T : MonoBehaviour {
         [SerializeField] private bool dontDestroyOnLoad = false;
         [SerializeField] private bool isSafeToOverwrite = false;

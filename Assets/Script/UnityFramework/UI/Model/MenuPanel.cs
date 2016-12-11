@@ -1,8 +1,8 @@
-﻿using UnityFramework.UI.Manager;
+﻿using UnityAPI.UI.Manager;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UnityFramework.UI.Model {
+namespace UnityAPI.UI.Model {
     public abstract class MenuPanel<T> : InstanceBehaviour where T : class {
         protected MenuController<T> menu = null;
         protected MenuPanel<T>[] submenus = null;

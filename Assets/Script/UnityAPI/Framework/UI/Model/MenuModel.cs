@@ -4,37 +4,67 @@ using UnityEngine;
 
 namespace UnityAPI.Framework.UI {
     public class MenuModel : MonoBehaviour {
-        [SerializeField] private int menuLevel;
-        [SerializeField] private int menuID;
-        [SerializeField] private bool isRootMenu;
+        public static List<int> menusByUIID = new List<int>();
 
-        public MenuModel[] links;
-        public MenuController owner;
-
-        public int MenuLevel {
+        public static int nextMenuUIID {
             get {
-                return menuLevel;
+                while (true) {
+                    ++currentMenuUUID;
+                    if (!menusByUIID.Contains(currentMenuUUID)) {
+                        return currentMenuUUID;
+                    }
+                }
             }
         }
 
-        public int MenuID { 
-            get { 
-                return menuID; 
-            }
-        }
+        private static int currentMenuUUID = -1;
 
-        public bool isRoot {
+        private MenuController owner;
+
+        [SerializeField] private MenuData menu;
+
+        public MenuModel this[int lookupID] {
             get {
-                return isRootMenu;
+                if (hasLinks || lookupID <= NumberOfLinks) {
+                    return null;
+                }
+                return menu.links[lookupID];
             }
         }
 
-        public void OnInit(MenuController owner)  {
+        public IEnumerable<MenuModel> Links {
+            get {
+                return menu.links;
+            }
+        }
+
+        public int NumberOfLinks {
+            get {
+                return menu.links.Length;
+            }
+        }
+
+        public int MenuUUID { get; set; }
+        public int MenuLevel { get { return menu.menuLevel; } }
+        public int MenuID { get { return menu.menuInstanceID; } }
+        public bool isRoot { get { return menu.menuType == MenuData.MenuType.Root; } }
+        public bool hasLinks { get { return menu.links.Length > 0; } }
+
+
+        public void Init(MenuController owner)  {
+            this.MenuUUID = nextMenuUIID;
             this.owner = owner;
+
             gameObject.SetActive(true);
-            if (isRoot) {
-                gameObject.SetActive(false);
-            }
+            gameObject.SetActive(false);
+        }
+
+        public void MakeActive() {
+            gameObject.SetActive(true);
+        }
+
+        public void MakeInactive() {
+            gameObject.SetActive(false);
         }
     }
 }

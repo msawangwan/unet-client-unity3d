@@ -2,36 +2,37 @@
 using System;
 using System.Collections;
 
-namespace UnityFramework {
+namespace UnityAPI {
     public abstract class ControllerBehaviour : MonoBehaviour {
         private bool isInitialised = false;
-        private Func<bool> onInitialisationCompleted = null;
+        public Func<bool> onInitCompleted = null;
 
         protected Action onStart = null;
 
-        public bool completedInitialisation {
+        public bool onInitComplete {
             get {
                 return isInitialised;
             }
         }
 
-        protected abstract bool HandleInitialisation();
+        protected abstract bool OnInit();
 
         protected virtual IEnumerator Start() {
-            onInitialisationCompleted += HandleInitialisation;
+            onInitCompleted += OnInit;
 
             do {
                 yield return null;
 
-                if (onInitialisationCompleted != null) {
-                    if (onInitialisationCompleted()) {
+                if (onInitCompleted != null) {
+                    if (onInitCompleted()) {
                         isInitialised = true;
+                        Debug.LogFormat("{0} init complete: {1}", gameObject.name, Time.time);
                         break;
                     }
                 }
             } while (true);
 
-            onInitialisationCompleted -= HandleInitialisation;
+            onInitCompleted -= OnInit;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using UnityFramework.UI.Model;
+using UnityAPI.UI.Model;
 using System.Collections.Generic;
 
-namespace UnityFramework.UI.Manager {
+namespace UnityAPI.UI.Manager {
     public class HomeMenuController : MenuController<HomeMenuController> {
         private MenuPanel<HomeMenuController> currentActivePanel = null;
 
@@ -42,7 +42,7 @@ namespace UnityFramework.UI.Manager {
             for (int i = 0; i < transform.childCount; i++) { // register each panel in the set
                 transform.GetChild(i).gameObject.SetActive(true);
                 // register
-                
+
             }
         }
 

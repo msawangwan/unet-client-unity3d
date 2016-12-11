@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UnityFramework {
+namespace UnityAPI {
     public abstract class InstanceBehaviour : MonoBehaviour {
         private static List<int> instanceIDs = new List<int>();
 

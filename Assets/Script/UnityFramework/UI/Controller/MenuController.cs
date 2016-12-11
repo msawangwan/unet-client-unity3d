@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-// using UnityFramework.UI.Model;
+// using UnityAPI.UI.Model;
 
-namespace UnityFramework.UI.Manager {
+namespace UnityAPI.UI.Manager {
     public abstract class MenuController<T> : ControllerBehaviour where T : class {
         protected List<int[]> menuGraph = new List<int[]>();
         protected Stack<int> menuHistory = new Stack<int>();
@@ -60,7 +60,7 @@ namespace UnityFramework.UI.Manager {
             return cachedSuccessfully;
         }
 
-        protected override bool HandleInitialisation() {
+        protected override bool OnInit() {
             return true;
         }
     }

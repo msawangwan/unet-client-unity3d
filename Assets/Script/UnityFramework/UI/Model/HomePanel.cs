@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityFramework.UI.Manager;
+using UnityAPI.UI.Manager;
 using System.Collections;
 
-namespace UnityFramework.UI.Model {
+namespace UnityAPI.UI.Model {
     public class HomePanel : MenuPanel<HomeMenuController> {
         [SerializeField] private Button NewGameButton = null;
         [SerializeField] private Button LoadGameButton = null;
