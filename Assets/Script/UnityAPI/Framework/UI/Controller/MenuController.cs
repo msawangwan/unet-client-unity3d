@@ -32,20 +32,6 @@ namespace UnityAPI.Framework.UI {
             }
         }
 
-        protected override bool OnInit() {
-            this.Init();
-            MenuView.Init();
-            return true;
-        }
-
-        private void SetActiveState(MenuModel m, bool toggleActive) {
-            m.gameObject.SetActive(toggleActive);
-            if (toggleActive) {
-                this.activeMenu = m;
-                traversalPath.Push(activeMenu);
-            }
-        }
-
         public void Traverse(int level, int id, int submenuKey) {
             MenuModel m = this.menuGraph[level, id][submenuKey];
             SetActiveState(activeMenu, false);
@@ -62,6 +48,20 @@ namespace UnityAPI.Framework.UI {
             }
             if (onExit != null) {
                 onExit();
+            }
+        }
+
+        protected override bool OnInit() {
+            this.Init();
+            MenuView.Init();
+            return true;
+        }
+
+        private void SetActiveState(MenuModel m, bool toggleActive) {
+            m.gameObject.SetActive(toggleActive);
+            if (toggleActive) {
+                this.activeMenu = m;
+                traversalPath.Push(activeMenu);
             }
         }
     }
