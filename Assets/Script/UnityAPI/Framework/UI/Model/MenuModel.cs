@@ -20,6 +20,7 @@ namespace UnityAPI.Framework.UI {
         private static int currentMenuUUID = -1;
 
         private MenuController owner;
+        private bool isInit = false;
 
         [SerializeField] private MenuData menu;
 
@@ -49,14 +50,19 @@ namespace UnityAPI.Framework.UI {
         public int MenuID { get { return menu.menuInstanceID; } }
         public bool isRoot { get { return menu.menuType == MenuData.MenuType.Root; } }
         public bool hasLinks { get { return menu.links.Length > 0; } }
+        public bool isInitialised {get { return isInit; } }
 
 
         public void Init(MenuController owner)  {
-            this.MenuUUID = nextMenuUIID;
-            this.owner = owner;
+            if (!isInit) {
+                this.MenuUUID = nextMenuUIID;
+                this.owner = owner;
 
-            gameObject.SetActive(true);
-            gameObject.SetActive(false);
+                gameObject.SetActive(true);
+                gameObject.SetActive(false);
+
+                isInit = true;
+            }
         }
 
         public void MakeActive() {

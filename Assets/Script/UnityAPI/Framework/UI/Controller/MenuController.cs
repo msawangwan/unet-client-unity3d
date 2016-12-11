@@ -15,21 +15,20 @@ namespace UnityAPI.Framework.UI {
         public void Init() {
             for (int i = 0; i < MenuView.transform.childCount; i++) {
                 MenuModel m = MenuView.transform.GetChild(i).GetComponent<MenuModel>();
-
-                if (!this.menus.Contains(m.MenuUUID)) {
+                if (!m.isInitialised) {
                     m.Init(this);
+                    if (!this.menus.Contains(m.MenuUUID)) {
+                        this.menuGraph[m.MenuLevel, m.MenuID] = m;
 
-                    this.menuGraph[m.MenuLevel, m.MenuID] = m;
+                        if (m.isRoot) {
+                            this.SetActiveState(m, true);
+                            this.traversalPath.Push(m);
+                        }
 
-                    if (m.isRoot) {
-                        this.SetActiveState(m, true);
-                        this.traversalPath.Push(m);
+                        this.menus.Add(m.MenuUUID);
+                        Debug.LogFormat("{0} added to menu list [level {1}][id {2}]", m.name, m.MenuLevel, m.MenuID);
                     }
-
-                    this.menus.Add(m.MenuUUID);
                 }
-
-                Debug.Log(m.MenuLevel + " " + m.MenuID);
             }
         }
 
