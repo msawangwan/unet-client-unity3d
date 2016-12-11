@@ -13,7 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuName: 3
   menuType: 2
-  parent: {fileID: 114501254577613878, guid: 40510844fdbb5438bae65e35561605a4, type: 2}
-  links: []
   menuLevel: 1
   menuInstanceID: 0

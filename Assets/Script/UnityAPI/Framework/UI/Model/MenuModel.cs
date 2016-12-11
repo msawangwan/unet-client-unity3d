@@ -23,34 +23,64 @@ namespace UnityAPI.Framework.UI {
         private bool isInit = false;
 
         [SerializeField] private MenuData menu;
+        [SerializeField] private MenuModel parent;
+        [SerializeField] private MenuModel[] links;
 
         public MenuModel this[int lookupID] {
             get {
-                if (hasLinks || lookupID <= NumberOfLinks) {
+                if (!hasLinks || lookupID > NumberOfLinks) {
                     return null;
                 }
-                return menu.links[lookupID];
+                return links[lookupID];
             }
         }
 
         public IEnumerable<MenuModel> Links {
             get {
-                return menu.links;
+                return links;
             }
         }
 
         public int NumberOfLinks {
             get {
-                return menu.links.Length;
+                return links.Length;
             }
         }
 
-        public int MenuUUID { get; set; }
-        public int MenuLevel { get { return menu.menuLevel; } }
-        public int MenuID { get { return menu.menuInstanceID; } }
-        public bool isRoot { get { return menu.menuType == MenuData.MenuType.Root; } }
-        public bool hasLinks { get { return menu.links.Length > 0; } }
-        public bool isInitialised {get { return isInit; } }
+        public int MenuUUID { 
+            get; 
+            set; 
+        }
+
+        public int MenuLevel { 
+            get { 
+                return menu.menuLevel; 
+            } 
+        }
+
+        public int MenuID { 
+            get { 
+                return menu.menuInstanceID; 
+            } 
+        }
+
+        public bool isRoot { 
+            get { 
+                return menu.menuType == MenuData.MenuType.Root; 
+            } 
+        }
+
+        public bool hasLinks { 
+            get { 
+                return links.Length > 0; 
+            } 
+        }
+
+        public bool isInitialised {
+            get { 
+                return isInit; 
+            } 
+        }
 
 
         public void Init(MenuController owner)  {
@@ -59,6 +89,9 @@ namespace UnityAPI.Framework.UI {
                 this.owner = owner;
 
                 gameObject.SetActive(true);
+                if (links.Length <= 0) {
+                    links = new MenuModel[1] { parent };
+                }
                 gameObject.SetActive(false);
 
                 isInit = true;

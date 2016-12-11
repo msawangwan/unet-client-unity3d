@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace UnityAPI.Framework.UI {
@@ -26,7 +27,6 @@ namespace UnityAPI.Framework.UI {
                         }
 
                         this.menus.Add(m.MenuUUID);
-                        Debug.LogFormat("{0} added to menu list [level {1}][id {2}]", m.name, m.MenuLevel, m.MenuID);
                     }
                 }
             }
@@ -38,24 +38,30 @@ namespace UnityAPI.Framework.UI {
             return true;
         }
 
-        private void SetActiveState(MenuModel m, bool toggleActive = true) {
+        private void SetActiveState(MenuModel m, bool toggleActive) {
             m.gameObject.SetActive(toggleActive);
             if (toggleActive) {
                 this.activeMenu = m;
+                traversalPath.Push(activeMenu);
             }
         }
 
-        public void DownOneLevel(int level, int id) {
-            MenuModel m = this.menuGraph[level, id];
-            if (traversalPath.Peek().MenuLevel != m.MenuLevel) {
-                if (activeMenu.MenuID != m.MenuID) {
-                    MenuModel p = traversalPath.Pop();
+        public void Traverse(int level, int id, int submenuKey) {
+            MenuModel m = this.menuGraph[level, id][submenuKey];
+            SetActiveState(activeMenu, false);
+            SetActiveState(m, true);
+        }
 
-                    traversalPath.Push(m);
-
-                    p.MakeInactive();
-                    m.MakeActive();
+        public void ExitMenu(bool disableAll, System.Action onExit) {
+            if (disableAll) {
+                foreach (var item in menuGraph) {
+                    if (item != null) {
+                        this.SetActiveState(item, false);
+                    }
                 }
+            }
+            if (onExit != null) {
+                onExit();
             }
         }
     }

@@ -7,23 +7,29 @@ namespace UnityAPI.Framework.UI {
     public class MenuView : MonoBehaviour {
         public MenuController controller;
 
-        public Button newProfile;
-        public Button confirmProfile;
+        [SerializeField] private Button createProfile;
+        [SerializeField] private Button selectProfile;
 
-        public Button selectProfile;
-        public Button displayProfile;
-        public Button loadProfile;
+        [SerializeField] private Button confirmCreate;
+        [SerializeField] private Button toTitleFromCreate;
 
-        public Button upOneLevel;
+        [SerializeField] private Button loadFromSlot1;
+        [SerializeField] private Button loadFromSlot2;
+        [SerializeField] private Button loadFromSlot3;
+        [SerializeField] private Button toTitleFromSelect;
 
         public void Init() {
             Button[] allButtons = new Button[] {
-                newProfile,
-                confirmProfile,
+                createProfile,
                 selectProfile,
-                displayProfile,
-                loadProfile,
-                upOneLevel,
+
+                confirmCreate,
+                toTitleFromCreate,
+
+                loadFromSlot1,
+                loadFromSlot2,
+                loadFromSlot3,
+                toTitleFromSelect,
             };
             
             foreach (var item in allButtons) {
@@ -32,21 +38,51 @@ namespace UnityAPI.Framework.UI {
                 }
             }
 
-            newProfile.onClick.AddListener(
+            createProfile.onClick.AddListener(
                 () => {
-                    controller.DownOneLevel(0, 0); // get the menu with key 0 and the link at points index 0
-                }
-            );
-
-            confirmProfile.onClick.AddListener(
-                () => {
-                    Debug.Log("starting new game");
+                    controller.Traverse(0, 0, 0);
                 }
             );
 
             selectProfile.onClick.AddListener(
                 () => {
-                    controller.DownOneLevel(1, 0);
+                    controller.Traverse(0, 0, 1);
+                }
+            );
+
+            toTitleFromCreate.onClick.AddListener(
+                () => {
+                    controller.Traverse(1, 0, 0);
+                }
+            );
+
+            toTitleFromSelect.onClick.AddListener(
+                () => {
+                    controller.Traverse(1, 1, 0);
+                }
+            );
+
+            confirmCreate.onClick.AddListener(
+                () => {
+                    Debug.Log("new profile created");
+                }
+            );
+
+            loadFromSlot1.onClick.AddListener(
+                () => {
+                    Debug.Log("loading profile slot 1");
+                }
+            );
+
+            loadFromSlot2.onClick.AddListener(
+                () => {
+                    Debug.Log("loading profile slot 2");
+                }
+            );
+
+            loadFromSlot3.onClick.AddListener(
+                () => {
+                    Debug.Log("loading profile slot 3");
                 }
             );
         }

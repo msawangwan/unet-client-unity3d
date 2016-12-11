@@ -20,9 +20,6 @@ namespace UnityAPI.Framework.UI {
         public MenuName menuName;
         public MenuType menuType;
 
-        public MenuModel parent;
-        public MenuModel[] links;
-
         public int menuLevel;
         public int menuInstanceID;
     }
