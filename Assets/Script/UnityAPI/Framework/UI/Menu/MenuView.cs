@@ -18,6 +18,8 @@ namespace UnityAPI.Framework.UI {
         [SerializeField] private Button loadFromSlot3;
         [SerializeField] private Button toTitleFromSelect;
 
+        [SerializeField] private InputField profileNameTextField;
+
         public void Init() {
             Button[] allButtons = new Button[] {
                 createProfile,
@@ -64,7 +66,12 @@ namespace UnityAPI.Framework.UI {
 
             confirmCreate.onClick.AddListener(
                 () => {
-                    Debug.Log("new profile created");
+                    string profileName = profileNameTextField.text;
+                    if (controller.VerifyProfileIsValid(profileName)) {
+                        Debug.Log("new profile created: " + profileName);
+                    } else {
+                        Debug.Log("invalid profile name: " + profileName);
+                    }
                 }
             );
 

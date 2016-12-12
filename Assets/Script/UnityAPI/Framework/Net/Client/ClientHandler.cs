@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using UnityAPI.Net.Util;
 using System;
 using System.IO;
 using System.Net;
-using System.Text;
 
-namespace UnityAPI.Net.Client {
+namespace UnityAPI.Framework.Net {
     public class ClientHandler : MonoBehaviour {
         [Serializable]
         public class Configuration {
@@ -30,10 +28,9 @@ namespace UnityAPI.Net.Client {
 
             try {
                 WebRequest req = WebRequest.Create(uri);
-                WebResponse res = req.GetResponse();
-
                 req.Method = "GET";
 
+                WebResponse res = req.GetResponse();
                 Stream dataStream = res.GetResponseStream();
                 res.Close();
 
@@ -42,7 +39,7 @@ namespace UnityAPI.Net.Client {
                     info(resParsed); // <- debug
                 }
 
-                dataStream.Close();
+                dataStream.Close(); // dont need
             } catch (WebException we) {
                 info(NetUtil.PrintfWebException(we));
             } catch (Exception e) {

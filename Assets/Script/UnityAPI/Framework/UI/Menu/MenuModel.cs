@@ -19,7 +19,7 @@ namespace UnityAPI.Framework.UI {
 
         private static int currentMenuUUID = -1;
 
-        private MenuController owner;
+        // private MenuController owner;
         private bool isInit = false;
 
         [SerializeField] private MenuData menu;
@@ -86,7 +86,7 @@ namespace UnityAPI.Framework.UI {
         public void Init(MenuController owner)  {
             if (!isInit) {
                 this.MenuUUID = nextMenuUIID;
-                this.owner = owner;
+                // this.owner = owner;
 
                 gameObject.SetActive(true);
                 if (links.Length <= 0) {

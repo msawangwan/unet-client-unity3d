@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace UnityAPI.Global {
     public class Globals : SingletonBehaviour<Globals> {
-        public ControllerBehaviour homeMenuManager = null;
+        public ControllerBehaviour titleMenuController = null;
+        public ControllerBehaviour serviceController = null;
 
         private IEnumerator Start() {
             do {
                 yield return null;
-                if (homeMenuManager.onInitComplete) {
+                if (titleMenuController.onInitComplete && serviceController.onInitComplete) {
                     Debug.LogFormat("{0} all controller loaded", gameObject.name);
                     break;
                 }
