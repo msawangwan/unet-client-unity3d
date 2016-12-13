@@ -6,14 +6,17 @@ using System.Net;
 namespace UnityAPI.Framework.Net {
     public class ServiceController : ControllerBehaviour {
         [SerializeField] private ClientHandler.Configuration clientConfiguration;
+        [SerializeField] private string debug_route1 = "http://10.0.0.76:8000/ProfileSearch";
+        [SerializeField] private string debug_route2 = "http://tyrant.systems:80/api/availability";
 
         private Uri remoteAddr = null;
 
         public bool ValidateNewProfile(string profileAsJson) {
             try {
-                Uri uri = BuildRoute("/ProfileSearch");
+                // Uri uri = BuildRoute("/ProfileSearch");
                 // Debug.LogFormat("requesting... {0}", uri.OriginalString);
-                HttpWebRequest req = WebRequest.Create("http://10.0.0.76:8000/ProfileSearch") as HttpWebRequest;
+                Debug.Log(debug_route2);
+                HttpWebRequest req = WebRequest.Create(debug_route2) as HttpWebRequest;
 
                 req.ContentType = "application/json; charset=utf-8";
                 req.Method = "POST";
