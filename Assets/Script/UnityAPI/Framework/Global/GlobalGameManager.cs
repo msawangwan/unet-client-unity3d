@@ -30,8 +30,8 @@ namespace UnityAPI.Global {
         }
 
         public IEnumerator VerifyProfileValidRoutine(string profileName) {
-            ProfileSearch newProfile = new ProfileSearch(profileName);
-            string json = UnityEngine.JsonUtility.ToJson(newProfile);
+            string json = UnityEngine.JsonUtility.ToJson(new ProfileSearch(profileName));
+            
             Func<ProfileSearch> searchResult = null;
             ProfileNameVerificationHandler h = new ProfileNameVerificationHandler();
             h.POSTasync(json, searchResult);
@@ -40,10 +40,7 @@ namespace UnityAPI.Global {
                 yield return null;
                 if (h.onDone != null) {
                     ProfileSearch returnedSearchResult = h.onDone();
-                    Debug.Log("now " + returnedSearchResult.isAvailable + " " + returnedSearchResult.Name);
-                    // yield return null;
-                    // Debug.Log("later " + returnedSearchResult.isAvailable);
-                    if (returnedSearchResult.isAvailable) {
+                    if (returnedSearchResult.IsAvailable) {
                         Debug.LogFormat("loaded profile: {0}", returnedSearchResult.Name);
                         loadedProfile = new Profile(returnedSearchResult.Name);
                         break;

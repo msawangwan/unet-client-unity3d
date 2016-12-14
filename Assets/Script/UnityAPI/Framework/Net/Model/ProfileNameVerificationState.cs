@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 
 namespace UnityAPI.Framework.Net {
-    public class ProfileNameVerificationHandler {
+    public class ProfileNameVerificationHandler { // ADD GENERIC TYPE
         public class HandlerContext : IHandlerContext {
             public HttpWebRequest Request { get; set; }
             public HttpWebResponse Response { get; set; }
@@ -28,7 +28,7 @@ namespace UnityAPI.Framework.Net {
                 HandlerContext state = new HandlerContext();
                 state.onVerify = cb;
 
-                state.Request = (HttpWebRequest) WebRequest.Create(ClientServiceHandler.debug_route);
+                state.Request = (HttpWebRequest) WebRequest.Create(ClientServiceHandler.debug_route1);
                 state.Request.ContentType = "application/json; charset=utf-8";
                 state.Request.Method = "POST";
 
@@ -76,10 +76,8 @@ namespace UnityAPI.Framework.Net {
                 StreamReader reader = new StreamReader(stream);
                 string response = reader.ReadToEnd();
 
-                Debug.Log(response);
-                ProfileSearch p = JsonUtility.FromJson<ProfileSearch>(response);
-                onDone = () => { 
-                    return p;
+                onDone = () => {
+                    return JsonUtility.FromJson<ProfileSearch>(response);
                 };
 
                 reader.Close();

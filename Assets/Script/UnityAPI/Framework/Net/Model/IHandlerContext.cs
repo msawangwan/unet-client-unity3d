@@ -1,7 +1,7 @@
 ﻿using System.Net;
 
 namespace UnityAPI.Framework.Net {
-    public interface IHandlerContext {
+    public interface IHandlerContext {// ADD GENERIC TYPE
         HttpWebRequest Request { get; set; }
         HttpWebResponse Response { get; set; }
 
