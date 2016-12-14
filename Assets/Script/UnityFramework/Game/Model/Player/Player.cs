@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
 public class Player : MonoBehaviour {
-    [System.Serializable]
-    public class PlayerProfile {
-        public string Name;
-    }
+    // [System.Serializable]
+    // public class PlayerProfile {
+    //     public string Name;
+    // }
     
-    [SerializeField] private PlayerProfile profile;
+    // [SerializeField] private PlayerProfile profile;
     // public PlayerState State = null;
 
     public static Vector3 CurrentPosition = Vector3.zero;
@@ -26,6 +26,6 @@ public class Player : MonoBehaviour {
 		StarMapController.RaiseNodeSelected += OnTargetNodeSelected;
         StarMapController.RaiseNodeDeselected += OnNullSelection;
 
-        Debug.LogFormat("{0}", profile.Name);
+        // Debug.LogFormat("{0}", profile.Name);
     }
 }

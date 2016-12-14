@@ -38,16 +38,6 @@ namespace UnityAPI.Framework.UI {
             SetActiveState(m, true);
         }
 
-        public bool VerifyProfileIsValid(string profileName) {
-            if (profileName != string.Empty) { // query db
-                UnityAPI.Model.ProfileSearch newProfile = new UnityAPI.Model.ProfileSearch(profileName);
-                string json = JsonUtility.ToJson(newProfile);
-                UnityAPI.Framework.Net.ServiceController service = Global.Globals.S.serviceController as UnityAPI.Framework.Net.ServiceController;
-                return service.ValidateNewProfile(json);
-            }
-            return false;
-        }
-
         public void ExitMenu(bool disableAll, System.Action onExit) {
             if (disableAll) {
                 foreach (var item in menuGraph) {

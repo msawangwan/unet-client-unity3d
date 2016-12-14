@@ -2,11 +2,10 @@
     [System.Serializable]
     public class Profile {
         public string Name;
-        public bool isAvailable;
+        public bool isLoaded;
 
-        public Profile(string name, bool isAvailable = true) {
+        public Profile(string name) {
             this.Name = name;
-            this.isAvailable = isAvailable;
         }
     }
 }

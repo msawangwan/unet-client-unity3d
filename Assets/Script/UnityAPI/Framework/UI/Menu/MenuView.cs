@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityAPI.Model;
 
 namespace UnityAPI.Framework.UI {
     public class MenuView : MonoBehaviour {
@@ -66,12 +67,8 @@ namespace UnityAPI.Framework.UI {
 
             confirmCreate.onClick.AddListener(
                 () => {
-                    string profileName = profileNameTextField.text;
-                    if (controller.VerifyProfileIsValid(profileName)) {
-                        Debug.Log("new profile created: " + profileName);
-                    } else {
-                        Debug.Log("invalid profile name: " + profileName);
-                    }
+                    Global.GlobalGameManager gm = Global.Globals.S.globalGameController as Global.GlobalGameManager;
+                    StartCoroutine(gm.VerifyProfileValidRoutine(profileNameTextField.text));
                 }
             );
 

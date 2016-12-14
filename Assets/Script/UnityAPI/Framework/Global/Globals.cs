@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace UnityAPI.Global {
     public class Globals : SingletonBehaviour<Globals> {
-        public ControllerBehaviour titleMenuController = null;
-        public ControllerBehaviour serviceController = null;
+        public ControllerBehaviour titleMenuController;
+        public ControllerBehaviour serviceController;
+        public ControllerBehaviour globalGameController;
 
         private IEnumerator Start() {
             do {
