@@ -8,6 +8,7 @@ namespace UnityAPI.Framework.UI {
             Title,
             ProfileCreate,
             ProfileSelect,
+            ProfileConfirmSelection,
         }
 
         public enum MenuType {

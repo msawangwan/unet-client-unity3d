@@ -17,9 +17,11 @@ namespace UnityAPI.Framework.UI {
             for (int i = 0; i < MenuView.transform.childCount; i++) {
                 MenuModel m = MenuView.transform.GetChild(i).GetComponent<MenuModel>();
                 if (!m.isInitialised) {
-                    m.Init(this);
+                    m.Init();
                     if (!this.menus.Contains(m.MenuUUID)) {
                         this.menuGraph[m.MenuLevel, m.MenuID] = m;
+
+                        Debug.LogFormat("set menu: {0} {1}", m.MenuLevel, m.MenuID);
 
                         if (m.isRoot) {
                             this.SetActiveState(m, true);
@@ -32,8 +34,26 @@ namespace UnityAPI.Framework.UI {
             }
         }
 
-        public void Traverse(int level, int id, int submenuKey) {
-            MenuModel m = this.menuGraph[level, id][submenuKey];
+        public void Traverse(int level, int id, int submenuKey, bool keepPreviousActive = false) {
+            MenuModel m = null;
+
+            if (submenuKey == -1) {
+                m = this.menuGraph[level, id];
+            } else {
+                m = this.menuGraph[level, id][submenuKey];
+            }
+
+            SetActiveState(activeMenu, keepPreviousActive);
+            SetActiveState(m, true);
+        }
+
+        public void UpOneLevel() {
+            MenuModel m = traversalPath.Pop();
+
+            if (m == activeMenu) { // works for now but, find a cleaner solution than this me thinks...
+                m = traversalPath.Pop();
+            }
+
             SetActiveState(activeMenu, false);
             SetActiveState(m, true);
         }
@@ -46,6 +66,7 @@ namespace UnityAPI.Framework.UI {
                     }
                 }
             }
+            
             if (onExit != null) {
                 onExit();
             }

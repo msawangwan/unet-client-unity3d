@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityAPI.Model;
@@ -19,7 +18,18 @@ namespace UnityAPI.Framework.UI {
         [SerializeField] private Button loadFromSlot3;
         [SerializeField] private Button toTitleFromSelect;
 
+        [SerializeField] private Button confirmConfirm;
+        [SerializeField] private Button cancelConfirm;
+
         [SerializeField] private InputField profileNameTextField;
+
+        [SerializeField] private Text confirmNameText;
+
+        // private Action onConfirm;
+        // private Action onCancel;
+
+        // private bool fromCreate;
+        private string profileName;
 
         public void Init() {
             Button[] allButtons = new Button[] {
@@ -33,6 +43,9 @@ namespace UnityAPI.Framework.UI {
                 loadFromSlot2,
                 loadFromSlot3,
                 toTitleFromSelect,
+
+                confirmCreate,
+                cancelConfirm
             };
             
             foreach (var item in allButtons) {
@@ -53,22 +66,28 @@ namespace UnityAPI.Framework.UI {
                 }
             );
 
+            confirmCreate.onClick.AddListener(
+                () => {
+                    Global.GlobalGameController gameController = Global.Globals.S.globalGameController as Global.GlobalGameController;
+
+                    profileName = profileNameTextField.text;
+
+                    if (string.IsNullOrEmpty(profileName)){
+                        /* todo: needs menu prompt */
+                        Debug.LogErrorFormat("err: empty name not allowed!");
+                        /* todo: needs menu prompt */
+                    } else {
+                        confirmNameText.text = profileName + " >>";
+
+                        gameController.QueueStage1Action(() => { controller.Traverse(2, 0, -1, true); });
+                        StartCoroutine(gameController.VerifyProfileValidRoutine(profileName));
+                    }
+                }
+            );
+
             toTitleFromCreate.onClick.AddListener(
                 () => {
                     controller.Traverse(1, 0, 0);
-                }
-            );
-
-            toTitleFromSelect.onClick.AddListener(
-                () => {
-                    controller.Traverse(1, 1, 0);
-                }
-            );
-
-            confirmCreate.onClick.AddListener(
-                () => {
-                    Global.GlobalGameManager gm = Global.Globals.S.globalGameController as Global.GlobalGameManager;
-                    StartCoroutine(gm.VerifyProfileValidRoutine(profileNameTextField.text));
                 }
             );
 
@@ -87,6 +106,24 @@ namespace UnityAPI.Framework.UI {
             loadFromSlot3.onClick.AddListener(
                 () => {
                     Debug.Log("loading profile slot 3");
+                }
+            );
+
+            toTitleFromSelect.onClick.AddListener(
+                () => {
+                    controller.Traverse(1, 1, 0);
+                }
+            );
+
+            confirmConfirm.onClick.AddListener(
+                () => {
+                    controller.ExitMenu(true, null);
+                }
+            );
+
+            cancelConfirm.onClick.AddListener(
+                () => {
+                    controller.UpOneLevel();
                 }
             );
         }

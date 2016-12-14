@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 
 namespace UnityAPI.Framework.Net {
-    public class ProfileNameVerificationHandler { // ADD GENERIC TYPE
+    public class ProfileNameVerificationHandler { // ADD GENERIC TYPE PARAM??
         public class HandlerContext : IHandlerContext {
             public HttpWebRequest Request { get; set; }
             public HttpWebResponse Response { get; set; }
@@ -17,38 +17,38 @@ namespace UnityAPI.Framework.Net {
             public HandlerContext() {
                 Payload = new byte[128];
             }
-
-            public System.Func<ProfileSearch> onVerify;
         }
 
-        public System.Func<ProfileSearch> onDone;
+        public System.Func<ProfileSearch> onDone { get; private set; }
 
-        public void POSTasync(string json, System.Func<ProfileSearch> cb) {
+        public void VerifyNameIsAvailable(string json, System.Func<ProfileSearch> cb) {
             try {
                 HandlerContext state = new HandlerContext();
-                state.onVerify = cb;
-
-                state.Request = (HttpWebRequest) WebRequest.Create(ClientServiceHandler.debug_route1);
-                state.Request.ContentType = "application/json; charset=utf-8";
-                state.Request.Method = "POST";
 
                 state.Payload = Encoding.UTF8.GetBytes(json);
                 state.PayloadSize = json.Length;
 
-                Debug.LogFormat("making async request, payload size: {0}", state.PayloadSize);
+                state.Request = (HttpWebRequest) WebRequest.Create(ServiceController.DebugAddr);
+                state.Request.Method = "POST";
+                state.Request.ContentType = "application/json; charset=utf-8";
+                state.Request.ContentLength = state.PayloadSize;
 
                 state.Request.BeginGetRequestStream(
-                    new AsyncCallback(POSTrequestStreamCallback),
+                    new AsyncCallback(OnRequest),
                     state
                 );
             } catch (WebException we) {
-                Debug.Log(NetUtil.PrintfWebException(we));
+                Debug.LogError(NetUtil.PrintfWebException(we));
             } catch (Exception e) {
-                Debug.Log(NetUtil.PrintfException(e));
+                Debug.LogError(NetUtil.PrintfException(e));
             }
         }
 
-        private void POSTrequestStreamCallback(IAsyncResult ar) {
+        public void Reset() {
+            onDone = null;
+        }
+
+        private void OnRequest(IAsyncResult ar) {
             try {
                 HandlerContext state = (HandlerContext) ar.AsyncState;
 
@@ -57,17 +57,17 @@ namespace UnityAPI.Framework.Net {
                 stream.Close();
 
                 state.Request.BeginGetResponse(
-                    new AsyncCallback(POSTresponseCallback),
+                    new AsyncCallback(OnResponse),
                     state
                 );
             } catch (WebException we) {
-                Debug.Log(NetUtil.PrintfWebException(we));
+                Debug.LogError(NetUtil.PrintfWebException(we));
             } catch (Exception e) {
-                Debug.Log(NetUtil.PrintfException(e));
+                Debug.LogError(NetUtil.PrintfException(e));
             }
         }
 
-        private void POSTresponseCallback(IAsyncResult ar) {
+        private void OnResponse(IAsyncResult ar) {
             try {
                 HandlerContext state = (HandlerContext) ar.AsyncState;
                 state.Response = (HttpWebResponse) state.Request.EndGetResponse(ar);
@@ -85,9 +85,9 @@ namespace UnityAPI.Framework.Net {
 
                 state.Response.Close();
             } catch (WebException we) {
-                Debug.Log(NetUtil.PrintfWebException(we));
+                Debug.LogError(NetUtil.PrintfWebException(we));
             } catch (Exception e) {
-                Debug.Log(NetUtil.PrintfException(e));
+                Debug.LogError(NetUtil.PrintfException(e));
             }
         }
     }
