@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityAPI;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class SelectionArea : MonoBehaviour {
@@ -29,12 +30,12 @@ public class SelectionArea : MonoBehaviour {
     }
 
 	void OnMouseDown () {
-        EventController.InvokeSafe(RaiseSelectionAreaDownEvent);
+        RaiseSelectionAreaDownEvent.InvokeSafe();
         // isHolding = true;
     }
 
     void OnMouseUp () {
-        EventController.InvokeSafe(RaiseSelectionAreaUpEvent);
+        RaiseSelectionAreaUpEvent.InvokeSafe();
         // isHolding = false;
     }
 }

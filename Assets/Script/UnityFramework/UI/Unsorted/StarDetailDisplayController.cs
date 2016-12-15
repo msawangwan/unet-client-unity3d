@@ -84,8 +84,8 @@ public class StarDetailDisplayController : MonoBehaviour {
     private void Start () {
         CachedTransform = gameObject.transform;
 
-        StarMapController.RaiseNodeSelected += HandleOnSelection;
-        StarMapController.RaiseNodeDeselected += HandleOnClearSelection;
+        // StarMapController.RaiseNodeSelected += HandleOnSelection;
+        // StarMapController.RaiseNodeDeselected += HandleOnClearSelection;
 
         ToggleCanvasGameObjectActiveState ( true );
     }

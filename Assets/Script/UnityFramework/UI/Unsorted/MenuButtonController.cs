@@ -10,23 +10,23 @@ public class MenuButtonController : MonoBehaviour {
 	public Button BtnSaveGame = null;
 
 	private void MapButtons () {
-		BtnNewGame.onClick.RemoveAllListeners ();
-        BtnNewGame.onClick.AddListener ( () => {
-            Game game = new Game(null);
-            StarMap.State savedMap = game.Setup(true, null);
-            StateSerializer.WriteSave(savedMap, StringConstant.SaveFile.StarMap);
-            MenuButtonController.StaticInstace.gameObject.SetActive(false);
-        });
+		// BtnNewGame.onClick.RemoveAllListeners ();
+        // BtnNewGame.onClick.AddListener ( () => {
+        //     Game game = new Game(null);
+        //     StarMap.State savedMap = game.Setup(true, null);
+        //     StateSerializer.WriteSave(savedMap, StringConstant.SaveFile.StarMap);
+        //     MenuButtonController.StaticInstace.gameObject.SetActive(false);
+        // });
 
-		BtnLoadGame.onClick.RemoveAllListeners ();
-		BtnLoadGame.onClick.AddListener ( () => {
-            StarMap.State load = StateSerializer.LoadFromSave<StarMap.State>(StringConstant.SaveFile.StarMap);
-            Game game = new Game(null);
-            load = game.Setup(false, load);
-            game.Setup(false, load);
-            StateSerializer.WriteSave(load, StringConstant.SaveFile.StarMap);
-            MenuButtonController.StaticInstace.gameObject.SetActive(false);
-        });
+		// BtnLoadGame.onClick.RemoveAllListeners ();
+		// BtnLoadGame.onClick.AddListener ( () => {
+        //     StarMap.State load = StateSerializer.LoadFromSave<StarMap.State>(StringConstant.SaveFile.StarMap);
+        //     Game game = new Game(null);
+        //     load = game.Setup(false, load);
+        //     game.Setup(false, load);
+        //     StateSerializer.WriteSave(load, StringConstant.SaveFile.StarMap);
+        //     MenuButtonController.StaticInstace.gameObject.SetActive(false);
+        // });
     }
 
 	private void Awake () {

@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 
 namespace UnityAPI.Framework.Net {
-    public class ProfileNameVerificationHandler { // ADD GENERIC TYPE PARAM??
+    public class ProfileCreateHandler {
         public class HandlerContext : IHandlerContext {
             public HttpWebRequest Request { get; set; }
             public HttpWebResponse Response { get; set; }
@@ -19,23 +19,23 @@ namespace UnityAPI.Framework.Net {
             }
         }
 
-        public System.Func<ProfileSearch> onDone { get; private set; }
+        public System.Func<Profile> onDone { get; private set; }
 
-        public void VerifyNameIsAvailable(string json, System.Func<ProfileSearch> cb) {
+        public void CreateNewProfile(string json) {
             try {
-                HandlerContext state = new HandlerContext();
+                HandlerContext context = new HandlerContext();
 
-                state.Payload = Encoding.UTF8.GetBytes(json);
-                state.PayloadSize = json.Length;
+                context.Payload = Encoding.UTF8.GetBytes(json);
+                context.PayloadSize = json.Length;
 
-                state.Request = (HttpWebRequest) WebRequest.Create(ServiceController.DebugAddr0);
-                state.Request.Method = "POST";
-                state.Request.ContentType = "application/json; charset=utf-8";
-                state.Request.ContentLength = state.PayloadSize;
+                context.Request = (HttpWebRequest)WebRequest.Create(ServiceController.DebugAddr1);
+                context.Request.Method = "POST";
+                context.Request.ContentType = "application/json; charset=utf-8";
+                context.Request.ContentLength = context.PayloadSize;
 
-                state.Request.BeginGetRequestStream(
+                context.Request.BeginGetRequestStream(
                     new AsyncCallback(OnRequest),
-                    state
+                    context
                 );
             } catch (WebException we) {
                 Debug.LogError(NetUtil.PrintfWebException(we));
@@ -44,30 +44,27 @@ namespace UnityAPI.Framework.Net {
             }
         }
 
-        public void Reset() {
-            onDone = null;
-        }
-
-        private void OnRequest(IAsyncResult ar) {
+        public void OnRequest(IAsyncResult ar) {
             try {
-                HandlerContext state = (HandlerContext) ar.AsyncState;
+                HandlerContext context = (HandlerContext) ar.AsyncState;
 
-                Stream stream = state.Request.EndGetRequestStream(ar);
-                stream.Write(state.Payload, 0, state.PayloadSize);
+                Stream stream = context.Request.EndGetRequestStream(ar);
+                stream.Write(context.Payload, 0, context.PayloadSize);
                 stream.Close();
 
-                state.Request.BeginGetResponse(
+                context.Request.BeginGetResponse(
                     new AsyncCallback(OnResponse),
-                    state
+                    context
                 );
             } catch (WebException we) {
                 Debug.LogError(NetUtil.PrintfWebException(we));
             } catch (Exception e) {
                 Debug.LogError(NetUtil.PrintfException(e));
             }
+
         }
 
-        private void OnResponse(IAsyncResult ar) {
+        public void OnResponse(IAsyncResult ar) {
             try {
                 HandlerContext state = (HandlerContext) ar.AsyncState;
                 state.Response = (HttpWebResponse) state.Request.EndGetResponse(ar);
@@ -77,7 +74,7 @@ namespace UnityAPI.Framework.Net {
                 string response = reader.ReadToEnd();
 
                 onDone = () => {
-                    return JsonUtility.FromJson<ProfileSearch>(response);
+                    return JsonUtility.FromJson<Profile>(response);
                 };
 
                 reader.Close();
