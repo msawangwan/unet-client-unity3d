@@ -73,8 +73,11 @@ namespace UnityAPI.Framework.Net {
                 StreamReader reader = new StreamReader(stream);
                 string response = reader.ReadToEnd();
 
+                Profile newProfile = JsonUtility.FromJson<Profile>(response);
+                Debug.Log("created new profile: " + response);
+
                 onDone = () => {
-                    return JsonUtility.FromJson<Profile>(response);
+                    return newProfile;
                 };
 
                 reader.Close();

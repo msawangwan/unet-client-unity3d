@@ -76,6 +76,7 @@ namespace UnityAPI.Framework.Net {
                 StreamReader reader = new StreamReader(stream);
                 string response = reader.ReadToEnd();
 
+
                 onDone = () => {
                     return JsonUtility.FromJson<ProfileSearch>(response);
                 };
