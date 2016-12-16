@@ -28,7 +28,7 @@ namespace UnityAPI.Framework.Net {
                 context.Payload = Encoding.UTF8.GetBytes(json);
                 context.PayloadSize = json.Length;
 
-                context.Request = (HttpWebRequest)WebRequest.Create(ServiceController.DebugAddr1);
+                context.Request = (HttpWebRequest)WebRequest.Create(ServiceController.Debug_Addr_Create_Profile);
                 context.Request.Method = "POST";
                 context.Request.ContentType = "application/json; charset=utf-8";
                 context.Request.ContentLength = context.PayloadSize;

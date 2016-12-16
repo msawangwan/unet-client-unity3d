@@ -7,28 +7,32 @@ using System.Collections;
 namespace UnityAPI.Framework.Net {
     public class ServiceController : ControllerBehaviour {
         private static bool useLocalAsHost = false;
-        private static string debug_route1 = "http://10.0.0.76:80/api/availability";
-        private static string debug_route2 = "http://tyrant.systems:80/api/availability";
+        private static string debug_local_availability = "http://10.0.0.76:80/api/availability";
+        private static string debug_remote_availability = "http://tyrant.systems:80/api/availability";
 
-        private static string debug_route11 = "http://10.0.0.76:80/api/profile/create";
-        private static string debug_route22 = "http://tyrant.systems:80/api/profile/create";
+        private static string debug_local_create_profile = "http://10.0.0.76:80/api/profile/create";
+        private static string debug_remote_create_profile= "http://tyrant.systems:80/api/profile/create";
 
-        public static string DebugAddr0 {
+        public static string Debug_Addr_Availability {
             get {
                 if (useLocalAsHost) {
-                    return debug_route1;
+                    print("route request: " + debug_local_availability);
+                    return debug_local_availability;
                 } else {
-                    return debug_route2;
+                    print("route request: " + debug_remote_availability);
+                    return debug_remote_availability;
                 }
             }
         }
 
-        public static string DebugAddr1 {
+        public static string Debug_Addr_Create_Profile {
             get {
                 if (useLocalAsHost) {
-                    return debug_route11;
+                    print("route request: " + debug_local_create_profile);
+                    return debug_local_create_profile;
                 } else {
-                    return debug_route22;
+                    print("route request: " + debug_remote_create_profile);
+                    return debug_remote_create_profile;
                 }
             }
         }
