@@ -23,6 +23,11 @@ namespace UnityAPI.Framework.Client {
             SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         }
 
+        public GameState LoadedGameState {
+            get;
+            private set;
+        }
+
         public Profile LoadedProfile {
             get;
             private set;
@@ -48,46 +53,45 @@ namespace UnityAPI.Framework.Client {
         }
 
         public IEnumerator VerifyProfileValidRoutine(string profileName) { // this shouldn't be limited to just the one screen it's started on
-            ProfileNameVerificationHandler handler = new ProfileNameVerificationHandler();
-            Func<ProfileSearch> searchResult = null;
+            // ProfileNameVerificationHandler handler = new ProfileNameVerificationHandler();
+            Handler<ProfileSearch> handler = new Handler<ProfileSearch>();
             string json = JsonUtility.ToJson(new ProfileSearch(profileName));
 
-            handler.VerifyNameIsAvailable(json, searchResult); // begin async request
+            handler.SendJsonRequest(json, "POST", ServiceController.Debug_Addr_Availability); // begin async request
 
             do {
                 yield return null;
                 if (handler.onDone != null) {
                     ProfileSearch returnedSearchResult = handler.onDone();
                     if (returnedSearchResult.IsAvailable) {
-                        Debug.LogFormat("success: loaded profile: {0}", returnedSearchResult.Name);
-                        // LoadedProfile = new Profile(returnedSearchResult.Name);
+                        Debug.LogFormat("success, name available:{0}", returnedSearchResult.Name);
                         ExecuteCommandPipeline();
                         break;
                     } else {
-                        Debug.LogErrorFormat("error: failed to load profile: {0}", returnedSearchResult.Name);
+                        Debug.LogErrorFormat("error, name is already taken: {0}", returnedSearchResult.Name);
                         handler.Reset();
                         returnedSearchResult = null;
                         ExecuteErrorPipeline();
                     }
                 }
             } while (true);
-
-            // LoadedProfile.isLoaded = true;
         }
 
         public IEnumerator CreateProfile(string profileName) {
-            ProfileCreateHandler handler = new ProfileCreateHandler();
+            Handler<GameState> handler = new Handler<GameState>();
             string json = JsonUtility.ToJson(new ProfileName(profileName));
 
-            handler.CreateNewProfile(json);
+            handler.SendJsonRequest(json, "POST", ServiceController.Debug_Addr_Create_Profile);
 
             do {
                 yield return null;
                 if (handler.onDone != null) {
-                    LoadedProfile = handler.onDone();
+                    LoadedGameState = handler.onDone();
+                    LoadedProfile = LoadedGameState.currentProfile;
                     LoadedProfile.isLoaded = true;
+                    Debug.LogFormat("created a profile with name {0} and uuid {1}", LoadedProfile.Name, LoadedProfile.UUID);
+                    Debug.LogFormat("loaded game state with seed {0} and star count {1}", LoadedGameState.currentStarMap.seed, LoadedGameState.currentStarMap.starCount);
                     ExecuteCommandPipeline();
-                    Debug.Log("LOADED PROFILE " + LoadedProfile.Name);
                     break;
                 }
             } while (true);

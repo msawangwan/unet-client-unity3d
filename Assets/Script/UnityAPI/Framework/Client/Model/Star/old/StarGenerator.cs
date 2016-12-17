@@ -32,8 +32,8 @@ namespace UnityAPI.Game {
             }
         }
 
-        public static StarMap.State GenerateStarMapState (StarGenerator.Parameters parameters) {
-            StarMap.State mapState = new StarMap.State();
+        public static StarMap_old.State GenerateStarMapState (StarGenerator.Parameters parameters) {
+            StarMap_old.State mapState = new StarMap_old.State();
 
             int seed = parameters.LoadedSeedValue;
             if ( parameters.IsLoadedSeed == false ) {

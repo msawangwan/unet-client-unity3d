@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnityAPI.Game {
+namespace UnityAPI.Framework.Client {
     [System.Serializable]
     public class Profile {
         public string Name;

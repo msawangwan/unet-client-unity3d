@@ -1,4 +1,4 @@
-﻿namespace UnityAPI.Game {
+﻿namespace UnityAPI.Framework.Client {
     [System.Serializable]
     public class ProfileSearch {
         public string Name;

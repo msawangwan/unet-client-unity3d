@@ -1,4 +1,4 @@
-﻿namespace UnityAPI.Framework.Game {
+﻿namespace UnityAPI.Framework.Client {
     public class ProfileName {
         public string Text;
 
