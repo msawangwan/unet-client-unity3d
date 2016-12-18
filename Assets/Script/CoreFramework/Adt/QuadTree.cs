@@ -116,6 +116,12 @@ namespace CoreFramework.Adt {
             return tree;
         }
 
+        // public IEnumerator GenerateMap(int numNodes) {
+        //     int createdSoFar = 0;
+
+        //     // List<Nodes>
+        // }
+
         public IEnumerator GenerateFromSeed(int numNodes, long seed) {
             // todo set seed
             int createdSoFar = 0;

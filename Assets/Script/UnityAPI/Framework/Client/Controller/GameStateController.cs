@@ -84,7 +84,8 @@ namespace UnityAPI.Framework.Client {
                     if (LoadedProfile.isLoaded) {
                         Debug.LogFormat("loading world data ...");
 
-                        CoreFramework.Adt.QuadTree tree = CoreFramework.Adt.QuadTree.CreateQuadTree(Vector3.zero);
+                        // CoreFramework.Adt.QuadTree tree = CoreFramework.Adt.QuadTree.CreateQuadTree(Vector3.zero);
+                        Quadrant q = Quadrant.InstantiateQuadrantRoot(Vector3.zero);
 
                         SceneManager.LoadSceneAsync(kGAME_PLAY, LoadSceneMode.Additive);
                         Scene s = SceneManager.GetSceneAt(kGAME_PLAY);
@@ -93,8 +94,11 @@ namespace UnityAPI.Framework.Client {
                             yield return new WaitForEndOfFrame();
                         }
 
-                        SceneManager.MoveGameObjectToScene(tree.gameObject.transform.parent.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
-                        StartCoroutine(tree.GenerateFromSeed(LoadedGameState.currentStarMap.starCount, LoadedGameState.currentStarMap.seed));
+                        SceneManager.MoveGameObjectToScene(q.gameObject.transform.parent.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
+                        // q.
+                        // StartCoroutine(tree.GenerateFromSeed(LoadedGameState.currentStarMap.starCount, LoadedGameState.currentStarMap.seed));
+                        List<GameObject> gos = Quadrant.InstantiateSubQuadrantGameObjects(q, LoadedGameState.currentStarMap.starCount);
+                        Quadrant.SortQuadrants(q, gos);
                         break;
                     }
                 }
