@@ -14,14 +14,6 @@ namespace UnityAPI.Framework.Client {
 
         private Queue<Action> commandPipelineStageOne = new Queue<Action>();
         private Queue<Action> errorPipelineStageOne = new Queue<Action>();
-        
-        public static void LoadSceneAtIndex(int sceneIndex) {
-            SceneManager.LoadSceneAsync(sceneIndex);
-        }
-
-        public static void LoadSceneAtIndexAdditive(int sceneIndex) {
-            SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
-        }
 
         public GameState LoadedGameState {
             get;
@@ -41,23 +33,11 @@ namespace UnityAPI.Framework.Client {
             errorPipelineStageOne.Enqueue(e);
         }
 
-        public IEnumerator MainMenuRoutine() {
-            do {
-                yield return null;
-                if (LoadedProfile != null) {
-                    if (LoadedProfile.isLoaded) {
-                        break;
-                    }
-                }
-            } while (true);
-        }
-
-        public IEnumerator VerifyProfileValidRoutine(string profileName) { // this shouldn't be limited to just the one screen it's started on
-            // ProfileNameVerificationHandler handler = new ProfileNameVerificationHandler();
+        public IEnumerator VerifyProfileValidRoutine(string profileName) {
             Handler<ProfileSearch> handler = new Handler<ProfileSearch>();
             string json = JsonUtility.ToJson(new ProfileSearch(profileName));
 
-            handler.SendJsonRequest(json, "POST", ServiceController.Debug_Addr_Availability); // begin async request
+            handler.SendJsonRequest(json, "POST", ServiceController.Debug_Addr_Availability);
 
             do {
                 yield return null;
@@ -97,13 +77,24 @@ namespace UnityAPI.Framework.Client {
             } while (true);
         }
 
-        public IEnumerator LoadGame() {
+        public IEnumerator LoadWorldData() {
             do {
                 yield return null;
                 if (LoadedProfile != null) {
                     if (LoadedProfile.isLoaded) {
-                        Debug.LogFormat("game loaded");
-                        LoadSceneAtIndexAdditive(kGAME_PLAY);
+                        Debug.LogFormat("loading world data ...");
+
+                        CoreFramework.Adt.QuadTree tree = CoreFramework.Adt.QuadTree.CreateQuadTree(Vector3.zero);
+
+                        SceneManager.LoadSceneAsync(kGAME_PLAY, LoadSceneMode.Additive);
+                        Scene s = SceneManager.GetSceneAt(kGAME_PLAY);
+
+                        if (!s.isLoaded) {
+                            yield return new WaitForEndOfFrame();
+                        }
+
+                        SceneManager.MoveGameObjectToScene(tree.gameObject.transform.parent.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
+                        StartCoroutine(tree.GenerateFromSeed(LoadedGameState.currentStarMap.starCount, LoadedGameState.currentStarMap.seed));
                         break;
                     }
                 }

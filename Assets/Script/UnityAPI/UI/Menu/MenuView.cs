@@ -117,7 +117,7 @@ namespace UnityAPI.Framework.UI {
 
             confirmConfirm.onClick.AddListener(
                 () => {
-                    gameController.EnqueueStageOneCommand(() => { StartCoroutine(gameController.LoadGame()); });
+                    gameController.EnqueueStageOneCommand(() => { StartCoroutine(gameController.LoadWorldData()); });
                     StartCoroutine(gameController.CreateProfile(profileName));
                     controller.ExitMenu(true, null);
                 }
