@@ -21,6 +21,8 @@ namespace UnityAPI.Framework.Client {
             }
         }
 
+        public bool isInitialised { get; private set; }
+
         private Quadrant[] subQuadrant = new Quadrant[4];
         private Transform nodeTransform = null;
         private int nodeID = -1;
@@ -72,14 +74,17 @@ namespace UnityAPI.Framework.Client {
             List<int> created = new List<int>();
 
             int numcreated = 0;
-            int maxattempts = 20;
             int attempts = 0;
+            int maxattempts = 20;
 
             float scalemin = -50;
             float scalemax = 50;
 
+            // Core.Lib.Rand r = new Core.Lib.Rand(System.Environment.TickCount);
+
             while (numcreated < gos.Count) {
                 foreach (GameObject go in gos) {
+                    // Debug.Log(r.ExtractMT());
                     Quadrant q = go.GetComponent<Quadrant>();
                     if (q == null) {
                         Vector3 p = new Vector3(
@@ -102,6 +107,8 @@ namespace UnityAPI.Framework.Client {
 
                 ++attempts;
             }
+
+            root.isInitialised = true;
         }
 
         private bool isOverlapping(Vector3 point) {

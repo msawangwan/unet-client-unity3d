@@ -1,10 +1,4 @@
-﻿using UnityEngine;
-using System;
-using System.IO;
-using System.Net;
-using System.Collections;
-
-namespace UnityAPI.Framework.Net {
+﻿namespace UnityAPI.Framework.Net {
     public class ServiceController : ControllerBehaviour {
         private static bool useLocalAsHost = true;
         private static string debug_local_availability = "http://10.0.0.76:80/api/availability";
@@ -13,7 +7,7 @@ namespace UnityAPI.Framework.Net {
         private static string debug_local_create_profile = "http://10.0.0.76:80/api/profile/create";
         private static string debug_remote_create_profile= "http://tyrant.systems:80/api/profile/create";
 
-        // private static string debug_local_create_profile = "http://10.0.0.76:80/api/profile/create";
+        private static string debug_local_store_world_data = "http://10.0.0.76:80/api/profile/world_data";
         // private static string debug_remote_create_profile= "http://tyrant.systems:80/api/profile/create";
 
         public static string Debug_Addr_Availability {
@@ -37,6 +31,12 @@ namespace UnityAPI.Framework.Net {
                     print("route request: " + debug_remote_create_profile);
                     return debug_remote_create_profile;
                 }
+            }
+        }
+
+        public static string Debug_Addr_Store_World_Data {
+            get {
+                return debug_local_store_world_data;
             }
         }
 

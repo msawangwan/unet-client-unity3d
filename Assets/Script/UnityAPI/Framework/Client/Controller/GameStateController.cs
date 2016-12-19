@@ -21,9 +21,16 @@ namespace UnityAPI.Framework.Client {
         }
 
         public Profile LoadedProfile {
-            get;
-            private set;
+            get {
+                return LoadedGameState.currentProfile;
+            }
         }
+
+        public StarMap LoadedStarMap {
+            get {
+                return LoadedGameState.currentStarMap;
+            }
+        } 
 
         public void EnqueueStageOneCommand(Action c) {
             commandPipelineStageOne.Enqueue(c);
@@ -46,6 +53,7 @@ namespace UnityAPI.Framework.Client {
                     if (returnedSearchResult.IsAvailable) {
                         Debug.LogFormat("success, name available:{0}", returnedSearchResult.Name);
                         ExecuteCommandPipeline();
+
                         break;
                     } else {
                         Debug.LogErrorFormat("error, name is already taken: {0}", returnedSearchResult.Name);
@@ -67,38 +75,79 @@ namespace UnityAPI.Framework.Client {
                 yield return null;
                 if (handler.onDone != null) {
                     LoadedGameState = handler.onDone();
-                    LoadedProfile = LoadedGameState.currentProfile;
                     LoadedProfile.isLoaded = true;
+
                     Debug.LogFormat("created a profile with name {0} and uuid {1}", LoadedProfile.Name, LoadedProfile.UUID);
                     Debug.LogFormat("loaded game state with seed {0} and star count {1}", LoadedGameState.currentStarMap.seed, LoadedGameState.currentStarMap.starCount);
+
                     ExecuteCommandPipeline();
+
                     break;
                 }
             } while (true);
         }
 
         public IEnumerator LoadWorldData() {
+            SceneManager.LoadSceneAsync(kGAME_PLAY, LoadSceneMode.Additive);
+
+            List<GameObject> gos = null;
+            Quadrant q = null;
+            Scene s = SceneManager.GetSceneAt(kGAME_PLAY);
+
             do {
                 yield return null;
                 if (LoadedProfile != null) {
                     if (LoadedProfile.isLoaded) {
-                        Debug.LogFormat("loading world data ...");
-
-                        SceneManager.LoadSceneAsync(kGAME_PLAY, LoadSceneMode.Additive);
-                        Scene s = SceneManager.GetSceneAt(kGAME_PLAY);
-
+                        Debug.LogFormat("loading gameplay scene ...");
                         if (!s.isLoaded) {
+                            Debug.LogFormat("gameplay scene is still loading ...");
                             yield return new WaitForEndOfFrame();
+                        } else {
+                            Debug.LogFormat("gameplay scene loaded");
+
+                            q = Quadrant.InstantiateQuadrantRootGameObject(Vector3.zero);
+                            gos = Quadrant.InstantiateSubQuadrantGameObjects(q, LoadedGameState.currentStarMap.starCount);
+
+                            Quadrant.SubdivideIntoSubQuadrants(q, gos);
+
+                            break;
                         }
-
-                        Quadrant q = Quadrant.InstantiateQuadrantRootGameObject(Vector3.zero);
-                        SceneManager.MoveGameObjectToScene(q.gameObject.transform.parent.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
-
-                        List<GameObject> gos = Quadrant.InstantiateSubQuadrantGameObjects(q, LoadedGameState.currentStarMap.starCount);
-                        Quadrant.SubdivideIntoSubQuadrants(q, gos);
-
-                        break;
                     }
+                }
+            } while (true);
+
+            do {
+                yield return null;
+                if (q.isInitialised) {
+                    Debug.LogFormat("world data loaded");
+                    break;
+                } else {
+                    Debug.LogFormat("loading world data ...");
+                }
+            } while (true);
+
+            SceneManager.MoveGameObjectToScene(q.gameObject.transform.parent.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
+
+            StarData data = new StarData(gos.Count);
+
+            int i = 0;
+            foreach (GameObject go in gos) {
+                data.AddPoint(go.transform.position, i);
+                i++;
+            }
+
+            Handler<StarData> handler = new Handler<StarData>();
+            string json = JsonUtility.ToJson(data);
+
+            Debug.LogFormat("data to send: {0}", json);
+
+            handler.SendJsonRequest(json, "POST", ServiceController.Debug_Addr_Store_World_Data);
+
+            do {
+                yield return null;
+                if (handler.onDone != null) {
+                    Debug.Log("sent world data");
+                    break;
                 }
             } while (true);
         }

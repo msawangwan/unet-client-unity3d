@@ -8,10 +8,29 @@ namespace UnityAPI.Global {
         public ControllerBehaviour serviceController;
         public ControllerBehaviour GameStateController;
 
+        private ControllerBehaviour[] allControllers;
+
         private IEnumerator Start() {
+            allControllers = new ControllerBehaviour[] {
+                titleMenuController,
+                serviceController,
+                GameStateController,
+            };
+
+            bool isInitComplete = false;
+
             do {
                 yield return null;
-                if (titleMenuController.onInitComplete && serviceController.onInitComplete) {
+
+                foreach (var controller in allControllers) {
+                    if (controller.onInitComplete) {
+                        isInitComplete = true;
+                    } else {
+                        isInitComplete = false;
+                    }
+                }
+
+                if (isInitComplete) {
                     Debug.LogFormat("{0} all controller loaded", gameObject.name);
                     break;
                 }

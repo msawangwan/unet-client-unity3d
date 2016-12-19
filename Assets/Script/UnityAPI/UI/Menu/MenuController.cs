@@ -21,8 +21,6 @@ namespace UnityAPI.Framework.UI {
                     if (!this.menus.Contains(m.MenuUUID)) {
                         this.menuGraph[m.MenuLevel, m.MenuID] = m;
 
-                        Debug.LogFormat("set menu: {0} {1}", m.MenuLevel, m.MenuID);
-
                         if (m.isRoot) {
                             this.SetActiveState(m, true);
                             this.traversalPath.Push(m);
