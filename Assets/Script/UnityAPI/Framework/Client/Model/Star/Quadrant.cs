@@ -58,6 +58,7 @@ namespace UnityAPI.Framework.Client {
 
         public static List<GameObject> InstantiateSubQuadrantGameObjects(Quadrant root, int nodeCount) {
             List<GameObject> gos = new List<GameObject>();
+            gos.Add(root.gameObject);
 
             int i = 0;
             while (i < nodeCount) {
@@ -80,11 +81,8 @@ namespace UnityAPI.Framework.Client {
             float scalemin = -50;
             float scalemax = 50;
 
-            // Core.Lib.Rand r = new Core.Lib.Rand(System.Environment.TickCount);
-
             while (numcreated < gos.Count) {
                 foreach (GameObject go in gos) {
-                    // Debug.Log(r.ExtractMT());
                     Quadrant q = go.GetComponent<Quadrant>();
                     if (q == null) {
                         Vector3 p = new Vector3(

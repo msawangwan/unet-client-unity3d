@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityAPI.Game;
-using UnityAPI.Framework.Game;
 using UnityAPI.Framework.Net;
 
 namespace UnityAPI.Framework.Client {
@@ -14,6 +12,8 @@ namespace UnityAPI.Framework.Client {
 
         private Queue<Action> commandPipelineStageOne = new Queue<Action>();
         private Queue<Action> errorPipelineStageOne = new Queue<Action>();
+
+        private List<GameObject> worldNodes = new List<GameObject>();
 
         public GameState LoadedGameState {
             get;
@@ -127,12 +127,14 @@ namespace UnityAPI.Framework.Client {
             } while (true);
 
             SceneManager.MoveGameObjectToScene(q.gameObject.transform.parent.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
+            SceneManager.MoveGameObjectToScene(CameraRigController.S.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
 
             StarData data = new StarData(gos.Count);
 
-            int i = 0;
+            int i = 0; // todo: optimize this out
             foreach (GameObject go in gos) {
                 data.AddPoint(go.transform.position, i);
+                go.AddComponent<StarNode>();
                 i++;
             }
 
@@ -150,6 +152,10 @@ namespace UnityAPI.Framework.Client {
                     break;
                 }
             } while (true);
+
+            worldNodes = gos;
+
+            CameraRigController.S.EnableMovement();
         }
 
         protected override bool OnInit() {

@@ -20,7 +20,7 @@ public class PlasmaRocketCannon : MonoBehaviour {
 	}
 
     void Update() {
-        TrackTarget(gameObject.transform, MousePointer.ScreenCoordinates());
+        // TrackTarget(gameObject.transform, MousePointer.ScreenCoordinates());
         if (Input.GetMouseButtonDown(0) == true && firing == false) {
             animator.SetInteger(state, 1);
             StartCoroutine(ReloadDelay(0.5f));

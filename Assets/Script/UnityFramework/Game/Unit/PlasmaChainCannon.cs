@@ -17,7 +17,7 @@ public class PlasmaChainCannon : MonoBehaviour {
 	}
 
     void Update() {
-        TrackTarget(gameObject.transform, MousePointer.ScreenCoordinates());
+        // TrackTarget(gameObject.transform, MousePointer.ScreenCoordinates());
         if (Input.GetMouseButtonDown(0) == true) {
             ToggleState();
         }
