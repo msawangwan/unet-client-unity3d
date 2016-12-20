@@ -109,7 +109,7 @@ namespace UnityAPI.Framework.Client {
             root.isInitialised = true;
         }
 
-        private bool isOverlapping(Vector3 point) {
+        private bool isOverlappedBy(Vector3 point) {
             float dx = Mathf.Abs(nodeTransform.position.x - point.x);
             float dy = Mathf.Abs(nodeTransform.position.y - point.y);
 
@@ -133,7 +133,7 @@ namespace UnityAPI.Framework.Client {
 
             if (x2 > x1 && y2 > y1) {
                 if (subQuadrant[0] == null) {
-                    if (!isOverlapping(point)) {
+                    if (!isOverlappedBy(point)) {
                         subQuadrant[0] = AddQuadrantComponentToGameObject(nodeTransform.gameObject, go, point, level, "quadrant 1");
                     }
                 } else {
@@ -141,7 +141,7 @@ namespace UnityAPI.Framework.Client {
                 }
             } else if (x2 > x1 && y2 < y1) {
                 if (subQuadrant[1] == null) {
-                    if (!isOverlapping(point)) {
+                    if (!isOverlappedBy(point)) {
                         subQuadrant[1] = AddQuadrantComponentToGameObject(nodeTransform.gameObject, go, point, level, "quadrant 2");
                     }
                 } else {
@@ -149,7 +149,7 @@ namespace UnityAPI.Framework.Client {
                 }
             } else if (x2 < x1 && y2 < y1) {
                 if (subQuadrant[2] == null) {
-                    if (!isOverlapping(point)) {
+                    if (!isOverlappedBy(point)) {
                         subQuadrant[2] = AddQuadrantComponentToGameObject(nodeTransform.gameObject, go, point, level, "quadrant 3");
                     }
                 } else {
@@ -157,7 +157,7 @@ namespace UnityAPI.Framework.Client {
                 }
             } else if (x2 < x1 && y2 > y1) {
                 if (subQuadrant[3] == null) {
-                    if (!isOverlapping(point)) {
+                    if (!isOverlappedBy(point)) {
                         subQuadrant[3] = AddQuadrantComponentToGameObject(nodeTransform.gameObject, go, point, level, "quadrant 4");
                     }
                 } else {
