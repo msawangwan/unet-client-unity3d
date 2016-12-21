@@ -1,23 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Core.Lib;
+using Engine.pRNG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityAPI.Framework.Net;
 
 namespace UnityAPI.Framework.Client {
     public class GameStateController : ControllerBehaviour {
-        private IEnumerator Start() {
-            int i = 0;
-            Rand r = new Rand(Rand.test_seed);
-            // Rand r = new Rand(Environment.TickCount);
-            do {
-                yield return null;
-                Debug.LogFormat("generating from test seed: {0}", r.TestFunc());
-                i++;
-            } while (i < 50);
-        }
         public const int kMAIN_MENU = 0;
         public const int kGAME_PLAY = 1;
 
