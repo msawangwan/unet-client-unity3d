@@ -10,12 +10,11 @@ namespace UnityAPI.Framework.Client {
     public class GameStateController : ControllerBehaviour {
         private IEnumerator Start() {
             int i = 0;
-            Rand r = new Rand(Environment.TickCount);
+            Rand r = new Rand(Rand.test_seed);
+            // Rand r = new Rand(Environment.TickCount);
             do {
                 yield return null;
-                float x = r.InRangef(-10f, 10f);
-                float y = r.InRangef(-100f, 100f);
-                Debug.LogFormat("x: {0} y: {1}",x, y);
+                Debug.LogFormat("generating from test seed: {0}", r.TestFunc());
                 i++;
             } while (i < 50);
         }

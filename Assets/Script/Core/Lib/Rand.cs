@@ -9,10 +9,12 @@
         private const long C = 2396403;
         private const long M = 32767;
 
-        private long Seed;
+        public const long test_seed = 1482284596187742126;
+
+        private long seed;
 
         public Rand(long seed) {
-            this.Seed = seed;
+            this.seed = seed;
         }
 
         public float InRangef(int min, int max) {
@@ -32,8 +34,12 @@
         }
 
         private long lcg() {
-            Seed = (A  * Seed + C) % M;
-            return Seed;
+            seed = (A  * seed + C) % M;
+            return seed;
+        }
+
+        public long TestFunc() {
+            return lcg();
         }
     }
 }
