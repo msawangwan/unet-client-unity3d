@@ -107,9 +107,11 @@ namespace UnityAPI.Framework.Client {
                             Debug.LogFormat("gameplay scene loaded");
 
                             q = Quadrant.InstantiateQuadrantRootGameObject(Vector3.zero);
-                            gos = Quadrant.InstantiateSubQuadrantGameObjects(q, LoadedGameState.currentStarMap.starCount);
+                            gos = Quadrant.InstantiateSubQuadrantGameObjects(q, 9); // LoadedGameState.currentStarMap.starCount
 
-                            Quadrant.SubdivideIntoSubQuadrants(q, gos);
+                            pRNG r = new pRNG(1482284596187742126); // LoadedGameState.currentStarMap.seed
+
+                            Quadrant.Partition(q, gos, r);
 
                             break;
                         }

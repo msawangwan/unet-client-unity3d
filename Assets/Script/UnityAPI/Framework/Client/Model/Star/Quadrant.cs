@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Engine.pRNG;
 using UnityEngine;
 
 namespace UnityAPI.Framework.Client {
@@ -71,7 +72,7 @@ namespace UnityAPI.Framework.Client {
             return gos;
         }
 
-        public static void SubdivideIntoSubQuadrants(Quadrant root, List<GameObject> gos) {
+        public static void Partition(Quadrant root, List<GameObject> gos, pRNG generator) {
             List<int> created = new List<int>();
 
             int numcreated = 0;
@@ -86,8 +87,8 @@ namespace UnityAPI.Framework.Client {
                     Quadrant q = go.GetComponent<Quadrant>();
                     if (q == null) {
                         Vector3 p = new Vector3(
-                            UnityEngine.Random.Range(scalemin, scalemax),
-                            UnityEngine.Random.Range(scalemin, scalemax),
+                            generator.InRangef(scalemin, scalemax),
+                            generator.InRangef(scalemin, scalemax),
                             0f
                         );
                         root.TryInsert(go, p, -1);
@@ -113,9 +114,7 @@ namespace UnityAPI.Framework.Client {
             float dx = Mathf.Abs(nodeTransform.position.x - point.x);
             float dy = Mathf.Abs(nodeTransform.position.y - point.y);
 
-            if (dx <= QuadrantRadius) {
-                return true;
-            }  else if (dy <= QuadrantRadius) {
+            if (dx <= QuadrantRadius || dy <= QuadrantRadius) {
                 return true;
             } else {
                 return false;
