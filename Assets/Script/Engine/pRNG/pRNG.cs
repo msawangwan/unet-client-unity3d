@@ -18,7 +18,7 @@
         private ulong seed;
 
         public pRNG(ulong seed) {
-            if (seed <= 0) { // seed == 0 should not be an accepted seed, only the server can generate a valid seed value
+            if (seed <= 0) { // (seed == 0) should not be an accepted seed, only the server can generate a valid seed value
                 this.seed = (ulong)System.Environment.TickCount;
             } else if ((A * seed + C) >= (1 << 64)){
                 this.seed = seed / 2;

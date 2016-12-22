@@ -23,18 +23,22 @@ namespace Engine.pRNG {
         [Test]
         public void Generate() {
             Debug.Log("engine/prng: can we generate anything at all");
+
             r = new pRNG(seed);
+            
             for (int i = 0; i < times; i++) {
                 int a = r.Intn(50);
                 float b = r.Float32();
                 float c = r.InRangef(-10, 10);
             }
+
             Debug.Log("test complete");
         }
 
         [Test]
         public void Overflow() {
             Debug.Log("engine/prng: handle overflow when seed is initialised");
+
             r = new pRNG(seed);
             Assert.True(r.Seed >= 0, "engine/prng: seed value overflow: {0}", r.Seed);
             r = new pRNG(maxl);
@@ -47,12 +51,16 @@ namespace Engine.pRNG {
             Assert.True(r.Seed >= 0, "engine/prng: seed value overflow: {0}", r.Seed);
             r = new pRNG(maxull);
             Assert.True(r.Seed >= 0, "engine/prng: seed value overflow: {0}", r.Seed);
+        
+            Debug.Log("test complete");
         }
 
         [Test]
         public void ZeroValueInput() {
             Debug.Log("engine/prng: handle zero as an input parameter");
+
             r = new pRNG(seed);
+        
             for (int i = 0; i < times; i++){
                 try {
                     int a = r.Intn(0);
@@ -61,11 +69,14 @@ namespace Engine.pRNG {
                     Assert.Fail("engine/prng: caught divide by zero exception");
                 }
             }
+    
+            Debug.Log("test complete");
         }
 
         [Test]
         public void ValidateRanges() {
             Debug.Log("engine/prng: validate all values fall within expected bounds");
+
             r = new pRNG(seed);
 
             int max = 50;
