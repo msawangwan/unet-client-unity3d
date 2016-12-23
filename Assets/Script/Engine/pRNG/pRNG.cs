@@ -5,9 +5,9 @@
          * http://stackoverflow.com/questions/15500621/c-c-algorithm-to-produce-same-pseudo-random-number-sequences-from-same-seed-on
          */
 
-        private const ulong A = 8253729;
-        private const ulong C = 2396403;
-        private const ulong M = 32767;
+        private const long A = 8253729;
+        private const long C = 2396403;
+        private const long M = 32767;
 
         public ulong Seed {
             get {
@@ -18,9 +18,11 @@
         private ulong seed;
 
         public pRNG(ulong seed) {
+            ulong p = (A * seed + C);
+
             if (seed <= 0) { // (seed == 0) should not be an accepted seed, only the server can generate a valid seed value
                 this.seed = (ulong)System.Environment.TickCount;
-            } else if ((A * seed + C) >= (1 << 64)){
+            } else if (p >= ulong.MaxValue){
                 this.seed = seed / 2;
             } else {
                 this.seed = seed;

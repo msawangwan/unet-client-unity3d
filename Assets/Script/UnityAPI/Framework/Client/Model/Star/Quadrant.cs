@@ -81,7 +81,7 @@ namespace UnityAPI.Framework.Client {
 
             float scalemin = -50;
             float scalemax = 50;
-
+            
             while (numcreated < gos.Count) {
                 foreach (GameObject go in gos) {
                     Quadrant q = go.GetComponent<Quadrant>();

@@ -25,11 +25,17 @@ namespace Engine.pRNG {
             Debug.Log("engine/prng: can we generate anything at all");
 
             r = new pRNG(seed);
-            
+
+            int maxn = 50;
+            float maxf = 10;
+
             for (int i = 0; i < times; i++) {
-                int a = r.Intn(50);
+                int a = r.Intn(maxn);
                 float b = r.Float32();
-                float c = r.InRangef(-10, 10);
+                float c = r.InRangef(-maxf,maxf);
+                Assert.True(a < maxn, "engine/prng: intn out of bounds");
+                Assert.True(b < 1 || b >= 0, "engine/prng: float32 out of bounds");
+                Assert.True(a > -maxf || a < maxf, "engine/prng: range out of bounds");
             }
 
             Debug.Log("test complete");
@@ -66,7 +72,7 @@ namespace Engine.pRNG {
                     int a = r.Intn(0);
                     float b = r.InRangef(0, 0);
                 } catch (System.DivideByZeroException dbze) {
-                    Assert.Fail("engine/prng: caught divide by zero exception");
+                    Assert.Fail("engine/prng: caught divide by zero exception", dbze);
                 }
             }
     

@@ -1,6 +1,6 @@
 ﻿namespace UnityAPI.Framework.Net {
     public class ServiceController : ControllerBehaviour {
-        private static bool useLocalAsHost = false;
+        private static bool useLocalAsHost = true;
         private static string debug_local_availability = "http://10.0.0.76:80/api/availability";
         private static string debug_remote_availability = "http://tyrant.systems:80/api/availability";
 
