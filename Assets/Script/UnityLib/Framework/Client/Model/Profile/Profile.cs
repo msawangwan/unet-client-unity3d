@@ -6,6 +6,8 @@ namespace UnityLib.Framework.Client {
         public string Name;
         public string UUID;
 
+        public long Seed;
+
         public DateTime DateCreated;
         public DateTime TimeLastSaved;
 

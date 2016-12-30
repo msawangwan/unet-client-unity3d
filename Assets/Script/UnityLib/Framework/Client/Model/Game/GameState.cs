@@ -2,6 +2,6 @@
     [System.Serializable]
     public class GameState {
         public Profile currentProfile;
-        public StarMap currentStarMap;
+        public GameParameter currentGameParameters;
     }
 }

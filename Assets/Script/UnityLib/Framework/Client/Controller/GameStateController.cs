@@ -16,20 +16,17 @@ namespace UnityLib.Framework.Client {
 
         private List<GameObject> worldNodes = new List<GameObject>();
 
-        public GameState LoadedGameState {
-            get;
-            private set;
-        }
+        private GameState loadedGameState;
 
         public Profile LoadedProfile {
             get {
-                return LoadedGameState.currentProfile;
+                return loadedGameState.currentProfile;
             }
         }
 
-        public StarMap LoadedStarMap {
+        public GameParameter LoadedGameParameters {
             get {
-                return LoadedGameState.currentStarMap;
+                return loadedGameState.currentGameParameters;
             }
         } 
 
@@ -75,11 +72,11 @@ namespace UnityLib.Framework.Client {
             do {
                 yield return null;
                 if (handler.onDone != null) {
-                    LoadedGameState = handler.onDone();
+                    loadedGameState = handler.onDone();
                     LoadedProfile.isLoaded = true;
 
                     Debug.LogFormat("created a profile with name {0} and uuid {1}", LoadedProfile.Name, LoadedProfile.UUID);
-                    Debug.LogFormat("loaded game state with seed {0} and star count {1}", LoadedGameState.currentStarMap.seed, LoadedGameState.currentStarMap.starCount);
+                    Debug.LogFormat("loaded game state with seed {0} and star count {1}", LoadedProfile.Seed, LoadedGameParameters.nodeCount);
 
                     ExecuteCommandPipeline();
 
@@ -106,12 +103,12 @@ namespace UnityLib.Framework.Client {
                         } else {
                             Debug.LogFormat("gameplay scene loaded");
 
-                            q = Quadrant.InstantiateQuadrantRootGameObject(Vector3.zero);
-                            gos = Quadrant.InstantiateSubQuadrantGameObjects(q, 9); // LoadedGameState.currentStarMap.starCount
+                            q = Quadrant.InstantiateQuadrantRootGameObject(Vector3.zero, LoadedGameParameters.worldScale, LoadedGameParameters.nodeRadius);
+                            gos = Quadrant.InstantiateSubQuadrantGameObjects(q, LoadedGameParameters.nodeCount); // LoadedGameState.currentStarMap.starCount
 
-                            pRNG r = new pRNG(1482284596187742126); // LoadedGameState.currentStarMap.seed
+                            pRNG r = new pRNG((ulong)LoadedProfile.Seed); // LoadedGameState.currentStarMap.seed
 
-                            Quadrant.Partition(q, gos, r);
+                            Quadrant.Partition(q, gos, r, LoadedGameParameters.maximumAttemptsWhenSpawningNodes);
 
                             break;
                         }

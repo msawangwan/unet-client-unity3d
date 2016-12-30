@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace UnityLib.Framework.Client {
     public class Quadrant : MonoBehaviour {
-        public static float QuadrantRadius = 1.2f;
-
         private static List<int> ids = new List<int>();
         private static int id = -1;
 
@@ -22,6 +20,9 @@ namespace UnityLib.Framework.Client {
             }
         }
 
+        public static float QuadrantScale { get; private set; } // todo: should not be static
+        public static float QuadrantNodeRadius { get; private set; } // todo: should not be static
+
         public bool isInitialised { get; private set; }
 
         private Quadrant[] subQuadrant = new Quadrant[4];
@@ -29,6 +30,7 @@ namespace UnityLib.Framework.Client {
         private int nodeID = -1;
         private int depth = -1;
         private string label = string.Empty;
+
 
         public static Quadrant AddQuadrantComponentToGameObject(GameObject parentQuadrant, GameObject node, Vector3 point, int depth, string label) {
             Quadrant q = node.AddComponent<Quadrant>();
@@ -39,7 +41,7 @@ namespace UnityLib.Framework.Client {
             q.label = label;
 
             CircleCollider2D c = node.AddComponent<CircleCollider2D>();
-            c.radius = QuadrantRadius;
+            c.radius = QuadrantNodeRadius;
 
             node.gameObject.name += string.Format("[subquadrant: {0}][depth: {1}]", label, depth);
             node.transform.SetParent(parentQuadrant.transform);
@@ -48,11 +50,14 @@ namespace UnityLib.Framework.Client {
             return q;
         }
 
-        public static Quadrant InstantiateQuadrantRootGameObject(Vector3 rootPoint) {
+        public static Quadrant InstantiateQuadrantRootGameObject(Vector3 rootPoint, float scale, float nodeRadius) {
             GameObject rootContainer = new GameObject("quadrant_tree");
             GameObject root = new GameObject("quadrant_root");
 
             rootContainer.transform.position = Vector3.zero;
+
+            Quadrant.QuadrantScale = scale;
+            Quadrant.QuadrantNodeRadius = nodeRadius;
 
             return AddQuadrantComponentToGameObject(rootContainer, root, rootPoint, -1, "quadrant_root");
         }
@@ -72,15 +77,15 @@ namespace UnityLib.Framework.Client {
             return gos;
         }
 
-        public static void Partition(Quadrant root, List<GameObject> gos, pRNG generator) {
+        public static void Partition(Quadrant root, List<GameObject> gos, pRNG generator, int maxSpawnAttempts) {
             List<int> created = new List<int>();
 
             int numcreated = 0;
             int attempts = 0;
-            int maxattempts = 20;
+            int maxattempts = maxSpawnAttempts;
 
-            float scalemin = -50;
-            float scalemax = 50;
+            float scalemin = -QuadrantScale;
+            float scalemax = QuadrantScale;
             
             while (numcreated < gos.Count) {
                 foreach (GameObject go in gos) {
@@ -114,7 +119,7 @@ namespace UnityLib.Framework.Client {
             float dx = Mathf.Abs(nodeTransform.position.x - point.x);
             float dy = Mathf.Abs(nodeTransform.position.y - point.y);
 
-            if (dx <= QuadrantRadius || dy <= QuadrantRadius) {
+            if (dx <= QuadrantNodeRadius || dy <= QuadrantNodeRadius) {
                 return true;
             } else {
                 return false;
