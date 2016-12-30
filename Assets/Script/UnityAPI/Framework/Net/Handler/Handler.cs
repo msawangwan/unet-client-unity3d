@@ -23,19 +23,24 @@ namespace UnityAPI.Framework.Net {
         }
 
         public System.Func<T> onDone { get; private set; }
+        private string jsonPayload;
+
+        public Handler(string payload) {
+            jsonPayload = payload;
+        }
 
         public void Reset() {
             onDone = null;
         }
 
-        public void SendJsonRequest(string json, string method, string resource) {
+        public void SendJsonRequest(string method, string resource) {
             try {
                 Debug.LogFormat("registered callback: {0}", Time.time);
 
                 HandlerContext context = new HandlerContext();
 
-                context.Payload = Encoding.UTF8.GetBytes(json);
-                context.PayloadSize = json.Length;
+                context.Payload = Encoding.UTF8.GetBytes(jsonPayload);
+                context.PayloadSize = jsonPayload.Length;
 
                 context.Request = (HttpWebRequest)WebRequest.Create(resource);
                 context.Request.Method = method;

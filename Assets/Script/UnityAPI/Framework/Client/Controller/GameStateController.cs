@@ -42,10 +42,10 @@ namespace UnityAPI.Framework.Client {
         }
 
         public IEnumerator VerifyProfileValidRoutine(string profileName) {
-            Handler<ProfileSearch> handler = new Handler<ProfileSearch>();
             string json = JsonUtility.ToJson(new ProfileSearch(profileName));
 
-            handler.SendJsonRequest(json, "POST", ServiceController.Debug_Addr_Availability);
+            Handler<ProfileSearch> handler = new Handler<ProfileSearch>(json);
+            handler.SendJsonRequest("POST", ServiceController.Debug_Addr_Availability);
 
             do {
                 yield return null;
@@ -67,10 +67,10 @@ namespace UnityAPI.Framework.Client {
         }
 
         public IEnumerator CreateProfile(string profileName) {
-            Handler<GameState> handler = new Handler<GameState>();
             string json = JsonUtility.ToJson(new ProfileName(profileName));
 
-            handler.SendJsonRequest(json, "POST", ServiceController.Debug_Addr_Create_Profile);
+            Handler<GameState> handler = new Handler<GameState>(json);
+            handler.SendJsonRequest("POST", ServiceController.Debug_Addr_Create_Profile);
 
             do {
                 yield return null;
@@ -132,33 +132,25 @@ namespace UnityAPI.Framework.Client {
             SceneManager.MoveGameObjectToScene(q.gameObject.transform.parent.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
             SceneManager.MoveGameObjectToScene(CameraRigController.S.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
 
-            StarData data = new StarData(gos.Count);
+            string json = JsonUtility.ToJson(LoadedProfile);
 
-            int i = 0; // todo: optimize this out
-            foreach (GameObject go in gos) {
-                data.AddPoint(go.transform.position, i);
-                go.AddComponent<StarNode>();
-                i++;
-            }
-
-            Handler<StarData> handler = new Handler<StarData>();
-            string json = JsonUtility.ToJson(data);
-
-            Debug.LogFormat("data to send: {0}", json);
-
-            handler.SendJsonRequest(json, "POST", ServiceController.Debug_Addr_Store_World_Data);
+            Handler<Confirmation> handler = new Handler<Confirmation>(json);
+            handler.SendJsonRequest("POST", ServiceController.Debug_Addr_Store_World_Data);
 
             do {
                 yield return null;
                 if (handler.onDone != null) {
-                    Debug.Log("sent world data");
+                    Confirmation ok = handler.onDone();
+                    if (ok.OK == 1) {
+                        Debug.Log("world ready"); // todo: handle errors and such
+                    }
                     break;
                 }
             } while (true);
 
-            worldNodes = gos;
-
             CameraRigController.S.EnableMovement();
+
+            // enter game loop
         }
 
         protected override bool OnInit() {

@@ -2,6 +2,9 @@
 
 * * *
 
-## a project for test assets and scripts
+## about 
+
+- a unity3d http client
+- for code see ../Assets/Script/
 
 * * *
