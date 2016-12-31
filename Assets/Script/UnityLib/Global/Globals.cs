@@ -1,21 +1,26 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityLib {
     public class Globals : SingletonBehaviour<Globals> {
         public ControllerBehaviour titleMenuController;
+        public ControllerBehaviour popupMenuController;
+
         public ControllerBehaviour serviceController;
-        public ControllerBehaviour GameStateController;
+
+        public ControllerBehaviour menuLoopController;
+        public ControllerBehaviour gameLoopController;
 
         private ControllerBehaviour[] allControllers;
 
         private IEnumerator Start() {
             allControllers = new ControllerBehaviour[] {
                 titleMenuController,
+                popupMenuController,
                 serviceController,
-                GameStateController,
-            };
+                menuLoopController,
+                gameLoopController,
+        };
 
             bool isInitComplete = false;
 
@@ -23,6 +28,9 @@ namespace UnityLib {
                 yield return null;
 
                 foreach (var controller in allControllers) {
+                    if (controller == null) {
+                        continue;
+                    }
                     if (controller.onInitComplete) {
                         isInitComplete = true;
                     } else {

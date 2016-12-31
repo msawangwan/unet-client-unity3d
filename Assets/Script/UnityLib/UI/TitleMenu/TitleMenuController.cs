@@ -1,37 +1,18 @@
 ﻿using System.Collections.Generic;
 
 namespace UnityLib.UI {
-    public class MenuController : ControllerBehaviour {
-        public MenuView MenuView;
+    public class TitleMenuController : ControllerBehaviour {
+        public TitleMenuView TitleMenuView;
 
-        private MenuModel[,] menuGraph = new MenuModel[5, 5];
+        private TitleMenuPanel[,] menuGraph = new TitleMenuPanel[5, 5];
         private List<int> menus = new List<int>();
-        private Stack<MenuModel> traversalPath = new Stack<MenuModel>();
+        private Stack<TitleMenuPanel> traversalPath = new Stack<TitleMenuPanel>();
 
-        private MenuModel rootMenu;
-        private MenuModel activeMenu;
-        
-        public void Init() {
-            for (int i = 0; i < MenuView.transform.childCount; i++) {
-                MenuModel m = MenuView.transform.GetChild(i).GetComponent<MenuModel>();
-                if (!m.isInitialised) {
-                    m.Init();
-                    if (!this.menus.Contains(m.MenuUUID)) {
-                        this.menuGraph[m.MenuLevel, m.MenuID] = m;
-
-                        if (m.isRoot) {
-                            this.SetActiveState(m, true);
-                            this.traversalPath.Push(m);
-                        }
-
-                        this.menus.Add(m.MenuUUID);
-                    }
-                }
-            }
-        }
+        private TitleMenuPanel rootMenu;
+        private TitleMenuPanel activeMenu;
 
         public void Traverse(int level, int id, int submenuKey, bool keepPreviousActive = false) {
-            MenuModel m = null;
+            TitleMenuPanel m = null;
 
             if (submenuKey == -1) {
                 m = this.menuGraph[level, id];
@@ -44,7 +25,7 @@ namespace UnityLib.UI {
         }
 
         public void UpOneLevel() {
-            MenuModel m = traversalPath.Pop();
+            TitleMenuPanel m = traversalPath.Pop();
 
             if (m == activeMenu) { // works for now but, find a cleaner solution than this me thinks...
                 m = traversalPath.Pop();
@@ -69,12 +50,29 @@ namespace UnityLib.UI {
         }
 
         protected override bool OnInit() {
-            this.Init();
-            MenuView.Init();
+            for (int i = 0; i < TitleMenuView.transform.childCount; i++) {
+                TitleMenuPanel m = TitleMenuView.transform.GetChild(i).GetComponent<TitleMenuPanel>();
+                if (!m.isInitialised) {
+                    m.Init();
+                    if (!this.menus.Contains(m.MenuUUID)) {
+                        this.menuGraph[m.MenuLevel, m.MenuID] = m;
+
+                        if (m.isRoot) {
+                            this.SetActiveState(m, true);
+                            this.traversalPath.Push(m);
+                        }
+
+                        this.menus.Add(m.MenuUUID);
+                    }
+                }
+            }
+
+            TitleMenuView.Init();
+
             return true;
         }
 
-        private void SetActiveState(MenuModel m, bool toggleActive) {
+        private void SetActiveState(TitleMenuPanel m, bool toggleActive) {
             m.gameObject.SetActive(toggleActive);
             if (toggleActive) {
                 this.activeMenu = m;

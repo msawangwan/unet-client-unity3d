@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityLib.Framework.Net;
 
 namespace UnityLib.Framework.Client {
-    public class GameStateController : ControllerBehaviour {
+    public class MenuLoopController : ControllerBehaviour {
         public const int kMAIN_MENU = 0;
         public const int kGAME_PLAY = 1;
 
@@ -145,9 +145,9 @@ namespace UnityLib.Framework.Client {
                 }
             } while (true);
 
-            CameraRigController.S.EnableMovement();
-
-            // enter game loop
+            GameLoopController gpc = Globals.S.gameLoopController as GameLoopController;
+            gpc.LoadGameplayWorldNodes(gos);
+            gpc.EnterGamePlay();
         }
 
         protected override bool OnInit() {

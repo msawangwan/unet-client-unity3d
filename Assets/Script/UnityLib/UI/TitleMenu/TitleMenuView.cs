@@ -3,8 +3,8 @@ using UnityEngine.UI;
 using UnityLib.Framework.Client;
 
 namespace UnityLib.UI {
-    public class MenuView : MonoBehaviour {
-        public MenuController controller;
+    public class TitleMenuView : MonoBehaviour {
+        public TitleMenuController controller;
 
         [SerializeField] private Button createProfile;
         [SerializeField] private Button selectProfile;
@@ -24,11 +24,11 @@ namespace UnityLib.UI {
 
         [SerializeField] private Text confirmNameText;
 
-        private GameStateController gameController;
+        private MenuLoopController gameController;
         private string profileName;
 
         public void Init() {
-            gameController = Globals.S.GameStateController as GameStateController;
+            gameController = Globals.S.menuLoopController as MenuLoopController;
 
             Button[] allButtons = new Button[] {
                 createProfile,

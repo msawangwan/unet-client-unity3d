@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 namespace UnityLib.UI {
-    [CreateAssetMenuAttribute(fileName="menu", menuName="Model/UI/Menu", order=1)]
-    public class MenuData : ScriptableObject {
+    [CreateAssetMenuAttribute(fileName="title_menu", menuName="Model/UI/TitleMenuPanel", order=1)]
+    public class TitleMenuInstance : ScriptableObject {
         public enum MenuName {
             None,
             Title,

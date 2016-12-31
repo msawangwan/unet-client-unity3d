@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace UnityLib.UI {
-    public class MenuModel : MonoBehaviour {
+    public class TitleMenuPanel : MonoBehaviour {
         public static List<int> menusByUIID = new List<int>();
 
         public static int nextMenuUIID {
@@ -20,11 +20,11 @@ namespace UnityLib.UI {
 
         private bool isInit = false;
 
-        [SerializeField] private MenuData menu;
-        [SerializeField] private MenuModel parent;
-        [SerializeField] private MenuModel[] links;
+        [SerializeField] private TitleMenuInstance menu;
+        [SerializeField] private TitleMenuPanel parent;
+        [SerializeField] private TitleMenuPanel[] links;
 
-        public MenuModel this[int lookupID] {
+        public TitleMenuPanel this[int lookupID] {
             get {
                 if (!hasLinks || lookupID > NumberOfLinks) {
                     return null;
@@ -33,7 +33,7 @@ namespace UnityLib.UI {
             }
         }
 
-        public IEnumerable<MenuModel> Links {
+        public IEnumerable<TitleMenuPanel> Links {
             get {
                 return links;
             }
@@ -64,7 +64,7 @@ namespace UnityLib.UI {
 
         public bool isRoot { 
             get { 
-                return menu.menuType == MenuData.MenuType.Root; 
+                return menu.menuType == TitleMenuInstance.MenuType.Root; 
             } 
         }
 
@@ -88,7 +88,7 @@ namespace UnityLib.UI {
                 gameObject.SetActive(true);
                 if (links.Length <= 0) {
                     if (parent != null) {
-                        links = new MenuModel[1] { parent };
+                        links = new TitleMenuPanel[1] { parent };
                     }
                 }
                 gameObject.SetActive(false);
