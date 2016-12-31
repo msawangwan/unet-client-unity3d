@@ -4,10 +4,13 @@ using UnityEngine;
 
 namespace UnityLib.UI {
     public class PopupPanel : MonoBehaviour {
+        [SerializeField] private PopupInstance instance;
         [SerializeField] private bool rootPanel;
 
         public bool isRootPanel { get { return rootPanel; } }
         public bool isInitialised { get; private set; }
+
+        public int subpanelIndex { get { return instance.panelID; } }
 
         public void Init() {
             isInitialised = true;

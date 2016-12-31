@@ -1,16 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PopupInstance : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+namespace UnityLib.UI {
+    [CreateAssetMenuAttribute(fileName="popup_submenu", menuName="Model/UI/PopupMenuPanel", order=1)]
+    public class PopupInstance : ScriptableObject {
+        public int panelID;
+    }
 }
