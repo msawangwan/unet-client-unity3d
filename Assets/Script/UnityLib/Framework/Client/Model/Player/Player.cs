@@ -1,31 +1,27 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
-public class Player : MonoBehaviour {
-    // [System.Serializable]
-    // public class PlayerProfile {
-    //     public string Name;
-    // }
-    
-    // [SerializeField] private PlayerProfile profile;
-    // public PlayerState State = null;
+namespace UnityLib.Framework.Client {
+    public class Player : MonoBehaviour {
+        public int Credits;
+        public GameObject HQ;
+        public bool isActive = false;
+        public bool hasHQ = false;
+        public bool hasAction = false;
 
-    // public static Vector3 CurrentPosition = Vector3.zero;
-    // public static Vector3 PotentialPosition = Vector3.zero;
+        private int tick = -1;
 
-    // void OnTargetNodeSelected (StarNode a) {
-    //     PotentialPosition = a.gameObject.transform.position;
-    //     StarMapRoute.Instance.DrawRoute(CurrentPosition, PotentialPosition);
-    // }
+        public static Player New() {
+            return new GameObject("player").AddComponent<Player>();
+        }
 
-	// void OnNullSelection() {
-    //     PotentialPosition = CurrentPosition;
-    //     StarMapRoute.Instance.ClearRoute();
-    // }
-
-	void Start () {
-		// StarMapController.RaiseNodeSelected += OnTargetNodeSelected;
-        // StarMapController.RaiseNodeDeselected += OnNullSelection;
-
-        // Debug.LogFormat("{0}", profile.Name);
+        private IEnumerator Turn() {
+            do {
+                yield return null;
+                if (tick == -1) {
+                    break;
+                }
+            } while (true);
+        }
     }
 }
