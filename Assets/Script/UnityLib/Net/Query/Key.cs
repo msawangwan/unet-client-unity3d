@@ -1,10 +1,10 @@
 ﻿namespace UnityLib.Framework.Net {
     [System.Serializable]
     public class Key {
-        public string query;
+        public string info;
 
-        public Key(string query) {
-            this.query = query;
+        public Key(string info) {
+            this.info = info;
         }
     }
 }

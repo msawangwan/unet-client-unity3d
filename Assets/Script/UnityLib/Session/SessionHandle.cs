@@ -9,15 +9,36 @@ namespace UnityLib {
         public Queue<Action<string[]>> executeOnListFetched = new Queue<Action<string[]>>();
         public Queue<Action<bool>> executeOnNameAvailabilityCheck = new Queue<Action<bool>>();
 
-        public bool SessionNameOK { get; set; }
+        public Instance SessionInstance { get; private set; }
+
+        public IEnumerator Create(string gamename) {
+            string json = JsonUtility.ToJson(new Key(gamename));
+            Handler<Instance> handler = new Handler<Instance>(json);
+            handler.SendJsonRequest("POST", ServiceController.Session_Create_New);
+
+            do {
+                yield return null;
+                if (handler.onDone != null) {
+                    SessionInstance = handler.onDone();
+                    break;
+                }
+            } while (true);
+        }
 
         public IEnumerator Join(string gamename) {
-            yield return null;
+            string json = JsonUtility.ToJson(new Key(gamename));
+            Handler<Instance> handler = new Handler<Instance>(json);
+
+            // handler.SendJsonRequest()
+
+            do {
+                yield return null;
+            } while (true);
         }
 
         public IEnumerator FetchSessionList() {
             Handler<Lobby> handler = new Handler<Lobby>("poop");
-            handler.SendGetRequest("GET", ServiceController.DebugAddr_Session_Active_List);
+            handler.SendGetRequest("GET", ServiceController.Session_ActiveList);
 
             do {
                 yield return null;
@@ -35,7 +56,7 @@ namespace UnityLib {
         public IEnumerator CheckSessionAvailability(string sessionName) {
             string json = JsonUtility.ToJson(new Key(sessionName));
             Handler<LobbyAvailability> handler = new Handler<LobbyAvailability>(json);
-            handler.SendJsonRequest("POST", ServiceController.DebugAddr_Session_Available);
+            handler.SendJsonRequest("POST", ServiceController.Session_Available);
 
             do {
                 yield return null;

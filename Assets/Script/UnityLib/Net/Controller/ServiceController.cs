@@ -10,8 +10,11 @@
         private static string debug_local_store_world_data = "http://10.0.0.76:80/api/profile/world/load";
         private static string debug_remote_store_world_data = "http://tyrant.systems:80/api/profile/world/load";
 
-        private static string debug_session_list_all_active = "http://10.0.0.76:80/api/session/active";
-        private static string debug_session_check_available = "http://10.0.0.76:80/api/session/availability";
+        private static string session_list_all_active = "http://10.0.0.76:80/api/session/active";
+        private static string session_check_available = "http://10.0.0.76:80/api/session/availability";
+        private static string session_create_new = "http://10.0.0.76:80/api/session/new";
+        private static string session_make_active = "http://10.0.0.76:80/api/session/new/open";
+        private static string session_join_existing = "http://10.0.0.76:80/api/session/new/join";
 
         public static string Debug_Addr_Availability {
             get {
@@ -49,15 +52,31 @@
             }
         }
 
-        public static string DebugAddr_Session_Active_List {
+        public static string Session_ActiveList {
             get {
-                return debug_session_list_all_active;
+                return session_list_all_active;
             }
         }
 
-        public static string DebugAddr_Session_Available {
+        public static string Session_Available {
             get {
-                return debug_session_check_available;
+                return session_check_available;
+            }
+        }
+
+        public static string Session_Create_New {
+            get {
+                return session_create_new;
+            }
+        }
+        public static string Session_MakeActive {
+            get {
+                return session_make_active;
+            }
+        }
+        public static string Session_JoinNew {
+            get {
+                return session_join_existing;
             }
         }
 

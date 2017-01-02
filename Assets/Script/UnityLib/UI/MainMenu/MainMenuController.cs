@@ -71,8 +71,8 @@ namespace UnityLib.UI {
                         go.GetComponent<Button>().onClick.RemoveAllListeners();
                         go.GetComponent<Button>().onClick.AddListener(
                             () => {
-                                session.Join(item);
                                 currentLevel.gameObject.SetActive(false);
+                                StartCoroutine(session.Join(item));
                             }
                         );
                     }
@@ -94,7 +94,7 @@ namespace UnityLib.UI {
                 SwitchLevel(2);
             } else if (currentLevel.levelIndex == 2) {
                 SwitchLevel(-1);
-                StartCoroutine(session.Join(currentSessionName));
+                StartCoroutine(session.Create(currentSessionName));
             }
 
             levels[3].gameObject.SetActive(false);
