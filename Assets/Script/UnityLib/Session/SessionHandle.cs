@@ -3,18 +3,59 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityLib.Framework.Net;
+using UnityLib.Framework.Client;
 
 namespace UnityLib {
     public class SessionHandle : MonoBehaviour {
         public Queue<Action<string[]>> executeOnListFetched = new Queue<Action<string[]>>();
         public Queue<Action<bool>> executeOnNameAvailabilityCheck = new Queue<Action<bool>>();
 
+        public Queue<Action> StageOne = new Queue<Action>();
+        public Queue<Action> StageOneError = new Queue<Action>();
+
         public Instance SessionInstance { get; private set; }
 
         public IEnumerator Create(string gamename) {
-            string json = JsonUtility.ToJson(new Key(gamename));
-            Handler<Instance> handler = new Handler<Instance>(json);
-            handler.SendJsonRequest("POST", ServiceController.Session_Create_New);
+            Handler<Instance> createSession = new Handler<Instance>(
+                JsonUtility.ToJson(new Key(gamename))
+            );
+
+            createSession.POST(RouteHandle.Session_CreateNew);
+
+            do {
+                yield return null;
+                if (createSession.onDone != null) {
+                    SessionInstance = createSession.onDone();
+                    break;
+                }
+            } while (true);
+
+            SessionInstance.playerCount++;
+            Handler<Confirmation> confirmGameActive = new Handler<Confirmation>(
+                JsonUtility.ToJson(SessionInstance)
+            );
+
+            confirmGameActive.POST(RouteHandle.Session_MakeActive);
+
+            do {
+                yield return null;
+                if (confirmGameActive.onDone != null) {
+                    confirmGameActive.onDone();
+                    break;
+                }
+            } while (true);
+
+            StartCoroutine(this.BeginSession());
+
+            Debug.LogFormat("created a session: {0} {1}", SessionInstance.sessionID, SessionInstance.seed);
+        }
+
+        public IEnumerator Join(string gamename) {
+            Handler<Instance> handler = new Handler<Instance>(
+                JsonUtility.ToJson(new Key(gamename))
+            );
+
+            handler.POST(RouteHandle.Session_JoinNew);
 
             do {
                 yield return null;
@@ -23,22 +64,15 @@ namespace UnityLib {
                     break;
                 }
             } while (true);
-        }
 
-        public IEnumerator Join(string gamename) {
-            string json = JsonUtility.ToJson(new Key(gamename));
-            Handler<Instance> handler = new Handler<Instance>(json);
+            StartCoroutine(this.BeginSession());
 
-            // handler.SendJsonRequest()
-
-            do {
-                yield return null;
-            } while (true);
+            Debug.LogFormat("joined a session: {0} {1}", SessionInstance.sessionID, SessionInstance.seed);
         }
 
         public IEnumerator FetchSessionList() {
             Handler<Lobby> handler = new Handler<Lobby>("poop");
-            handler.SendGetRequest("GET", ServiceController.Session_ActiveList);
+            handler.GET(RouteHandle.Session_ActiveList);
 
             do {
                 yield return null;
@@ -56,7 +90,7 @@ namespace UnityLib {
         public IEnumerator CheckSessionAvailability(string sessionName) {
             string json = JsonUtility.ToJson(new Key(sessionName));
             Handler<LobbyAvailability> handler = new Handler<LobbyAvailability>(json);
-            handler.SendJsonRequest("POST", ServiceController.Session_Available);
+            handler.POST(RouteHandle.Session_Available);
 
             do {
                 yield return null;

@@ -25,9 +25,7 @@ namespace UnityLib.Framework.Net {
         public System.Func<T> onDone { get; private set; }
         private string jsonPayload;
 
-        public Handler() {
-            
-        }
+        public Handler() {}
 
         public Handler(string payload) {
             jsonPayload = payload;
@@ -37,11 +35,11 @@ namespace UnityLib.Framework.Net {
             onDone = null;
         }
 
-        public void SendGetRequest(string method, string resource) {
+        public void GET(string resource) {
             try {
                 HandlerContext context = new HandlerContext();
                 context.Request = (HttpWebRequest)WebRequest.Create(resource);
-                context.Request.Method = method;
+                context.Request.Method = "GET";
 
                 context.Request.BeginGetResponse(
                     new AsyncCallback(OnResponse),
@@ -54,7 +52,7 @@ namespace UnityLib.Framework.Net {
             }
         }
 
-        public void SendJsonRequest(string method, string resource) {
+        public void POST(string resource) {
             try {
                 Debug.LogFormat("registered callback: {0}", Time.time);
 
@@ -64,7 +62,7 @@ namespace UnityLib.Framework.Net {
                 context.PayloadSize = jsonPayload.Length;
 
                 context.Request = (HttpWebRequest)WebRequest.Create(resource);
-                context.Request.Method = method;
+                context.Request.Method = "POST";
                 context.Request.ContentType = "application/json; charset=utf-8";
                 context.Request.ContentLength = context.PayloadSize;
 
@@ -79,7 +77,7 @@ namespace UnityLib.Framework.Net {
             }
         }
 
-        public void OnRequest(IAsyncResult ar) {
+        private void OnRequest(IAsyncResult ar) {
             try {
                 HandlerContext context = (HandlerContext) ar.AsyncState;
 
@@ -99,7 +97,7 @@ namespace UnityLib.Framework.Net {
 
         }
 
-        public void OnResponse(IAsyncResult ar) {
+        private void OnResponse(IAsyncResult ar) {
             try {
                 HandlerContext context = (HandlerContext) ar.AsyncState;
 

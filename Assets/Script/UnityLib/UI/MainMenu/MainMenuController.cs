@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityLib.Framework.Client;
+using UnityLib.Framework.Net;
 
 namespace UnityLib.UI {
     public class MainMenuController : MonoBehaviour {

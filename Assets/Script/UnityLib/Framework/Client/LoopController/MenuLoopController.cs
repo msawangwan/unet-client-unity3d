@@ -42,7 +42,7 @@ namespace UnityLib.Framework.Client {
             string json = JsonUtility.ToJson(new ProfileSearch(profileName));
 
             Handler<ProfileSearch> handler = new Handler<ProfileSearch>(json);
-            handler.SendJsonRequest("POST", ServiceController.Debug_Addr_Availability);
+            handler.POST(RouteHandle.Debug_Addr_Availability);
 
             do {
                 yield return null;
@@ -67,7 +67,7 @@ namespace UnityLib.Framework.Client {
             string json = JsonUtility.ToJson(new ProfileName(profileName));
 
             Handler<GameState> handler = new Handler<GameState>(json);
-            handler.SendJsonRequest("POST", ServiceController.Debug_Addr_Create_Profile);
+            handler.POST(RouteHandle.Debug_Addr_Create_Profile);
 
             do {
                 yield return null;
@@ -132,7 +132,7 @@ namespace UnityLib.Framework.Client {
             string json = JsonUtility.ToJson(LoadedProfile);
 
             Handler<Confirmation> handler = new Handler<Confirmation>(json);
-            handler.SendJsonRequest("POST", ServiceController.Debug_Addr_Store_World_Data);
+            handler.POST(RouteHandle.Debug_Addr_Store_World_Data);
 
             do {
                 yield return null;

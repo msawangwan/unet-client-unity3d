@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace UnityLib {
     [System.Serializable]
-    public class Instance {
-        public long seed;
-        public string sessionID;
-        public int playerCount;
+    public class Connection : MonoBehaviour {
+        public bool Connected;
     }
 }

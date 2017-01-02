@@ -1,5 +1,5 @@
 ﻿namespace UnityLib.Framework.Net {
-    public class ServiceController : ControllerBehaviour {
+    public class RouteHandle : ControllerBehaviour {
         private static bool useLocalAsHost = true;
         private static string debug_local_availability = "http://10.0.0.76:80/api/profile/availability";
         private static string debug_remote_availability = "http://tyrant.systems:80/api/profile/availability";
@@ -15,6 +15,8 @@
         private static string session_create_new = "http://10.0.0.76:80/api/session/new";
         private static string session_make_active = "http://10.0.0.76:80/api/session/new/open";
         private static string session_join_existing = "http://10.0.0.76:80/api/session/new/join";
+
+        private static string game_fetch_frame = "http://10.0.0.76:80/api/game/frame";
 
         public static string Debug_Addr_Availability {
             get {
@@ -64,19 +66,27 @@
             }
         }
 
-        public static string Session_Create_New {
+        public static string Session_CreateNew {
             get {
                 return session_create_new;
             }
         }
+
         public static string Session_MakeActive {
             get {
                 return session_make_active;
             }
         }
+
         public static string Session_JoinNew {
             get {
                 return session_join_existing;
+            }
+        }
+
+        public static string Game_FetchFrame {
+            get {
+                return game_fetch_frame;
             }
         }
 

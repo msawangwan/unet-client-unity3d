@@ -6,7 +6,7 @@ namespace UnityLib {
         public ControllerBehaviour titleMenuController;
         public ControllerBehaviour popupMenuController;
 
-        public ControllerBehaviour serviceController;
+        public ControllerBehaviour RouteHandle;
 
         public ControllerBehaviour menuLoopController;
         public ControllerBehaviour gameLoopController;
@@ -17,7 +17,7 @@ namespace UnityLib {
             allControllers = new ControllerBehaviour[] {
                 titleMenuController,
                 popupMenuController,
-                serviceController,
+                RouteHandle,
                 menuLoopController,
                 gameLoopController,
         };
