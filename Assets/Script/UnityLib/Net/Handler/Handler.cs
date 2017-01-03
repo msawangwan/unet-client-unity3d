@@ -23,7 +23,9 @@ namespace UnityLib.Framework.Net {
         }
 
         public System.Func<T> onDone { get; private set; }
+
         private string jsonPayload;
+        private string endpoint;
 
         public Handler() {}
 
@@ -37,8 +39,13 @@ namespace UnityLib.Framework.Net {
 
         public void GET(string resource) {
             try {
+                endpoint = resource;
+
+                Debug.LogFormat("[+] GET {0} [{1}]", endpoint, Time.time);
+
                 HandlerContext context = new HandlerContext();
-                context.Request = (HttpWebRequest)WebRequest.Create(resource);
+        
+                context.Request = (HttpWebRequest)WebRequest.Create(endpoint);
                 context.Request.Method = "GET";
 
                 context.Request.BeginGetResponse(
@@ -54,14 +61,15 @@ namespace UnityLib.Framework.Net {
 
         public void POST(string resource) {
             try {
-                Debug.LogFormat("registered callback: {0}", Time.time);
+                endpoint = resource;
+
+                Debug.LogFormat("[+] POST {0} [{1}]", endpoint, Time.time);
 
                 HandlerContext context = new HandlerContext();
 
                 context.Payload = Encoding.UTF8.GetBytes(jsonPayload);
                 context.PayloadSize = jsonPayload.Length;
-
-                context.Request = (HttpWebRequest)WebRequest.Create(resource);
+                context.Request = (HttpWebRequest)WebRequest.Create(endpoint);
                 context.Request.Method = "POST";
                 context.Request.ContentType = "application/json; charset=utf-8";
                 context.Request.ContentLength = context.PayloadSize;
@@ -106,10 +114,10 @@ namespace UnityLib.Framework.Net {
                 context.Reader = new StreamReader(context.IOStream);
                 context.json = context.Reader.ReadToEnd();
 
-                Debug.LogFormat("server sent (json): {0} ", context.json);
+                Debug.LogFormat("[+] resource @ [{0}]", endpoint);
+                Debug.LogFormat(" - [+] yielded (json): {0} ", context.json);
 
                 onDone = () => {
-                    Debug.LogFormat("callback called: {0}", Time.time);
                     return JsonUtility.FromJson<T>(context.json);
                 };
 

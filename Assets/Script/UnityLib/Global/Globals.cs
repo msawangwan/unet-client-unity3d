@@ -39,7 +39,7 @@ namespace UnityLib {
                 }
 
                 if (isInitComplete) {
-                    Debug.LogFormat("{0} all controller loaded", gameObject.name);
+                    Debug.LogFormat("[+][INIT] {0} all controller loaded", gameObject.name);
                     break;
                 }
             } while (true);

@@ -15,12 +15,21 @@ namespace UnityLib {
         }
 
         private IEnumerator OnLoad() {
+            do {
+                yield return null;
+                if (CurrentSession.SessionInstance == null) {
+                    continue;
+                } else {
+                    break;
+                }
+            } while (true);
+
             // get the first frame
             Handler<Frame> handler = new Handler<Frame>(
                 JsonUtility.ToJson(CurrentSession.SessionInstance.sessionID)
             );
 
-            handler.POST(RouteHandle.Game_FetchFrame);
+            handler.POST(RouteHandle.Game_FetchFrameUpdate);
 
             do {
                 yield return null;
@@ -34,7 +43,8 @@ namespace UnityLib {
         }
 
         private void OnEnable() {
-            StartCoroutine(OnLoad());
+            // StartCoroutine(OnLoad());
+            StartCoroutine(this.BeginUpdate());
         }
     }
 }

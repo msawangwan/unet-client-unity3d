@@ -15,8 +15,10 @@
         private static string session_create_new = "http://10.0.0.76:80/api/session/new";
         private static string session_make_active = "http://10.0.0.76:80/api/session/new/open";
         private static string session_join_existing = "http://10.0.0.76:80/api/session/new/join";
+        private static string session_establish_conn = "http://10.0.0.76:80/api/session/new/connect";
 
-        private static string game_fetch_frame = "http://10.0.0.76:80/api/game/frame";
+        private static string game_start_update = "http://10.0.0.76:80/api/game/update/start";
+        private static string game_fetch_frame = "http://10.0.0.76:80/api/game/update/frame";
 
         public static string Debug_Addr_Availability {
             get {
@@ -83,10 +85,22 @@
                 return session_join_existing;
             }
         }
+ 
+        public static string Session_EstablishConn {
+            get {
+                return session_establish_conn;
+            }
+        }
 
-        public static string Game_FetchFrame {
+        public static string Game_FetchFrameUpdate {
             get {
                 return game_fetch_frame;
+            }
+        }
+
+        public static string Game_StartUpdate {
+            get {
+                return game_start_update;
             }
         }
 

@@ -14,6 +14,7 @@ namespace UnityLib {
         public Queue<Action> StageOneError = new Queue<Action>();
 
         public Instance SessionInstance { get; private set; }
+        public Key SKey { get; private set; }
 
         public IEnumerator Create(string gamename) {
             Handler<Instance> createSession = new Handler<Instance>(
@@ -31,7 +32,7 @@ namespace UnityLib {
             } while (true);
 
             SessionInstance.playerCount++;
-            Handler<Confirmation> confirmGameActive = new Handler<Confirmation>(
+            Handler<Key> confirmGameActive = new Handler<Key>(
                 JsonUtility.ToJson(SessionInstance)
             );
 
@@ -40,7 +41,8 @@ namespace UnityLib {
             do {
                 yield return null;
                 if (confirmGameActive.onDone != null) {
-                    confirmGameActive.onDone();
+                    SKey = confirmGameActive.onDone();
+                    Debug.LogFormat("session key: [bare] {0} [db] {1}", SKey.bareFormat, SKey.redisFormat);
                     break;
                 }
             } while (true);

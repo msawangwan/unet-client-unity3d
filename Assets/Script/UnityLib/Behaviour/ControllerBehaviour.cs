@@ -26,7 +26,7 @@ namespace UnityLib {
                 if (onInitCompleted != null) {
                     if (onInitCompleted()) {
                         isInitialised = true;
-                        Debug.LogFormat("{0} init complete: {1}", gameObject.name, Time.time);
+                        Debug.LogFormat("[+][INIT] {0} init complete: {1}", gameObject.name, Time.time);
                         break;
                     }
                 }
