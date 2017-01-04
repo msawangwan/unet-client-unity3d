@@ -1,6 +1,7 @@
 ﻿namespace UnityLib.Framework.Net {
     public class RouteHandle : ControllerBehaviour {
-        private static bool useLocalAsHost = true;
+        private static bool localAddr = false;
+
         private static string debug_local_availability = "http://10.0.0.76:80/api/profile/availability";
         private static string debug_remote_availability = "http://tyrant.systems:80/api/profile/availability";
 
@@ -11,22 +12,34 @@
         private static string debug_remote_store_world_data = "http://tyrant.systems:80/api/profile/world/load";
 
         private static string session_list_all_active = "http://10.0.0.76:80/api/session/active";
+        private static string remote_session_list_all_active = "http://tyrant.systems:80/api/session/active";
+
         private static string session_check_available = "http://10.0.0.76:80/api/session/availability";
+        private static string remote_session_check_available = "http://tyrant.systems:80/api/session/availability";
+
         private static string session_create_new = "http://10.0.0.76:80/api/session/new";
+        private static string remote_session_create_new = "http://tyrant.systems:80/api/session/new";
+
         private static string session_make_active = "http://10.0.0.76:80/api/session/new/open";
+        private static string remote_session_make_active = "http://tyrant.systems:80/api/session/new/open";
+
         private static string session_join_existing = "http://10.0.0.76:80/api/session/new/join";
+        private static string remote_session_join_existing = "http://tyrant.systems:80/api/session/new/join";
+
         private static string session_establish_conn = "http://10.0.0.76:80/api/session/new/connect";
+        private static string remote_session_establish_conn = "http://tyrant.systems:80/api/session/new/connect";
 
         private static string game_start_update = "http://10.0.0.76:80/api/game/update/start";
+        private static string remote_game_start_update = "http://tyrant.systems:80/api/game/update/start";
+
         private static string game_fetch_frame = "http://10.0.0.76:80/api/game/update/frame";
+        private static string remote_game_fetch_frame = "http://tyrant.systems:80/api/game/update/frame";
 
         public static string Debug_Addr_Availability {
             get {
-                if (useLocalAsHost) {
-                    print("route request: " + debug_local_availability);
+                if (localAddr) {
                     return debug_local_availability;
                 } else {
-                    print("route request: " + debug_remote_availability);
                     return debug_remote_availability;
                 }
             }
@@ -34,11 +47,9 @@
 
         public static string Debug_Addr_Create_Profile {
             get {
-                if (useLocalAsHost) {
-                    print("route request: " + debug_local_create_profile);
+                if (localAddr) {
                     return debug_local_create_profile;
                 } else {
-                    print("route request: " + debug_remote_create_profile);
                     return debug_remote_create_profile;
                 }
             }
@@ -46,11 +57,9 @@
 
         public static string Debug_Addr_Store_World_Data {
             get {
-                if (useLocalAsHost) {
-                    print("route request: " + debug_local_store_world_data);
+                if (localAddr) {
                     return debug_local_store_world_data;
                 } else {
-                    print("route request: " + debug_remote_store_world_data);
                     return debug_remote_store_world_data;
                 }
             }
@@ -58,49 +67,81 @@
 
         public static string Session_ActiveList {
             get {
-                return session_list_all_active;
+                if (localAddr) {
+                    return session_list_all_active;
+                } else {
+                    return remote_session_list_all_active;
+                }
             }
         }
 
         public static string Session_Available {
             get {
-                return session_check_available;
+                if (localAddr) {
+                    return session_check_available;
+                } else {
+                    return remote_session_check_available;
+                }
             }
         }
 
         public static string Session_CreateNew {
             get {
-                return session_create_new;
+                if (localAddr) {
+                    return session_create_new;
+                } else {
+                    return remote_session_create_new;
+                }
             }
         }
 
         public static string Session_MakeActive {
             get {
-                return session_make_active;
+                if (localAddr) {
+                    return session_make_active;
+                } else {
+                    return remote_session_make_active;
+                }
             }
         }
 
         public static string Session_JoinNew {
             get {
-                return session_join_existing;
+                if (localAddr) {
+                    return session_join_existing;
+                } else {
+                    return remote_session_join_existing;
+                }
             }
         }
- 
+
         public static string Session_EstablishConn {
             get {
-                return session_establish_conn;
+                if (localAddr){
+                    return session_establish_conn;
+                } else {
+                    return remote_session_establish_conn;
+                }
             }
         }
 
         public static string Game_FetchFrameUpdate {
             get {
-                return game_fetch_frame;
+                if (localAddr) {
+                    return game_fetch_frame;
+                } else {
+                    return remote_game_fetch_frame;
+                }
             }
         }
 
         public static string Game_StartUpdate {
             get {
-                return game_start_update;
+                if (localAddr) {
+                    return game_start_update;
+                } else {
+                    return remote_game_start_update;
+                }
             }
         }
 

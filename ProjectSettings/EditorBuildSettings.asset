@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scene/menu_loop.unity
+    path: Assets/Scene/game_select_loop.unity
   - enabled: 1
-    path: Assets/Scene/gameplay_loop.unity
+    path: Assets/Scene/game_play_loop.unity
