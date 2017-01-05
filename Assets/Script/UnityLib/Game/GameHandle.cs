@@ -46,5 +46,9 @@ namespace UnityLib {
             // StartCoroutine(OnLoad());
             StartCoroutine(this.BeginUpdate());
         }
+
+        private void OnDestroy() {
+            
+        }
     }
 }

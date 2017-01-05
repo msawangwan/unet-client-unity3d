@@ -30,5 +30,9 @@ namespace UnityLib {
 
             Debug.LogFormat("game update loop is now running!");
         }
+
+        public static void EndGameSession(this GameHandle gb) {
+            
+        }
     }
 }
