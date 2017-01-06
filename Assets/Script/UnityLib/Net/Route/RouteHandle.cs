@@ -1,6 +1,6 @@
 ﻿namespace UnityLib.Net {
     public class RouteHandle : ControllerBehaviour {
-        private static bool localAddr = false;
+        private static bool localAddr = true;
 
         private static string debug_local_availability = "http://10.0.0.76:80/api/profile/availability";
         private static string debug_remote_availability = "http://tyrant.systems:80/api/profile/availability";
