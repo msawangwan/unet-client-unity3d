@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityAdt;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityLib.Framework.Net;
+using UnityLib.Net;
 
 namespace UnityLib.Framework.Client {
     public class MenuLoopController : ControllerBehaviour {

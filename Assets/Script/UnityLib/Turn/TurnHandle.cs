@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour {
+public class TurnHandle : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

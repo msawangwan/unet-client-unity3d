@@ -1,6 +1,6 @@
-﻿namespace UnityLib.Framework.Net {
+﻿namespace UnityLib.Net {
     public class RouteHandle : ControllerBehaviour {
-        private static bool localAddr = true;
+        private static bool localAddr = false;
 
         private static string debug_local_availability = "http://10.0.0.76:80/api/profile/availability";
         private static string debug_remote_availability = "http://tyrant.systems:80/api/profile/availability";
@@ -23,6 +23,8 @@
         private static string session_make_active = "http://10.0.0.76:80/api/session/new/open";
         private static string remote_session_make_active = "http://tyrant.systems:80/api/session/new/open";
 
+        private static string remote_session_key_from_instance = "http://tyrant.systems:80/api/session/new/instance/key";
+
         private static string session_join_existing = "http://10.0.0.76:80/api/session/new/join";
         private static string remote_session_join_existing = "http://tyrant.systems:80/api/session/new/join";
 
@@ -32,8 +34,11 @@
         private static string game_start_update = "http://10.0.0.76:80/api/game/update/start";
         private static string remote_game_start_update = "http://tyrant.systems:80/api/game/update/start";
 
+        private static string remote_game_enter_update = "http://tyrant.systems:80/api/game/update/enter";
+
         private static string game_fetch_frame = "http://10.0.0.76:80/api/game/update/frame";
         private static string remote_game_fetch_frame = "http://tyrant.systems:80/api/game/update/frame";
+
 
         private static string game_kill = "http://10.0.0.76:80/api/game/update/kill";
 
@@ -107,6 +112,16 @@
             }
         }
 
+        public static string Session_KeyFromInstance {
+            get {
+                if (localAddr) {
+                    return "";
+                } else {
+                    return remote_session_key_from_instance;
+                }
+            }
+        }
+
         public static string Session_JoinNew {
             get {
                 if (localAddr) {
@@ -143,6 +158,16 @@
                     return game_start_update;
                 } else {
                     return remote_game_start_update;
+                }
+            }
+        }
+
+        public static string Game_EnterUpdate {
+            get {
+                if (localAddr) {
+                    return "";
+                } else {
+                    return remote_game_enter_update;
                 }
             }
         }

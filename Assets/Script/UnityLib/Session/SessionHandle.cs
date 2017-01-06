@@ -2,13 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityLib.Framework.Net;
-using UnityLib.Framework.Client;
+using UnityLib.Net;
 
 namespace UnityLib {
     public class SessionHandle : MonoBehaviour {
         public Queue<Action<string[]>> executeOnListFetched = new Queue<Action<string[]>>();
-        public Queue<Action<bool>> executeOnNameAvailabilityCheck = new Queue<Action<bool>>();
+        public Queue<Action<bool>> sessionNameAvailabilityCheck = new Queue<Action<bool>>();
 
         public Queue<Action> StageOne = new Queue<Action>();
         public Queue<Action> StageOneError = new Queue<Action>();
@@ -16,64 +15,82 @@ namespace UnityLib {
         public Instance SessionInstance { get; private set; }
         public Key SKey { get; private set; }
 
+        public string OwningPlayerName { get; private set; }
+
         public IEnumerator Create(string gamename) {
-            Handler<Instance> createSession = new Handler<Instance>(
+            Handler<Instance> createHandler = new Handler<Instance>(
                 JsonUtility.ToJson(new Key(gamename))
             );
 
-            createSession.POST(RouteHandle.Session_CreateNew);
+            createHandler.POST(RouteHandle.Session_CreateNew);
 
             do {
                 yield return null;
-                if (createSession.onDone != null) {
-                    SessionInstance = createSession.onDone();
+                if (createHandler.onDone != null) {
+                    SessionInstance = createHandler.onDone();
                     break;
                 }
             } while (true);
 
             SessionInstance.playerCount++;
-            Handler<Key> confirmGameActive = new Handler<Key>(
+            Handler<Key> confirmHandler = new Handler<Key>(
                 JsonUtility.ToJson(SessionInstance)
             );
 
-            confirmGameActive.POST(RouteHandle.Session_MakeActive);
+            confirmHandler.POST(RouteHandle.Session_MakeActive);
 
             do {
                 yield return null;
-                if (confirmGameActive.onDone != null) {
-                    SKey = confirmGameActive.onDone();
-                    Debug.LogFormat("session key: [bare] {0} [db] {1}", SKey.bareFormat, SKey.redisFormat);
+                if (confirmHandler.onDone != null) {
+                    SKey = confirmHandler.onDone();
+                    Debug.LogFormat("[+] session key: [bare] {0} [db] {1}", SKey.bareFormat, SKey.redisFormat);
                     break;
                 }
             } while (true);
 
-            StartCoroutine(this.BeginSession());
+            StartCoroutine(this.BeginSession(false));
 
-            Debug.LogFormat("created a session: {0} {1}", SessionInstance.sessionID, SessionInstance.seed);
+            Debug.LogFormat("- [+] created a session: {0} {1}", SessionInstance.sessionID, SessionInstance.seed);
         }
 
         public IEnumerator Join(string gamename) {
-            Handler<Instance> handler = new Handler<Instance>(
+            Handler<Instance> joinHandler = new Handler<Instance>(
                 JsonUtility.ToJson(new Key(gamename))
             );
 
-            handler.POST(RouteHandle.Session_JoinNew);
+            joinHandler.POST(RouteHandle.Session_JoinNew);
 
             do {
                 yield return null;
-                if (handler.onDone != null) {
-                    SessionInstance = handler.onDone();
+                if (joinHandler.onDone != null) {
+                    SessionInstance = joinHandler.onDone();
                     break;
                 }
             } while (true);
 
-            StartCoroutine(this.BeginSession());
+            Handler<Key> keyHandler = new Handler<Key>(
+                JsonUtility.ToJson(SessionInstance)
+            );
 
-            Debug.LogFormat("joined a session: {0} {1}", SessionInstance.sessionID, SessionInstance.seed);
+            keyHandler.POST(RouteHandle.Session_KeyFromInstance);
+
+            do {
+                yield return null;
+                if (keyHandler.onDone != null) {
+                    SKey = keyHandler.onDone();
+                    Debug.LogFormat("[+] session key: [bare] {0} [db] {1}", SKey.bareFormat, SKey.redisFormat);
+                    break;
+                }
+            } while (true);
+
+            StartCoroutine(this.BeginSession(true));
+
+            Debug.LogFormat("- [+] joined a session: {0} {1}", SessionInstance.sessionID, SessionInstance.seed);
         }
 
         public IEnumerator FetchSessionList() {
-            Handler<Lobby> handler = new Handler<Lobby>("poop");
+            Handler<Lobby> handler = new Handler<Lobby>();
+
             handler.GET(RouteHandle.Session_ActiveList);
 
             do {
@@ -98,8 +115,8 @@ namespace UnityLib {
                 yield return null;
                 if (handler.onDone != null) {
                     LobbyAvailability result = handler.onDone();
-                    while (executeOnNameAvailabilityCheck.Count > 0) {
-                        Action<bool> c = executeOnNameAvailabilityCheck.Dequeue();
+                    while (sessionNameAvailabilityCheck.Count > 0) {
+                        Action<bool> c = sessionNameAvailabilityCheck.Dequeue();
                         c(result.isAvailable);
                     }
                     break;
@@ -107,8 +124,14 @@ namespace UnityLib {
             } while (true);
         }
 
-        public static SessionHandle New() {
-            return new GameObject("session_handle").AddComponent<SessionHandle>();
+        public static SessionHandle New(string playerName) {
+            SessionHandle sh = new GameObject("session_handle").AddComponent<SessionHandle>();
+            sh.OwningPlayerName = playerName;
+            return sh;
+        }
+
+        private void OnDestroy() {
+            Debug.LogFormat("session handle destroyed");
         }
     }
 }

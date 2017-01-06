@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityLib.Framework.Client;
-using UnityLib.Framework.Net;
 
 namespace UnityLib.UI {
     public class MainMenuController : MonoBehaviour {
@@ -41,7 +37,7 @@ namespace UnityLib.UI {
 
         public void CreateGame(string sessionName) {
             currentSessionName = sessionName;
-            session.executeOnNameAvailabilityCheck.Enqueue(
+            session.sessionNameAvailabilityCheck.Enqueue(
                 (isAvailable) => {
                     if (isAvailable) {
                         levels[3].gameObject.SetActive(true);
@@ -91,7 +87,7 @@ namespace UnityLib.UI {
         public void Confirm() {
             if (currentLevel.levelIndex == 0) {
                 SwitchLevel(1);
-                session = SessionHandle.New();
+                session = SessionHandle.New(currentPlayerName);
             } else if (currentLevel.levelIndex == 1) {
                 SwitchLevel(2);
             } else if (currentLevel.levelIndex == 2) {

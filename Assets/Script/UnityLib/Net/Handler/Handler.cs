@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace UnityLib.Framework.Net {
+namespace UnityLib.Net {
     public class Handler<T>  {
         public class HandlerContext {
             public HttpWebRequest Request { get; set; }
