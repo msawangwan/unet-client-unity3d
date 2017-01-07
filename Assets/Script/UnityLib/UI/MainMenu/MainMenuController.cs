@@ -84,6 +84,23 @@ namespace UnityLib.UI {
             SwitchLevel(1);
         }
 
+        // this is here for future refactoring, deprecate the zero paramter version
+        public void Confirm(System.Action onConfirm) {
+            if (onConfirm != null) {
+                onConfirm();
+            }
+
+            if (currentLevel.levelIndex == 0) {
+                SwitchLevel(1);
+            } else if (currentLevel.levelIndex == 1) {
+                SwitchLevel(2);
+            } else if (currentLevel.levelIndex == 2) {
+                SwitchLevel(-1);
+            }
+
+            levels[3].gameObject.SetActive(false);
+        }
+
         public void Confirm() {
             if (currentLevel.levelIndex == 0) {
                 SwitchLevel(1);
