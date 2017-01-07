@@ -1,7 +1,8 @@
 ﻿namespace UnityLib.Net {
     public class RouteHandle : ControllerBehaviour {
-        private static bool localAddr = true;
+        private static bool localAddr = false;
 
+        /* DEPRECATED */
         private static string debug_local_availability = "http://10.0.0.76:80/api/profile/availability";
         private static string debug_remote_availability = "http://tyrant.systems:80/api/profile/availability";
 
@@ -10,6 +11,9 @@
 
         private static string debug_local_store_world_data = "http://10.0.0.76:80/api/profile/world/load";
         private static string debug_remote_store_world_data = "http://tyrant.systems:80/api/profile/world/load";
+
+        /* SESSION */
+        private static string remote_session_register = "http://tyrant.systems:80/api/session/new/key";
 
         private static string session_list_all_active = "http://10.0.0.76:80/api/session/active";
         private static string remote_session_list_all_active = "http://tyrant.systems:80/api/session/active";
@@ -31,6 +35,8 @@
         private static string session_establish_conn = "http://10.0.0.76:80/api/session/new/connect";
         private static string remote_session_establish_conn = "http://tyrant.systems:80/api/session/new/connect";
 
+
+        /* GAME */
         private static string game_start_update = "http://10.0.0.76:80/api/game/update/start";
         private static string remote_game_start_update = "http://tyrant.systems:80/api/game/update/start";
 
@@ -168,6 +174,16 @@
                     return "";
                 } else {
                     return remote_game_enter_update;
+                }
+            }
+        }
+
+        public static string Session_RegisterSession {
+            get {
+                if (localAddr) {
+                    return "";
+                } else {
+                    return remote_session_register;
                 }
             }
         }

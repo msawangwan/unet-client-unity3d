@@ -15,7 +15,10 @@ namespace UnityLib {
         public Instance SessionInstance { get; private set; }
         public Key SKey { get; private set; }
 
-        public string OwningPlayerName { get; private set; }
+        public string OwningPlayerName { get; private set; } // deprecate
+
+        public int ID { get; set; }
+        public string Owner { get; private set; } 
 
         public IEnumerator Create(string gamename) {
             Handler<Instance> createHandler = new Handler<Instance>(
@@ -122,6 +125,12 @@ namespace UnityLib {
                     break;
                 }
             } while (true);
+        }
+
+        public static SessionHandle New(string playerName, bool isNewImpl) { // the over load is to use the same name before deleting the old impl
+            SessionHandle sh = new GameObject("session_handle").AddComponent<SessionHandle>();
+            sh.Owner = playerName;
+            return sh;
         }
 
         public static SessionHandle New(string playerName) {

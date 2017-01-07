@@ -7,20 +7,27 @@ namespace UnityLib {
     public static class SessionHandleExtension {
         private const int kSceneIndexGameplay = 1;
 
-        // public static IEnumerator KeyFromGameName(this SessionHandle sh) {
-        //     Handler<Key> keyHandler = new Handler<Key>(
-        //         JsonUtility.ToJson(sh.SessionInstance)
-        //     );
+        public static IEnumerator Register(this SessionHandle sh) {
+            int skey = -1;
 
-        //     do {
-        //         yield return null;
-        //     } while (true);
-        // }
+            Handler<JsonInt> registerHandler = new Handler<JsonInt>();
+            registerHandler.GET(RouteHandle.Session_RegisterSession);
 
-        // public static IEnumerator IncreasePlayerCount(this SessionHandle sh) {
-        //     sh.SessionInstance.playerCount++;
-        //     yield return null;
-        // }
+            do {
+                yield return null;
+                if (registerHandler.onDone != null) {
+                    JsonInt jint = registerHandler.onDone();
+                    skey = jint.value;
+                    break;
+                }
+            } while (true);
+
+            Debug.LogFormat("-- [+] new session registered with key: {0}", skey);
+
+            if (skey == -1) {
+                Debug.LogErrorFormat("[+] key cannot be negative ({0})", skey);
+            }
+        }
 
         public static IEnumerator BeginSession(this SessionHandle sh, bool isExistingSession) {
             SceneManager.LoadSceneAsync(kSceneIndexGameplay, LoadSceneMode.Additive);
@@ -31,10 +38,6 @@ namespace UnityLib {
                 Debug.Log("----- [*] loading session ...");
                 yield return new WaitForEndOfFrame();
             } while (!scene.isLoaded);
-
-            // Handler<Connection> handler = new Handler<Connection>(
-            //     JsonUtility.ToJson(sh.SessionInstance)
-            // );
 
             Handler<Connection> connHandler = new Handler<Connection>(
                 JsonUtility.ToJson(new SessionOwner(sh.SessionInstance.sessionID, sh.OwningPlayerName))

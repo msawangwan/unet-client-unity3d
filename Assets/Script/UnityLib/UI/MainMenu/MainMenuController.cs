@@ -88,6 +88,7 @@ namespace UnityLib.UI {
             if (currentLevel.levelIndex == 0) {
                 SwitchLevel(1);
                 session = SessionHandle.New(currentPlayerName);
+                session.StartCoroutine(session.Register());
             } else if (currentLevel.levelIndex == 1) {
                 SwitchLevel(2);
             } else if (currentLevel.levelIndex == 2) {
