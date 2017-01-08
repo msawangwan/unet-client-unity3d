@@ -14,6 +14,7 @@ namespace UnityLib {
 
         public Instance SessionInstance { get; private set; }
         public Key SKey { get; private set; }
+        public int SessionKey { get; set; }
 
         public string OwningPlayerName { get; private set; } // deprecate
 
@@ -127,7 +128,7 @@ namespace UnityLib {
             } while (true);
         }
 
-        public static SessionHandle New(string playerName, bool isNewImpl) { // the over load is to use the same name before deleting the old impl
+        public static SessionHandle New(string playerName, bool blah) { // the over load is to use the same name before deleting the old impl
             SessionHandle sh = new GameObject("session_handle").AddComponent<SessionHandle>();
             sh.Owner = playerName;
             return sh;

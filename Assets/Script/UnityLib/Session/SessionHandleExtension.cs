@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityLib.Net;
@@ -26,7 +27,29 @@ namespace UnityLib {
 
             if (skey == -1) {
                 Debug.LogErrorFormat("[+] key cannot be negative ({0})", skey);
+            } else {
+                sh.SessionKey = skey;
             }
+        }
+
+        public static IEnumerator HostGame(this SessionHandle sh, Action onSuccess) {
+            Debug.LogFormat("-- -- [*] attempting to host new game ... [{0}]", Time.time);
+
+            Handler<Instance> hostHandler = new Handler<Instance>(
+                JsonUtility.ToJson(new JsonInt(sh.SessionKey))
+            );
+
+            hostHandler.POST(RouteHandle.Session_HostNewInstance);
+
+            do {
+                yield return null;
+                Debug.LogFormat("-- -- -- [*] waiting for server response ... [{0}]", Time.time);
+                if (hostHandler.isReady) {
+                    hostHandler.onDone();
+                    onSuccess();
+                    break;
+                }
+            } while (true);
         }
 
         public static IEnumerator BeginSession(this SessionHandle sh, bool isExistingSession) {

@@ -22,7 +22,16 @@ namespace UnityLib.Net {
             }
         }
 
-        public System.Func<T> onDone { get; private set; }
+        public System.Func<T> onDone { 
+            get; 
+            private set;
+        }
+
+        public bool isReady {
+            get {
+                return onDone != null;
+            }
+        }
 
         private string jsonPayload;
         private string endpoint;

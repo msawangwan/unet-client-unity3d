@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UnityLib.UI {
@@ -33,6 +35,26 @@ namespace UnityLib.UI {
         public void ChooseName(string playerName) {
             currentPlayerName = playerName; 
             levels[3].gameObject.SetActive(true);
+        }
+
+        public IEnumerator LoadHostGame() {
+            float start = Time.time;
+            bool wg = false;
+
+            Action onSuccess = () => { wg = true; };
+
+            do {
+                yield return session.HostGame(onSuccess);
+
+                Debug.LogFormat("-- -- [*] hosting game [{0}] ...", Time.time);
+
+                if (wg) {
+                    Debug.LogFormat("-- -- -- [*] success [{0}] ...", Time.time);
+                    break;
+                }
+            } while (true);
+            
+            Debug.LogFormat("-- -- [*] done, took: {1} seconds [{0}] ...", Time.time, (Time.time - start));
         }
 
         public void CreateGame(string sessionName) {
@@ -110,6 +132,7 @@ namespace UnityLib.UI {
                 SwitchLevel(2);
             } else if (currentLevel.levelIndex == 2) {
                 SwitchLevel(-1);
+                StartCoroutine(LoadHostGame());
                 StartCoroutine(session.Create(currentSessionName));
             }
 

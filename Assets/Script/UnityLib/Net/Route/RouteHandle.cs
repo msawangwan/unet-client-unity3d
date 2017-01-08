@@ -1,6 +1,15 @@
 ﻿namespace UnityLib.Net {
     public class RouteHandle : ControllerBehaviour {
-        private static bool localAddr = false;
+        private static bool useLocalAddr = true;
+
+        private static string prefix = "api";
+
+        private static string addr_local = string.Format("{0}/{1}", "http://10.0.0.76:80", prefix);
+        private static string addr_remote = string.Format("{0}/{1}", "http://tyrant.systems:80", prefix);
+
+        private static string BuildRoute(string addr, string resource) {
+            return string.Format("{0}/{1}", addr, resource);
+        }
 
         /* DEPRECATED */
         private static string debug_local_availability = "http://10.0.0.76:80/api/profile/availability";
@@ -13,7 +22,8 @@
         private static string debug_remote_store_world_data = "http://tyrant.systems:80/api/profile/world/load";
 
         /* SESSION */
-        private static string remote_session_register = "http://tyrant.systems:80/api/session/new/key";
+        private static string resource_session_register = "session/new/key";
+        private static string resource_session_hostInstance = "session/host/instance";
 
         private static string session_list_all_active = "http://10.0.0.76:80/api/session/active";
         private static string remote_session_list_all_active = "http://tyrant.systems:80/api/session/active";
@@ -40,7 +50,7 @@
         private static string game_start_update = "http://10.0.0.76:80/api/game/update/start";
         private static string remote_game_start_update = "http://tyrant.systems:80/api/game/update/start";
 
-        private static string remote_game_enter_update = "http://tyrant.systems:80/api/game/update/enter";
+        private static string resourece_game_enterUpdate = "api/game/update/enter";
 
         private static string game_fetch_frame = "http://10.0.0.76:80/api/game/update/frame";
         private static string remote_game_fetch_frame = "http://tyrant.systems:80/api/game/update/frame";
@@ -50,7 +60,7 @@
 
         public static string Debug_Addr_Availability {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return debug_local_availability;
                 } else {
                     return debug_remote_availability;
@@ -60,7 +70,7 @@
 
         public static string Debug_Addr_Create_Profile {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return debug_local_create_profile;
                 } else {
                     return debug_remote_create_profile;
@@ -70,7 +80,7 @@
 
         public static string Debug_Addr_Store_World_Data {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return debug_local_store_world_data;
                 } else {
                     return debug_remote_store_world_data;
@@ -80,7 +90,7 @@
 
         public static string Session_ActiveList {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return session_list_all_active;
                 } else {
                     return remote_session_list_all_active;
@@ -90,7 +100,7 @@
 
         public static string Session_Available {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return session_check_available;
                 } else {
                     return remote_session_check_available;
@@ -100,7 +110,7 @@
 
         public static string Session_CreateNew {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return session_create_new;
                 } else {
                     return remote_session_create_new;
@@ -110,7 +120,7 @@
 
         public static string Session_MakeActive {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return session_make_active;
                 } else {
                     return remote_session_make_active;
@@ -120,7 +130,7 @@
 
         public static string Session_KeyFromInstance {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return "";
                 } else {
                     return remote_session_key_from_instance;
@@ -130,7 +140,7 @@
 
         public static string Session_JoinNew {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return session_join_existing;
                 } else {
                     return remote_session_join_existing;
@@ -140,7 +150,7 @@
 
         public static string Session_EstablishConn {
             get {
-                if (localAddr){
+                if (useLocalAddr){
                     return session_establish_conn;
                 } else {
                     return remote_session_establish_conn;
@@ -150,7 +160,7 @@
 
         public static string Game_FetchFrameUpdate {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return game_fetch_frame;
                 } else {
                     return remote_game_fetch_frame;
@@ -160,7 +170,7 @@
 
         public static string Game_StartUpdate {
             get {
-                if (localAddr) {
+                if (useLocalAddr) {
                     return game_start_update;
                 } else {
                     return remote_game_start_update;
@@ -170,20 +180,30 @@
 
         public static string Game_EnterUpdate {
             get {
-                if (localAddr) {
-                    return "";
+                if (useLocalAddr) {
+                    return BuildRoute(addr_local, resourece_game_enterUpdate);
                 } else {
-                    return remote_game_enter_update;
+                    return BuildRoute(addr_remote, resourece_game_enterUpdate);
                 }
             }
         }
 
         public static string Session_RegisterSession {
             get {
-                if (localAddr) {
-                    return "";
+                if (useLocalAddr) {
+                    return BuildRoute(addr_local, resource_session_register);
                 } else {
-                    return remote_session_register;
+                    return BuildRoute(addr_remote, resource_session_register);
+                }
+            }
+        }
+
+        public static string Session_HostNewInstance {
+            get {
+                if (useLocalAddr) {
+                    return BuildRoute(addr_local, resource_session_hostInstance);
+                } else {
+                    return BuildRoute(addr_remote, resource_session_hostInstance);
                 }
             }
         }
