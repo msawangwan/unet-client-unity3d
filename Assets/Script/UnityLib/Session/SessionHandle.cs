@@ -21,6 +21,7 @@ namespace UnityLib {
         public int ID { get; set; }
         public string Owner { get; private set; } 
 
+        // DEPRECATE THIS
         public IEnumerator Create(string gamename) {
             Handler<Instance> createHandler = new Handler<Instance>(
                 JsonUtility.ToJson(new Key(gamename))

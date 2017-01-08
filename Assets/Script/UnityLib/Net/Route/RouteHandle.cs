@@ -11,6 +11,12 @@
             return string.Format("{0}/{1}", addr, resource);
         }
 
+        private static void another() {
+            System.Action pooop = () => {
+                another();
+            };
+        }
+
         /* DEPRECATED */
         private static string debug_local_availability = "http://10.0.0.76:80/api/profile/availability";
         private static string debug_remote_availability = "http://tyrant.systems:80/api/profile/availability";

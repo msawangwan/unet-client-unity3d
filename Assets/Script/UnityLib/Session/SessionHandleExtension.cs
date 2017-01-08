@@ -32,6 +32,28 @@ namespace UnityLib {
             }
         }
 
+        public static IEnumerator LoadAsHost(this SessionHandle sh) {
+            Debug.LogFormat("-- -- [*] load game as host ... [{0}]", Time.time);
+
+            float start = Time.time;
+            bool wg = false;
+
+            Action onSuccess = () => { wg = true; };
+
+            do {
+                yield return sh.HostGame(onSuccess);
+
+                Debug.LogFormat("-- -- [*] hosting game [{0}] ...", Time.time);
+
+                if (wg) {
+                    Debug.LogFormat("-- -- -- [*] success [{0}] ...", Time.time);
+                    break;
+                }
+            } while (true);
+            
+            Debug.LogFormat("-- -- [*] loaded game as host (took {1} seconds) [{0}] ...", Time.time, (Time.time - start));
+        }
+
         public static IEnumerator HostGame(this SessionHandle sh, Action onSuccess) {
             Debug.LogFormat("-- -- [*] attempting to host new game ... [{0}]", Time.time);
 
@@ -58,7 +80,7 @@ namespace UnityLib {
             Scene scene = SceneManager.GetSceneAt(kSceneIndexGameplay);
 
             do {
-                Debug.Log("----- [*] loading session ...");
+                Debug.LogFormat("-- -- [*] loading session ... [{0}]", Time.time);
                 yield return new WaitForEndOfFrame();
             } while (!scene.isLoaded);
 

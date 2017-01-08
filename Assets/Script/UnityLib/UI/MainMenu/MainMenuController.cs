@@ -37,7 +37,7 @@ namespace UnityLib.UI {
             levels[3].gameObject.SetActive(true);
         }
 
-        public IEnumerator LoadHostGame() {
+        public IEnumerator Host() {
             float start = Time.time;
             bool wg = false;
 
@@ -54,7 +54,7 @@ namespace UnityLib.UI {
                 }
             } while (true);
             
-            Debug.LogFormat("-- -- [*] done, took: {1} seconds [{0}] ...", Time.time, (Time.time - start));
+            Debug.LogFormat("-- -- [*] done (took {1} seconds) [{0}] ...", Time.time, (Time.time - start));
         }
 
         public void CreateGame(string sessionName) {
@@ -132,7 +132,7 @@ namespace UnityLib.UI {
                 SwitchLevel(2);
             } else if (currentLevel.levelIndex == 2) {
                 SwitchLevel(-1);
-                StartCoroutine(LoadHostGame());
+                StartCoroutine(Host());
                 StartCoroutine(session.Create(currentSessionName));
             }
 
