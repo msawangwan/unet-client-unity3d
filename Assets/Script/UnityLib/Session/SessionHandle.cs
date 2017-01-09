@@ -27,7 +27,7 @@ namespace UnityLib {
                 JsonUtility.ToJson(new Key(gamename))
             );
 
-            joinHandler.POST(RouteHandle.Session_JoinNew);
+            // joinHandler.POST(RouteHandle.Session_JoinNew);
 
             do {
                 yield return null;
@@ -41,7 +41,7 @@ namespace UnityLib {
                 JsonUtility.ToJson(SessionInstance)
             );
 
-            keyHandler.POST(RouteHandle.Session_KeyFromInstance);
+            // keyHandler.POST(RouteHandle.Session_KeyFromInstance);
 
             do {
                 yield return null;

@@ -91,7 +91,7 @@ namespace UnityLib {
                 JsonUtility.ToJson(new JsonString(sessionName))
             );
 
-            handler.POST(RouteHandle.Session_CheckGameNameAvailable);
+            handler.POST(RouteHandle.Session_CheckHostNameAvailable);
             
             do {
                 yield return null;
@@ -129,10 +129,10 @@ namespace UnityLib {
         }
 
         // OK
-        public static IEnumerator FetchSessionList(this SessionHandle sh, Action<string[]> onFetch) {
+        public static IEnumerator FetchLobbyList(this SessionHandle sh, Action<string[]> onFetch) {
             Handler<Lobby> handler = new Handler<Lobby>();
 
-            handler.GET(RouteHandle.Session_ActiveList);
+            handler.GET(RouteHandle.Session_FetchLobbyList);
 
             do {
                 yield return null;
@@ -163,29 +163,29 @@ namespace UnityLib {
                 yield return new WaitForEndOfFrame();
             } while (!scene.isLoaded);
 
-            Handler<Connection> connHandler = new Handler<Connection>(
-                JsonUtility.ToJson(new SessionOwner(sh.SessionInstance.sessionID, sh.OwningPlayerName))
-            );
+            // Handler<Connection> connHandler = new Handler<Connection>(
+            //     JsonUtility.ToJson(new SessionOwner(sh.SessionInstance.sessionID, sh.OwningPlayerName))
+            // );
 
-            connHandler.POST(RouteHandle.Session_EstablishConn);
+            // connHandler.POST(RouteHandle.Session_EstablishConn);
 
-            Connection conn = null;
+            // Connection conn = null;
 
-            do {
-                yield return null;
-                if (connHandler.onDone != null) {
-                    conn = connHandler.onDone();
-                    break;
-                }
-            } while (true);
+            // do {
+            //     yield return null;
+            //     if (connHandler.onDone != null) {
+            //         conn = connHandler.onDone();
+            //         break;
+            //     }
+            // } while (true);
 
-            if (conn != null) {
-                if (!conn.isConnected) { // TODO: handle this case
-                    Debug.LogFormat("----- [*] failed to connect: {0}", sh.SessionInstance.sessionID);
-                } else {
-                    Debug.LogFormat("----- [*] connected: {0}", sh.SessionInstance.sessionID);
-                }
-            }
+            // if (conn != null) {
+            //     if (!conn.isConnected) { // TODO: handle this case
+            //         Debug.LogFormat("----- [*] failed to connect: {0}", sh.SessionInstance.sessionID);
+            //     } else {
+            //         Debug.LogFormat("----- [*] connected: {0}", sh.SessionInstance.sessionID);
+            //     }
+            // }
 
             GameHandle gh = GameHandle.New(sh, isExistingSession);
 

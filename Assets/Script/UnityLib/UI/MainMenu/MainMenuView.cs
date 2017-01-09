@@ -83,7 +83,7 @@ namespace UnityLib.UI {
                         }
                     };
 
-                    StartCoroutine(sessionHandle.FetchSessionList(onFetch));
+                    StartCoroutine(sessionHandle.FetchLobbyList(onFetch));
                 }
             );
 
