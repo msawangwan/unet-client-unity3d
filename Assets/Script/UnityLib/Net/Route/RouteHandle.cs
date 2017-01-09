@@ -28,7 +28,9 @@
         private static string debug_remote_store_world_data = "http://tyrant.systems:80/api/profile/world/load";
 
         /* SESSION */
-        private static string resource_session_register = "session/new/key";
+        private static string resource_session_register = "session/register/key";
+        private static string resource_session_register_name = "session/register/name";
+        private static string resource_session_check_game_name_available = "session/host/name/availability";
         private static string resource_session_hostInstance = "session/host/instance";
 
         private static string session_list_all_active = "http://10.0.0.76:80/api/session/active";
@@ -200,6 +202,26 @@
                     return BuildRoute(addr_local, resource_session_register);
                 } else {
                     return BuildRoute(addr_remote, resource_session_register);
+                }
+            }
+        }
+
+        public static string Session_SetPlayerName {
+            get {
+                if (useLocalAddr) {
+                    return BuildRoute(addr_local, resource_session_register_name);
+                } else {
+                    return BuildRoute(addr_remote, resource_session_register_name);
+                }
+            }
+        }
+
+        public static string Session_CheckGameNameAvailable {
+            get {
+                if (useLocalAddr) {
+                    return BuildRoute(addr_local, resource_session_check_game_name_available);
+                } else {
+                    return BuildRoute(addr_remote, resource_session_check_game_name_available);
                 }
             }
         }

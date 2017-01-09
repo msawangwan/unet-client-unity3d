@@ -18,8 +18,78 @@ namespace UnityLib.UI {
         private string currentPlayerName;
         private string currentSessionName;
 
-        private SessionHandle session;
+        public SessionHandle session { get; set; }
+        public string SessionName { get; set; }
 
+        public string NameChoice { get; set; }
+
+        // public IEnumerator Host() {
+        //     bool isHostNameAvailable = false;
+
+        //     Action<bool> onCheck = (result) => { isHostNameAvailable = result; };
+
+        //     do {
+        //         yield return session.CheckSessionAvailability(SessionName, onCheck);
+        //     } while (!isHostNameAvailable);
+
+        //     float start = Time.time;
+        //     bool wg = false;
+
+        //     Action onSuccess = () => { wg = true; };
+
+        //     do {
+        //         yield return session.HostGame(onSuccess);
+
+        //         Debug.LogFormat("-- -- [*] hosting game [{0}] ...", Time.time);
+
+        //         if (wg) {
+        //             Debug.LogFormat("-- -- -- [*] success [{0}] ...", Time.time);
+        //             break;
+        //         }
+        //     } while (true);
+            
+        //     Debug.LogFormat("-- -- [*] done (took {1} seconds) [{0}] ...", Time.time, (Time.time - start));
+        // }
+
+
+        public void ShowConfirmation(GameObject panel, Button button, Action action) {
+            if (action != null) {
+                if (button != null) {
+                    button.onClick.RemoveAllListeners();
+                    button.onClick.AddListener(
+                        () => { 
+                            action();
+                            panel.SetActive(false);
+                        }
+                    );
+                    panel.SetActive(true);
+                } else {
+                    action();
+                }
+            }
+        }
+
+        public MainMenuLevel SwitchLevel(int next) {
+            currentLevel.gameObject.SetActive(false);
+
+            if (next == -1) {
+                return currentLevel;
+            }
+
+            currentLevel = levels[next];
+            currentLevel.gameObject.SetActive(true);
+
+            return currentLevel;
+        }
+
+        public void ReturnToMainMenu() {
+            SwitchLevel(1);
+        }
+
+        public void Cancel() {
+            levels[3].gameObject.SetActive(false);
+        }
+        
         private void Start() {
             foreach (var l in levels) {
                 if (l.levelIndex == 0) {
@@ -28,128 +98,10 @@ namespace UnityLib.UI {
                     l.gameObject.SetActive(false);
                 }
             }
+
             currentLevel = levels[0];
+
             view.Init();
-        }
-
-        public void ChooseName(string playerName) {
-            currentPlayerName = playerName; 
-            levels[3].gameObject.SetActive(true);
-        }
-
-        public IEnumerator Host() {
-            float start = Time.time;
-            bool wg = false;
-
-            Action onSuccess = () => { wg = true; };
-
-            do {
-                yield return session.HostGame(onSuccess);
-
-                Debug.LogFormat("-- -- [*] hosting game [{0}] ...", Time.time);
-
-                if (wg) {
-                    Debug.LogFormat("-- -- -- [*] success [{0}] ...", Time.time);
-                    break;
-                }
-            } while (true);
-            
-            Debug.LogFormat("-- -- [*] done (took {1} seconds) [{0}] ...", Time.time, (Time.time - start));
-        }
-
-        public void CreateGame(string sessionName) {
-            currentSessionName = sessionName;
-            session.sessionNameAvailabilityCheck.Enqueue(
-                (isAvailable) => {
-                    if (isAvailable) {
-                        levels[3].gameObject.SetActive(true);
-                    } else {
-                        Debug.LogError("choose another name");
-                    }
-                }
-            );
-
-            StartCoroutine(session.CheckSessionAvailability(sessionName));
-        }
-
-        public void NewSession() {
-            SwitchLevel(2);
-            findSession.gameObject.SetActive(false);
-            newSession.gameObject.SetActive(true);
-        }
-
-        public void FindSession() {
-            SwitchLevel(2);
-            newSession.gameObject.SetActive(false);
-            findSession.gameObject.SetActive(true);
-        
-            session.executeOnListFetched.Enqueue(
-                (listing) => {
-                    foreach (var item in listing) {
-                        GameObject go = Instantiate(lobbyListingPrefab, Vector3.zero, Quaternion.identity, lobbyList.transform);
-                        go.GetComponentInChildren<Text>().text = item;
-                        go.GetComponent<Button>().onClick.RemoveAllListeners();
-                        go.GetComponent<Button>().onClick.AddListener(
-                            () => {
-                                currentLevel.gameObject.SetActive(false);
-                                StartCoroutine(session.Join(item));
-                            }
-                        );
-                    }
-                }
-            );
-
-            StartCoroutine(session.FetchSessionList());
-        }
-
-        public void ReturnToMainMenu() {
-            SwitchLevel(1);
-        }
-
-        // this is here for future refactoring, deprecate the zero paramter version
-        public void Confirm(System.Action onConfirm) {
-            if (onConfirm != null) {
-                onConfirm();
-            }
-
-            if (currentLevel.levelIndex == 0) {
-                SwitchLevel(1);
-            } else if (currentLevel.levelIndex == 1) {
-                SwitchLevel(2);
-            } else if (currentLevel.levelIndex == 2) {
-                SwitchLevel(-1);
-            }
-
-            levels[3].gameObject.SetActive(false);
-        }
-
-        public void Confirm() {
-            if (currentLevel.levelIndex == 0) {
-                SwitchLevel(1);
-                session = SessionHandle.New(currentPlayerName);
-                session.StartCoroutine(session.Register());
-            } else if (currentLevel.levelIndex == 1) {
-                SwitchLevel(2);
-            } else if (currentLevel.levelIndex == 2) {
-                SwitchLevel(-1);
-                StartCoroutine(Host());
-                StartCoroutine(session.Create(currentSessionName));
-            }
-
-            levels[3].gameObject.SetActive(false);
-        }
-
-        public void Cancel() {
-            levels[3].gameObject.SetActive(false);
-        }
-
-        private void SwitchLevel(int next) {
-            currentLevel.gameObject.SetActive(false);
-            if (next == -1) {
-                return;
-            }
-            currentLevel = levels[next];
-            currentLevel.gameObject.SetActive(true);
         }
     }
 }

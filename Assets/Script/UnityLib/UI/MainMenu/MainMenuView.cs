@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UnityLib.UI {
@@ -19,10 +20,19 @@ namespace UnityLib.UI {
         [SerializeField] private Text headerConfirm;
         [SerializeField] private Text inputToConfirm;
 
+        [SerializeField] private GameObject lobbyListingPrefab;
+
+        [SerializeField] private GameObject newSessionPanel;
+        [SerializeField] private GameObject findSessionPanel;
+        [SerializeField] private GameObject confirmationPanel;
         [SerializeField] private GameObject lobbyList;
+
+        private MainMenuLevel currentLevel;
 
         private string playername;
         private string sessionname;
+
+        private SessionHandle sessionHandle;
 
         public void Init() {
             Button[] buttons = new Button[] {
@@ -39,47 +49,88 @@ namespace UnityLib.UI {
                 b.onClick.RemoveAllListeners();
             }
 
-            confirmPlayerName.onClick.AddListener(
-                () => {
-                    playername = playerNameInputField.text;
-                    headerConfirm.text = "are you sure you want the player name:";
-                    inputToConfirm.text = playername;
-                    mainMenuController.ChooseName(playername);
-                }
-            );
-
             newSession.onClick.AddListener(
                 () => {
                     createSession.gameObject.SetActive(true);
-                    mainMenuController.NewSession();
+
+                    findSessionPanel.SetActive(false);
+                    newSessionPanel.SetActive(true);
+
+                    currentLevel = mainMenuController.SwitchLevel(2);
                 }
             );
 
             findSession.onClick.AddListener(
                 () => {
                     createSession.gameObject.SetActive(false);
-                    mainMenuController.FindSession();
+
+                    newSessionPanel.SetActive(false);
+                    findSessionPanel.SetActive(true);
+
+                    currentLevel = mainMenuController.SwitchLevel(2);
+
+                    Action<string[]> onFetch = (listing) => {
+                        foreach (string item in listing) {
+                            GameObject go = Instantiate(lobbyListingPrefab, Vector3.zero, Quaternion.identity, lobbyList.transform);
+                            go.GetComponentInChildren<Text>().text = item;
+                            go.GetComponent<Button>().onClick.RemoveAllListeners();
+                            go.GetComponent<Button>().onClick.AddListener(
+                                () => {
+                                    currentLevel.gameObject.SetActive(false);
+                                    StartCoroutine(sessionHandle.Join(item));
+                                }
+                            );
+                        }
+                    };
+
+                    StartCoroutine(sessionHandle.FetchSessionList(onFetch));
                 }
             );
 
-            cancel.onClick.AddListener(
+            confirmPlayerName.onClick.AddListener(
                 () => {
-                    mainMenuController.Cancel();
-                }
-            );
+                    playername = playerNameInputField.text;
 
-            confirm.onClick.AddListener(
-                () => {
-                    mainMenuController.Confirm();
+                    headerConfirm.text = "are you sure you want the player name:";
+                    inputToConfirm.text = playername;
+
+                    sessionHandle = SessionHandle.New(playername);
+                    mainMenuController.session = sessionHandle;
+
+                    mainMenuController.ShowConfirmation(
+                        confirmationPanel,
+                        confirm,
+                        () => {
+                            Debug.LogFormat("[+] starting a new session ... [{0}]", Time.time);
+                            currentLevel = mainMenuController.SwitchLevel(1);
+                            sessionHandle.StartCoroutine(sessionHandle.Register(playername));
+                        }
+                    );
                 }
             );
 
             createSession.onClick.AddListener(
                 () => {
                     sessionname = sessionNameInputField.text;
+
                     headerConfirm.text = "create session with name:";
                     inputToConfirm.text = sessionname;
-                    mainMenuController.CreateGame(sessionname);
+
+                    mainMenuController.ShowConfirmation(
+                        confirmationPanel,
+                        confirm,
+                        () => {
+                            Debug.LogFormat("[+] creating a new game as host ... [{0}]", Time.time);
+                            currentLevel = mainMenuController.SwitchLevel(-1);
+                            sessionHandle.StartCoroutine(sessionHandle.CreateHostSession(sessionname));
+                        }
+                    );
+                }
+            );
+
+            cancel.onClick.AddListener(
+                () => {
+                    mainMenuController.Cancel();
                 }
             );
 

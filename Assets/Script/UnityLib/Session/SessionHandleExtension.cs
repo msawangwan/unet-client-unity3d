@@ -8,7 +8,8 @@ namespace UnityLib {
     public static class SessionHandleExtension {
         private const int kSceneIndexGameplay = 1;
 
-        public static IEnumerator Register(this SessionHandle sh) {
+        // OK
+        public static IEnumerator Register(this SessionHandle sh, string playername) {
             int skey = -1;
 
             Handler<JsonInt> registerHandler = new Handler<JsonInt>();
@@ -29,18 +30,46 @@ namespace UnityLib {
                 Debug.LogErrorFormat("[+] key cannot be negative ({0})", skey);
             } else {
                 sh.SessionKey = skey;
+                sh.SessionPlayerName = playername;
             }
+
+            Handler<JsonEmpty> nameHandler = new Handler<JsonEmpty>(
+                JsonUtility.ToJson(new JsonStringWithKey(sh.SessionKey, sh.SessionPlayerName))
+            );
+
+            nameHandler.POST(RouteHandle.Session_SetPlayerName);
+
+            do {
+                yield return null;
+                if (nameHandler.onDone != null) {
+                    Debug.LogFormat("-- [+] player name set: {0} ... [{1}]", sh.SessionPlayerName, Time.time);
+                    break;
+                }
+            } while (true);
         }
 
-        public static IEnumerator LoadAsHost(this SessionHandle sh) {
-            Debug.LogFormat("-- -- [*] load game as host ... [{0}]", Time.time);
+        // OK
+        public static IEnumerator CreateHostSession(this SessionHandle sh, string sessionName){
+            bool isHostNameAvailable = false;
+
+            Action<bool> onCheck = (result) => { isHostNameAvailable = result; };
+
+            do { // check for name availability
+                yield return sh.CheckGameNameAvailability(sessionName, onCheck);
+            } while (!isHostNameAvailable);
+
+            if (isHostNameAvailable) {
+                sh.SessionLabelTentative = sessionName;
+            } else {
+                Debug.Log("-- -- -- [*] error can't use that name");
+            }
 
             float start = Time.time;
             bool wg = false;
 
             Action onSuccess = () => { wg = true; };
 
-            do {
+            do { // launch a session as host
                 yield return sh.HostGame(onSuccess);
 
                 Debug.LogFormat("-- -- [*] hosting game [{0}] ...", Time.time);
@@ -51,14 +80,37 @@ namespace UnityLib {
                 }
             } while (true);
             
-            Debug.LogFormat("-- -- [*] loaded game as host (took {1} seconds) [{0}] ...", Time.time, (Time.time - start));
+            Debug.LogFormat("-- -- [*] done (took {1} seconds) [{0}] ...", Time.time, (Time.time - start));
         }
 
-        public static IEnumerator HostGame(this SessionHandle sh, Action onSuccess) {
+        // OK
+        private static IEnumerator CheckGameNameAvailability(this SessionHandle sh, string sessionName, Action<bool> onComplete) {
+            bool isAvailable = false;
+
+            Handler<LobbyAvailability> handler = new Handler<LobbyAvailability>(
+                JsonUtility.ToJson(new JsonString(sessionName))
+            );
+
+            handler.POST(RouteHandle.Session_CheckGameNameAvailable);
+            
+            do {
+                yield return null;
+                if (handler.onDone != null) {
+                    LobbyAvailability result = handler.onDone();
+                    isAvailable = result.isAvailable;
+                    break;
+                }
+            } while (true);
+
+            onComplete(isAvailable);
+        }
+
+        // OK
+        private static IEnumerator HostGame(this SessionHandle sh, Action onSuccess) {
             Debug.LogFormat("-- -- [*] attempting to host new game ... [{0}]", Time.time);
 
-            Handler<Instance> hostHandler = new Handler<Instance>(
-                JsonUtility.ToJson(new JsonInt(sh.SessionKey))
+            Handler<Simulation> hostHandler = new Handler<Simulation>(
+                JsonUtility.ToJson(new JsonStringWithKey(sh.SessionKey, sh.SessionLabelTentative))
             );
 
             hostHandler.POST(RouteHandle.Session_HostNewInstance);
@@ -67,13 +119,40 @@ namespace UnityLib {
                 yield return null;
                 Debug.LogFormat("-- -- -- [*] waiting for server response ... [{0}]", Time.time);
                 if (hostHandler.isReady) {
-                    hostHandler.onDone();
+                    sh.SimulationInstance = hostHandler.onDone();
                     onSuccess();
+                    break;
+                }
+            } while (true);
+
+            Debug.LogFormat("[+] host session up: [label: {0}] [seed: {1}]", sh.SimulationInstance.label, sh.SimulationInstance.seed);
+        }
+
+        // OK
+        public static IEnumerator FetchSessionList(this SessionHandle sh, Action<string[]> onFetch) {
+            Handler<Lobby> handler = new Handler<Lobby>();
+
+            handler.GET(RouteHandle.Session_ActiveList);
+
+            do {
+                yield return null;
+                if (handler.onDone != null) {
+                    Debug.LogFormat("-- [+] got lobby list ... [{0}]", Time.time);
+                    Lobby lobby = handler.onDone();
+                    if (onFetch != null) {
+                        onFetch(lobby.listing);
+                    }
                     break;
                 }
             } while (true);
         }
 
+        // TODO: left off HERE!!
+        public static IEnumerator JoinSession(this SessionHandle sh) {
+            yield return null;
+        }
+
+        // DEPRECATE
         public static IEnumerator BeginSession(this SessionHandle sh, bool isExistingSession) {
             SceneManager.LoadSceneAsync(kSceneIndexGameplay, LoadSceneMode.Additive);
 

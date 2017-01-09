@@ -778,7 +778,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 154.94952}
+  m_AnchoredPosition: {x: 0, y: 159.96606}
   m_SizeDelta: {x: 0, y: 341}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &240537504
@@ -5721,6 +5721,11 @@ MonoBehaviour:
   confirm: {fileID: 675149544}
   headerConfirm: {fileID: 1131027684}
   inputToConfirm: {fileID: 1557681642}
+  lobbyListingPrefab: {fileID: 1659620543990778, guid: 1b7c62b5922b24b2580635cf5712f417,
+    type: 2}
+  newSessionPanel: {fileID: 2019964463}
+  findSessionPanel: {fileID: 54315538}
+  confirmationPanel: {fileID: 408919817}
   lobbyList: {fileID: 240537502}
 --- !u!1 &1537596488
 GameObject:
@@ -5918,8 +5923,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 265650192}
   m_HandleRect: {fileID: 265650191}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.5456025
+  m_Value: 0.000000095387605
+  m_Size: 0.5308911
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
