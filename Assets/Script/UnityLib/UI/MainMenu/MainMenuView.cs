@@ -32,7 +32,7 @@ namespace UnityLib.UI {
         private string playername;
         private string sessionname;
 
-        private SessionHandle sessionHandle;
+        // private SessionHandle sessionHandle;
         private ClientHandle clientHandle;
 
         public void Init() {
@@ -58,6 +58,12 @@ namespace UnityLib.UI {
                     newSessionPanel.SetActive(true);
 
                     currentLevel = mainMenuController.SwitchLevel(2);
+
+                    StartCoroutine(clientHandle.RequestHostKey(
+                        () => {
+                            GameHandle gh = new GameHandle();
+                        }
+                    ));
                 }
             );
 
@@ -78,13 +84,15 @@ namespace UnityLib.UI {
                             go.GetComponent<Button>().onClick.AddListener(
                                 () => {
                                     currentLevel.gameObject.SetActive(false);
-                                    StartCoroutine(sessionHandle.Join(item));
+                                    // StartCoroutine(sessionHandle.Join(item));
                                 }
                             );
                         }
                     };
 
-                    StartCoroutine(sessionHandle.FetchLobbyList(onFetch));
+                    // StartCoroutine(sessionHandle.FetchLobbyList(onFetch));
+
+                    StartCoroutine(clientHandle.RequestJoinKey(onFetch));
                 }
             );
 
@@ -95,17 +103,15 @@ namespace UnityLib.UI {
                     headerConfirm.text = "confirm player name:";
                     inputToConfirm.text = playername;
 
-                    sessionHandle = SessionHandle.New(playername);
-                    mainMenuController.session = sessionHandle;
-
                     mainMenuController.ShowConfirmation(
                         confirmationPanel,
                         confirmButton,
                         () => {
-                            Debug.LogFormat("[+] registering session with server ... [{0}]", Time.time);
+                            Debug.LogFormat("[+] registering client handler with server ... [{0}]", Time.time);
+
                             currentLevel = mainMenuController.SwitchLevel(1);
-                            // sessionHandle.StartCoroutine(sessionHandle.Register(playername));
                             clientHandle = ClientHandle.New(playername);
+
                             StartCoroutine(clientHandle.Register(null));
                         }
                     );
@@ -124,8 +130,10 @@ namespace UnityLib.UI {
                         confirmButton,
                         () => {
                             Debug.LogFormat("[+] creating a new game as host ... [{0}]", Time.time);
+
                             currentLevel = mainMenuController.SwitchLevel(-1);
-                            sessionHandle.StartCoroutine(sessionHandle.CreateHostSession(sessionname));
+
+                            // sessionHandle.StartCoroutine(sessionHandle.CreateHostSession(sessionname));
                         }
                     );
                 }

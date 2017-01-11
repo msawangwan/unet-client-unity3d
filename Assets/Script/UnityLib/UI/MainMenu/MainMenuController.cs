@@ -18,39 +18,10 @@ namespace UnityLib.UI {
         private string currentPlayerName;
         private string currentSessionName;
 
-        public SessionHandle session { get; set; }
-        public string SessionName { get; set; }
+        public SessionHandle session { get; set; } // deprecate
+        public string SessionName { get; set; } // deprecate
 
-        public string NameChoice { get; set; }
-
-        // public IEnumerator Host() {
-        //     bool isHostNameAvailable = false;
-
-        //     Action<bool> onCheck = (result) => { isHostNameAvailable = result; };
-
-        //     do {
-        //         yield return session.CheckSessionAvailability(SessionName, onCheck);
-        //     } while (!isHostNameAvailable);
-
-        //     float start = Time.time;
-        //     bool wg = false;
-
-        //     Action onSuccess = () => { wg = true; };
-
-        //     do {
-        //         yield return session.HostGame(onSuccess);
-
-        //         Debug.LogFormat("-- -- [*] hosting game [{0}] ...", Time.time);
-
-        //         if (wg) {
-        //             Debug.LogFormat("-- -- -- [*] success [{0}] ...", Time.time);
-        //             break;
-        //         }
-        //     } while (true);
-            
-        //     Debug.LogFormat("-- -- [*] done (took {1} seconds) [{0}] ...", Time.time, (Time.time - start));
-        // }
-
+        public string NameChoice { get; set; } // deprecate
 
         public void ShowConfirmation(GameObject panel, Button button, Action action) {
             if (action != null) {

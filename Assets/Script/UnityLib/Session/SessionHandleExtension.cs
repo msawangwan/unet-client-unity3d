@@ -9,44 +9,44 @@ namespace UnityLib {
         private const int kSceneIndexGameplay = 1;
 
         // OK
-        public static IEnumerator Register(this SessionHandle sh, string playername) {
-            int skey = -1;
+        // public static IEnumerator Register(this SessionHandle sh, string playername) {
+        //     int skey = -1;
 
-            Handler<JsonInt> registerHandler = new Handler<JsonInt>();
-            registerHandler.GET(RouteHandle.Session_RegisterSession);
+        //     Handler<JsonInt> registerHandler = new Handler<JsonInt>();
+        //     registerHandler.GET(RouteHandle.Session_RegisterSession);
 
-            do {
-                yield return null;
-                if (registerHandler.onDone != null) {
-                    JsonInt jint = registerHandler.onDone();
-                    skey = jint.value;
-                    break;
-                }
-            } while (true);
+        //     do {
+        //         yield return null;
+        //         if (registerHandler.onDone != null) {
+        //             JsonInt jint = registerHandler.onDone();
+        //             skey = jint.value;
+        //             break;
+        //         }
+        //     } while (true);
 
-            Debug.LogFormat("-- [+] new session registered with key: {0}", skey);
+        //     Debug.LogFormat("-- [+] new session registered with key: {0}", skey);
 
-            if (skey == -1) {
-                Debug.LogErrorFormat("[+] key cannot be negative ({0})", skey);
-            } else {
-                sh.SessionKey = skey;
-                sh.SessionPlayerName = playername;
-            }
+        //     if (skey == -1) {
+        //         Debug.LogErrorFormat("[+] key cannot be negative ({0})", skey);
+        //     } else {
+        //         sh.SessionKey = skey;
+        //         sh.SessionPlayerName = playername;
+        //     }
 
-            Handler<JsonEmpty> nameHandler = new Handler<JsonEmpty>(
-                JsonUtility.ToJson(new JsonStringWithKey(sh.SessionKey, sh.SessionPlayerName))
-            );
+        //     Handler<JsonEmpty> nameHandler = new Handler<JsonEmpty>(
+        //         JsonUtility.ToJson(new JsonStringWithKey(sh.SessionKey, sh.SessionPlayerName))
+        //     );
 
-            nameHandler.POST(RouteHandle.Session_SetPlayerName);
+        //     nameHandler.POST(RouteHandle.Session_SetPlayerName);
 
-            do {
-                yield return null;
-                if (nameHandler.onDone != null) {
-                    Debug.LogFormat("-- [+] player name set: {0} ... [{1}]", sh.SessionPlayerName, Time.time);
-                    break;
-                }
-            } while (true);
-        }
+        //     do {
+        //         yield return null;
+        //         if (nameHandler.onDone != null) {
+        //             Debug.LogFormat("-- [+] player name set: {0} ... [{1}]", sh.SessionPlayerName, Time.time);
+        //             break;
+        //         }
+        //     } while (true);
+        // }
 
         // OK
         public static IEnumerator CreateHostSession(this SessionHandle sh, string sessionName){

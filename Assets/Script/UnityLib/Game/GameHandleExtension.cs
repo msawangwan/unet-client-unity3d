@@ -21,17 +21,17 @@ namespace UnityLib {
         }
 
         public static IEnumerator GetFrame(this GameHandle gh) {
-            do {
-                yield return null;
-                if (gh.Session.SessionInstance == null) {
-                    continue;
-                } else {
-                    break;
-                }
-            } while (true);
+            // do {
+            //     yield return null;
+            //     if (gh.Session.SessionInstance == null) {
+            //         continue;
+            //     } else {
+            //         break;
+            //     }
+            // } while (true);
 
             Handler<Frame> handler = new Handler<Frame>(
-                JsonUtility.ToJson(gh.Session.SessionInstance.sessionID)
+                // JsonUtility.ToJson(gh.Session.SessionInstance.sessionID)
             );
 
             // handler.POST(RouteHandle.Game_FetchFrameUpdate);
@@ -52,17 +52,17 @@ namespace UnityLib {
         }
 
         public static IEnumerator LoadAsNew(this GameHandle gh) {
-            do {
-                yield return null;;
-                if (gh.Session.SessionInstance != null) {
-                    break;
-                }
-            } while (true);
+            // do {
+            //     yield return null;;
+            //     if (gh.Session.SessionInstance != null) {
+            //         break;
+            //     }
+            // } while (true);
 
             // Debug.LogFormat("-- [+][Create] Session label and key: {0} {1}", gh.Session.SKey.bareFormat, gh.Session.SKey.redisFormat);
 
             Handler<Frame> handler = new Handler<Frame>(
-                JsonUtility.ToJson(gh.Session.SKey)
+                // JsonUtility.ToJson(gh.Session.SKey)
             );
 
             // handler.POST(RouteHandle.Game_StartUpdate);
@@ -79,17 +79,17 @@ namespace UnityLib {
         }
 
         public static IEnumerator LoadAsExisting(this GameHandle gh) {
-            do {
-                yield return null;
-                if (gh.Session.SessionInstance != null) {
-                    break;
-                }
-            } while (true);
+            // do {
+            //     yield return null;
+            //     if (gh.Session.SessionInstance != null) {
+            //         break;
+            //     }
+            // } while (true);
 
             // Debug.LogFormat("-- [+][Join] Session label and key {0} {1}", gh.Session.SKey.bareFormat, gh.Session.SKey.redisFormat);
 
             Handler<Frame> handler = new Handler<Frame>(
-                JsonUtility.ToJson(gh.Session.SKey)
+                // JsonUtility.ToJson(gh.Session.SKey)
             );
 
             handler.POST(RouteHandle.Game_EnterUpdate);

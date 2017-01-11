@@ -1,7 +1,7 @@
 ﻿// type JsonString wraps an string for server message compatability
 namespace UnityLib {
     [System.Serializable]
-    public class JsonString {
+    public class JsonString : IJSONer {
         public string @value;
         
         public JsonString() {}
@@ -9,10 +9,14 @@ namespace UnityLib {
         public JsonString(string @value) {
             this.@value = @value;
         }
+
+        public string Marshall() {
+            return UnityEngine.JsonUtility.ToJson(this);
+        }
     }
 
     [System.Serializable]
-    public class JsonStringWithKey {
+    public class JsonStringWithKey : IJSONer {
         public int key;
         public string @value;
         
@@ -21,6 +25,10 @@ namespace UnityLib {
         public JsonStringWithKey(int key, string @value) {
             this.key = key;
             this.@value = @value;
+        }
+
+        public string Marshall() {
+            return UnityEngine.JsonUtility.ToJson(this);
         }
     }
 
