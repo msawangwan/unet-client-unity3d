@@ -118,7 +118,7 @@ namespace UnityLib {
             do {
                 yield return null;
                 Debug.LogFormat("-- -- -- [*] waiting for server response ... [{0}]", Time.time);
-                if (hostHandler.isReady) {
+                if (hostHandler.hasLoadedResource) {
                     sh.SimulationInstance = hostHandler.onDone();
                     onSuccess();
                     break;

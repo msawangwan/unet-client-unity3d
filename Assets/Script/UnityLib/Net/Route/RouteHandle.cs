@@ -11,12 +11,9 @@
             return string.Format("{0}/{1}", addr, resource);
         }
 
-        private static void another() {
-            System.Action pooop = () => {
-                another();
-            };
-        }
-     
+        /* CLIENT */
+        private static string resource_client_handleRegistration = "client/handle/register";
+
         /* SESSION */
         private static string resource_session_register                  = "session/register/key";
         private static string resource_session_register_name             = "session/register/name";
@@ -25,36 +22,17 @@
         private static string resource_session_joinShowList              = "session/join/lobby/list";
 
         /* GAME */
-        private static string game_start_update = "http://10.0.0.76:80/api/game/update/start";
-        private static string remote_game_start_update = "http://tyrant.systems:80/api/game/update/start";
-
         private static string resourece_game_enterUpdate = "api/game/update/enter";
 
-        private static string game_fetch_frame = "http://10.0.0.76:80/api/game/update/frame";
-        private static string remote_game_fetch_frame = "http://tyrant.systems:80/api/game/update/frame";
-
-
-        private static string game_kill = "http://10.0.0.76:80/api/game/update/kill";
-
-        public static string Game_FetchFrameUpdate {
+        public static string Client_HandleRegistration {
             get {
                 if (useLocalAddr) {
-                    return game_fetch_frame;
+                    return BuildRoute(addr_local, resource_client_handleRegistration);
                 } else {
-                    return remote_game_fetch_frame;
+                    return BuildRoute(addr_remote, resource_client_handleRegistration);
                 }
             }
-        }
-
-        public static string Game_StartUpdate {
-            get {
-                if (useLocalAddr) {
-                    return game_start_update;
-                } else {
-                    return remote_game_start_update;
-                }
-            }
-        }
+        }        
 
         public static string Game_EnterUpdate {
             get {

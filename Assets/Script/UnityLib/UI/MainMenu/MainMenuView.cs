@@ -15,7 +15,7 @@ namespace UnityLib.UI {
         [SerializeField] private Button toMainMenu;
         [SerializeField] private Button createSession;
         [SerializeField] private Button cancel;
-        [SerializeField] private Button confirm;
+        [SerializeField] private Button confirmButton;
 
         [SerializeField] private Text headerConfirm;
         [SerializeField] private Text inputToConfirm;
@@ -33,6 +33,7 @@ namespace UnityLib.UI {
         private string sessionname;
 
         private SessionHandle sessionHandle;
+        private ClientHandle clientHandle;
 
         public void Init() {
             Button[] buttons = new Button[] {
@@ -42,7 +43,7 @@ namespace UnityLib.UI {
                 toMainMenu,
                 createSession,
                 cancel,
-                confirm,
+                confirmButton,
             };
 
             foreach (var b in buttons) {
@@ -91,7 +92,7 @@ namespace UnityLib.UI {
                 () => {
                     playername = playerNameInputField.text;
 
-                    headerConfirm.text = "are you sure you want the player name:";
+                    headerConfirm.text = "confirm player name:";
                     inputToConfirm.text = playername;
 
                     sessionHandle = SessionHandle.New(playername);
@@ -99,11 +100,13 @@ namespace UnityLib.UI {
 
                     mainMenuController.ShowConfirmation(
                         confirmationPanel,
-                        confirm,
+                        confirmButton,
                         () => {
-                            Debug.LogFormat("[+] starting a new session ... [{0}]", Time.time);
+                            Debug.LogFormat("[+] registering session with server ... [{0}]", Time.time);
                             currentLevel = mainMenuController.SwitchLevel(1);
-                            sessionHandle.StartCoroutine(sessionHandle.Register(playername));
+                            // sessionHandle.StartCoroutine(sessionHandle.Register(playername));
+                            clientHandle = ClientHandle.New(playername);
+                            StartCoroutine(clientHandle.Register(null));
                         }
                     );
                 }
@@ -118,7 +121,7 @@ namespace UnityLib.UI {
 
                     mainMenuController.ShowConfirmation(
                         confirmationPanel,
-                        confirm,
+                        confirmButton,
                         () => {
                             Debug.LogFormat("[+] creating a new game as host ... [{0}]", Time.time);
                             currentLevel = mainMenuController.SwitchLevel(-1);

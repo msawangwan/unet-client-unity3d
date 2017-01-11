@@ -34,7 +34,7 @@ namespace UnityLib {
                 JsonUtility.ToJson(gh.Session.SessionInstance.sessionID)
             );
 
-            handler.POST(RouteHandle.Game_FetchFrameUpdate);
+            // handler.POST(RouteHandle.Game_FetchFrameUpdate);
 
             do {
                 yield return null;
@@ -59,13 +59,13 @@ namespace UnityLib {
                 }
             } while (true);
 
-            Debug.LogFormat("-- [+][Create] Session label and key: {0} {1}", gh.Session.SKey.bareFormat, gh.Session.SKey.redisFormat);
+            // Debug.LogFormat("-- [+][Create] Session label and key: {0} {1}", gh.Session.SKey.bareFormat, gh.Session.SKey.redisFormat);
 
             Handler<Frame> handler = new Handler<Frame>(
                 JsonUtility.ToJson(gh.Session.SKey)
             );
 
-            handler.POST(RouteHandle.Game_StartUpdate);
+            // handler.POST(RouteHandle.Game_StartUpdate);
 
             do {
                 yield return null;
@@ -86,7 +86,7 @@ namespace UnityLib {
                 }
             } while (true);
 
-            Debug.LogFormat("-- [+][Join] Session label and key {0} {1}", gh.Session.SKey.bareFormat, gh.Session.SKey.redisFormat);
+            // Debug.LogFormat("-- [+][Join] Session label and key {0} {1}", gh.Session.SKey.bareFormat, gh.Session.SKey.redisFormat);
 
             Handler<Frame> handler = new Handler<Frame>(
                 JsonUtility.ToJson(gh.Session.SKey)

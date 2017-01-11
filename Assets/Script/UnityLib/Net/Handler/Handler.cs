@@ -27,7 +27,7 @@ namespace UnityLib.Net {
             private set;
         }
 
-        public bool isReady {
+        public bool hasLoadedResource {
             get {
                 return onDone != null;
             }
