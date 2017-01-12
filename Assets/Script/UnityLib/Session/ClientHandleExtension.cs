@@ -39,6 +39,7 @@ namespace UnityLib {
             Handler<JsonInt> keyHandler = new Handler<JsonInt>(ch.json.ClientSessionID);
             JsonInt id = null;
 
+            // LEFT OFF HEREREREER!!
             keyHandler.POST(ClientHandle.RequestHostingKey.Route);
 
             do {
