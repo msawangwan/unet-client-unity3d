@@ -2,7 +2,7 @@
 
 namespace UnityLib {
     public class ClientHandle : MonoBehaviour {
-        public enum ClientRole : byte {
+        public enum RoleType : byte {
             None = 0,
             Host = 1,
             Client = 2,
@@ -13,9 +13,9 @@ namespace UnityLib {
             public string ClientSessionID;
         }
 
-        public static readonly Route Registration      = new Route("client/handle/register");
-        public static readonly Route RequestHostingKey = new Route("client/handle/host/key");
-        public static readonly Route RequestJoiningKey = new Route("client/handle/join/key");
+        public static readonly Resource Registration      = new Resource("client/handle/register");
+        public static readonly Resource RequestHostingKey = new Resource("client/handle/host/key");
+        public static readonly Resource RequestJoiningKey = new Resource("client/handle/join/key");
 
         public PayloadData json { 
             get; 
@@ -47,16 +47,16 @@ namespace UnityLib {
             }
         }
 
-        public int GameRoleKey {
+        public int SessionKey {
             get {
-                return gameRoleKey;
+                return sessionKey;
             }
             set {
-                gameRoleKey = value;
+                sessionKey = value;
             }
         }
 
-        public ClientRole Role {
+        public RoleType Role {
             get {
                 return role;
             }
@@ -65,10 +65,10 @@ namespace UnityLib {
             }
         }
 
-        private ClientRole role;
+        private RoleType role;
         private string clientName;
         private int clientId;
-        private int gameRoleKey;
+        private int sessionKey;
 
         public void Init(string clientPlayerName) {
             this.json = new PayloadData();

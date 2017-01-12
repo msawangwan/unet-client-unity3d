@@ -1,71 +1,58 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
-using UnityLib.Net;
+using UnityEngine.SceneManagement;
 
 namespace UnityLib {
     public class SessionHandle : MonoBehaviour {
-        // instance variables
-        public int SessionKey { get; set; }
+        public static readonly Resource VerifyName = new Resource("session/handle/name/verification");
 
-        public string SessionPlayerName { get; set; }
-        public string SessionLabelTentative { get; set; }
+        public int SessionKey {
+            get {
+                return sessionKey;
+            }
+            set {
+                sessionKey = value;
+            }
+        }
         
-        public Simulation SimulationInstance { get; set; }
-        public SimulationHandle SimHandle { get; set; }
-
-        // // deprecated variables
-        // public Instance SessionInstance { get; private set; } // DEPRECATE
-        // public Key SKey { get; private set; }// DEPRECATE
-        // public string OwningPlayerName { get; private set; } // DEPRECATE
-
-
-        // DEPRECATE
-        public IEnumerator Join(string gamename) {
-            Handler<Instance> joinHandler = new Handler<Instance>(
-                JsonUtility.ToJson(new Key(gamename))
-            );
-            yield return null;
-
-            // joinHandler.POST(RouteHandle.Session_JoinNew);
-
-            // do {
-            //     yield return null;
-            //     if (joinHandler.onDone != null) {
-            //         SessionInstance = joinHandler.onDone();
-            //         break;
-            //     }
-            // } while (true);
-
-            // Handler<Key> keyHandler = new Handler<Key>(
-            //     JsonUtility.ToJson(SessionInstance)
-            // );
-
-            // keyHandler.POST(RouteHandle.Session_KeyFromInstance);
-
-            // do {
-            //     yield return null;
-            //     if (keyHandler.onDone != null) {
-            //         SKey = keyHandler.onDone();
-            //         Debug.LogFormat("[+] session key: [bare] {0} [db] {1}", SKey.bareFormat, SKey.redisFormat);
-            //         break;
-            //     }
-            // } while (true);
-
-            // StartCoroutine(this.BeginSession(true));
-
-            // Debug.LogFormat("- [+] joined a session: {0} {1}", SessionInstance.sessionID, SessionInstance.seed);
+        private int sessionKey;
+        
+        public void Init(int key) {
+            this.SessionKey = key;
+            StartCoroutine(Load(1));
         }
 
-        public static SessionHandle New(string playerName) {
+        public static SessionHandle New(int key) {
             SessionHandle sh = new GameObject("session_handle").AddComponent<SessionHandle>();
-            // sh.OwningPlayerName = playerName;
+            sh.Init(key);
             return sh;
         }
 
+        private IEnumerator Load(int sceneIndex) {
+            Scene scene = SceneManager.GetSceneAt(sceneIndex);
+            Debug.LogFormat("-- [*] session handle scene load [index: {1}] [name: {2}] ... [{0}]", Time.time, sceneIndex, scene.name);
+            SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+
+            do {
+                yield return new WaitForEndOfFrame();
+                Debug.LogFormat("-- -- [*] loading ... [{0}]", Time.time);
+            } while (!scene.isLoaded);
+
+            Debug.LogFormat("-- [*] scene finished loading [{0}]", Time.time);
+
+            SceneManager.MoveGameObjectToScene(this.gameObject, SceneManager.GetSceneAt(sceneIndex));
+        }
+
+        private void OnEnable() {
+            Debug.LogWarningFormat("[+] {0} callback: OnEnable ... [{1}]", gameObject.name, Time.time);
+        }
+
+        private void OnDisable() {
+            Debug.LogWarningFormat("[+] {0} callback: OnDisable ... [{1}]", gameObject.name, Time.time);
+        }
+
         private void OnDestroy() {
-            Debug.LogFormat("session handle destroyed");
+            Debug.LogWarningFormat("[+] {0} callback: OnDestroy ... [{1}]", gameObject.name, Time.time);
         }
     }
 }

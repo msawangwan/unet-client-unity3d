@@ -32,8 +32,8 @@ namespace UnityLib.UI {
         private string playername;
         private string sessionname;
 
-        // private SessionHandle sessionHandle;
         private ClientHandle clientHandle;
+        private SessionHandle sessionHandle;
 
         public void Init() {
             Button[] buttons = new Button[] {
@@ -61,7 +61,7 @@ namespace UnityLib.UI {
 
                     StartCoroutine(clientHandle.RequestHostKey(
                         () => {
-                            GameHandle gh = new GameHandle();
+                            sessionHandle = SessionHandle.New(clientHandle.SessionKey);
                         }
                     ));
                 }
@@ -129,7 +129,7 @@ namespace UnityLib.UI {
                         confirmationPanel,
                         confirmButton,
                         () => {
-                            Debug.LogFormat("[+] creating a new game as host ... [{0}]", Time.time);
+                            Debug.LogFormat("[+] sent host session request to server ... [{0}]", Time.time);
 
                             currentLevel = mainMenuController.SwitchLevel(-1);
 

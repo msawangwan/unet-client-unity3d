@@ -4,5 +4,4 @@ namespace UnityLib {
     public class JsonEmpty {
         public JsonEmpty() {}
     }
-
 }

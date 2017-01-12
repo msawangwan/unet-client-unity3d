@@ -12,7 +12,7 @@ namespace UnityLib {
             Handler<JsonInt> registerHandler = new Handler<JsonInt>(ch.json.ClientName);
             JsonInt id = null;
 
-            registerHandler.POST(ClientHandle.Registration.Resource);
+            registerHandler.POST(ClientHandle.Registration.Route);
 
             do {
                 yield return null;
@@ -32,16 +32,6 @@ namespace UnityLib {
             Debug.LogFormat("-- [+] registered client [name: {0}] [id: {1}]", ch.ClientName, ch.ClientSessionID);
         }
 
-        /* a client can either:
-         *
-         * - host a session or
-         * - join an existing session
-         * 
-         * both actions require that the client request a key from the server and
-         * with this key, the client can then validate a host or join request
-         */
-
-
         public static IEnumerator RequestHostKey(this ClientHandle ch, Action onSuccess) {
             Debug.LogFormat("-- [+] {0} is requesting a host key ... [{1}]", ch.name, Time.time);
             Debug.LogFormat("{0}", ClientHandle.RequestHostingKey.ToString());
@@ -49,7 +39,7 @@ namespace UnityLib {
             Handler<JsonInt> keyHandler = new Handler<JsonInt>(ch.json.ClientSessionID);
             JsonInt id = null;
 
-            keyHandler.POST(ClientHandle.RequestHostingKey.Resource);
+            keyHandler.POST(ClientHandle.RequestHostingKey.Route);
 
             do {
                 yield return null;
@@ -60,8 +50,8 @@ namespace UnityLib {
                 }
             } while (true);
 
-            ch.GameRoleKey = id.value;
-            ch.Role = ClientHandle.ClientRole.Host;
+            ch.SessionKey = id.value;
+            ch.Role = ClientHandle.RoleType.Host;
 
             if (onSuccess != null) {
                 onSuccess();
