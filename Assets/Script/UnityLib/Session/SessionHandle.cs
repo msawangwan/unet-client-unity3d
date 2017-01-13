@@ -6,6 +6,12 @@ namespace UnityLib {
     public class SessionHandle : MonoBehaviour {
         public static readonly Resource VerifyName = new Resource("session/handle/name/verification");
 
+        // public GameHandle GameHandler {
+        //     get;
+        //     set;
+        // }
+
+
         public int SessionKey {
             get {
                 return sessionKey;
@@ -15,23 +21,30 @@ namespace UnityLib {
             }
         }
         
+        public int GameID {
+            get;
+            set;
+        }
+
         private int sessionKey;
-        
+        private int gameid;
+
         public void Init(int key) {
             this.SessionKey = key;
             StartCoroutine(Load(1));
         }
 
         public static SessionHandle New(int key) {
-            SessionHandle sh = new GameObject("session_handle").AddComponent<SessionHandle>();
+            SessionHandle sh = new GameObject(string.Format("session_handle_[{0}]", key)).AddComponent<SessionHandle>();
             sh.Init(key);
             return sh;
         }
 
         private IEnumerator Load(int sceneIndex) {
-            Scene scene = SceneManager.GetSceneAt(sceneIndex);
-            Debug.LogFormat("-- [*] session handle scene load [index: {1}] [name: {2}] ... [{0}]", Time.time, sceneIndex, scene.name);
             SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+            Scene scene = SceneManager.GetSceneAt(sceneIndex);
+
+            Debug.LogFormat("-- [*] session handle scene load [index: {1}] [name: {2}] ... [{0}]", Time.time, sceneIndex, scene.name);
 
             do {
                 yield return new WaitForEndOfFrame();

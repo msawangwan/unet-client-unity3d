@@ -23,20 +23,20 @@ namespace UnityLib {
                 }
             } while (true);
 
-            ch.ClientSessionID = id.value;
+            ch.HandleID = id.value;
 
             if (onSuccess != null) {
                 onSuccess();
             }
 
-            Debug.LogFormat("-- [+] registered client [name: {0}] [id: {1}]", ch.ClientName, ch.ClientSessionID);
+            Debug.LogFormat("-- [+] registered client [name: {0}] [id: {1}]", ch.ClientName, ch.HandleID);
         }
 
         public static IEnumerator RequestHostKey(this ClientHandle ch, Action onSuccess) {
             Debug.LogFormat("-- [+] {0} is requesting a host key ... [{1}]", ch.name, Time.time);
             Debug.LogFormat("{0}", ClientHandle.RequestHostingKey.ToString());
 
-            Handler<JsonInt> keyHandler = new Handler<JsonInt>(ch.json.ClientSessionID);
+            Handler<JsonInt> keyHandler = new Handler<JsonInt>(ch.json.HandleID);
             JsonInt id = null;
 
             // LEFT OFF HEREREREER!!
@@ -58,7 +58,7 @@ namespace UnityLib {
                 onSuccess();
             }
 
-            Debug.LogFormat("-- [+] got host key [client handle key: {0}] [client host key: {1}]", Time.time);
+            Debug.LogFormat("-- [+] got host key [client handle id: {0}] [session key: {1}]", ch.HandleID, ch.SessionKey, Time.time);
         }
 
         public static IEnumerator RequestJoinKey(this ClientHandle ch, Action<string[]> onSuccess) {

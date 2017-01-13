@@ -4919,7 +4919,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1210020361}
-  - component: {fileID: 1210020362}
   m_Layer: 0
   m_Name: service_controller
   m_TagString: Untagged
@@ -4940,17 +4939,6 @@ Transform:
   m_Father: {fileID: 97310347}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1210020362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1210020360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41049ad56180a4cbfa85c80908f9c7e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1215748327
 GameObject:
   m_ObjectHideFlags: 0
