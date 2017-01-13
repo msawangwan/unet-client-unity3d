@@ -10,7 +10,7 @@ namespace UnityLib {
 
         public sealed class PayloadData {
             public string ClientName;
-            public string ClientSessionID;
+            public string HandleID;
         }
 
         public static readonly Resource Registration      = new Resource("client/handle/register");
@@ -37,13 +37,13 @@ namespace UnityLib {
             }
         }
 
-        public int ClientSessionID { // get from server on register 
+        public int HandleID { // get from server on register 
             get {
-                return clientId;
+                return handleID;
             }
             set {
-                clientId = value;
-                json.ClientSessionID = new JsonInt(clientId).Marshall();
+                handleID = value;
+                json.HandleID = new JsonInt(handleID).Marshall();
             }
         }
 
@@ -67,7 +67,7 @@ namespace UnityLib {
 
         private RoleType role;
         private string clientName;
-        private int clientId;
+        private int handleID;
         private int sessionKey;
 
         public void Init(string clientPlayerName) {

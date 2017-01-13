@@ -1,12 +1,11 @@
-﻿// type JsonInt wraps an int for server message compatability
-namespace UnityLib {
+﻿namespace UnityLib {
     [System.Serializable]
-    public class JsonInt : IJSONer {
-        public int @value;
-        
-        public JsonInt() {}
+    public class JsonBool :IJSONer {
+        public bool @value;
 
-        public JsonInt(int @value) {
+        public JsonBool() {}
+
+        public JsonBool(bool @value) {
             this.@value = @value;
         }
 
@@ -16,13 +15,13 @@ namespace UnityLib {
     }
 
     [System.Serializable]
-    public class JsonIntWithKey : IJSONer {
+    public class JsonBoolWithKey :IJSONer {
         public int key;
-        public int @value;
-        
-        public JsonIntWithKey() {}
+        public bool @value;
 
-        public JsonIntWithKey(int key, int @value) {
+        public JsonBoolWithKey() {}
+
+        public JsonBoolWithKey(int key, bool @value) {
             this.key = key;
             this.@value = @value;
         }

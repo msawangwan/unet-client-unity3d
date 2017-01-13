@@ -125,6 +125,8 @@ namespace UnityLib.UI {
                     headerConfirm.text = "create session with name:";
                     inputToConfirm.text = sessionname;
 
+                    StartCoroutine(sessionHandle.VerifyName(sessionname, null));
+
                     mainMenuController.ShowConfirmation(
                         confirmationPanel,
                         confirmButton,
