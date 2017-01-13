@@ -1,14 +1,17 @@
-﻿// namespace UnityLib.Net {
-//     public class RouteHandle : ControllerBehaviour {
+﻿namespace UnityLib.Net {
+    public class RouteHandle : ControllerBehaviour {
+        public string Scheme;
 
-//         /* SESSION */
-//         private static string resource_session_register                  = "session/register/key";
-//         private static string resource_session_register_name             = "session/register/name";
-//         private static string resource_session_check_game_name_available = "session/host/name/availability";
-//         private static string resource_session_hostInstance              = "session/host/simulation";
-//         private static string resource_session_joinShowList              = "session/join/lobby/list";
+        public string LocalGateway;
+        public string RemoteGateway;
 
-//         /* GAME */
-//         private static string resourece_game_enterUpdate = "api/game/update/enter";
-//     }
-// }
+        public string ServicePort;
+        public string ApiPrefix;
+
+        public bool IsClientOnLAN = false;
+
+        protected override bool OnInit() {
+            return true;
+        }
+    }
+}
