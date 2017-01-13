@@ -32,10 +32,25 @@ namespace UnityLib {
             }
         }
 
-        public static IEnumerator SpawnGameHandler(this SessionHandle sh) {
+        public static IEnumerator LoadGameHandler(this SessionHandle sh, GameHandle gh, Action onComplete) {
+            Debug.LogFormat("-- [+] session handle is loading the game handler ... [{0}]", Time.time);
+
+            // 1. get the seed for this game
+            // - call a gamehandlerext coroutine which takes a bool (host or not) and then spawns the world from seed
+
             do {
-                yield return null;
+                Debug.LogFormat("-- -- [+] loading (WIP) ... [{0}]", Time.time);
+                yield return new WaitForSeconds(5.0f); // null
+                if (true) {
+                    break;
+                }
             } while (true);
+
+            if (onComplete != null) {
+                onComplete();
+            }
+
+            Debug.LogFormat("-- [+] session handle completed loading game handler ... [{0}]", Time.time);
         }
     }
 

@@ -66,6 +66,11 @@ namespace UnityLib {
             }
         }
 
+        public bool hasSessionKey {
+            get;
+            set;
+        }
+
         private RoleType role;
         private string clientName;
         private int handleID;

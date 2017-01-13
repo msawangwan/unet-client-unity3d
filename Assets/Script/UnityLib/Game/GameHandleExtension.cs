@@ -12,7 +12,7 @@ namespace UnityLib {
                 }
             } while (true);
 
-            if (gh.isExisting) {
+            if (gh.isHost) {
                 // gh.StartCoroutine(gh.LoadAsExisting());
             } else {
                 // gh.StartCoroutine(gh.LoadAsNew());

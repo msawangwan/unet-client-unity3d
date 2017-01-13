@@ -7,11 +7,10 @@ namespace UnityLib {
     public class SessionHandle : MonoBehaviour {
         public static readonly Resource VerifyName = new Resource("session/handle/name/verification");
 
-        // public GameHandle GameHandler {
-        //     get;
-        //     set;
-        // }
-
+        public GameHandle GameHandler {
+            get;
+            set;
+        }
 
         public int SessionKey {
             get {

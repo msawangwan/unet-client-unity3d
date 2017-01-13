@@ -5,29 +5,27 @@ using UnityLib.Net;
 
 namespace UnityLib {
     public class GameHandle : MonoBehaviour {
-        public SessionHandle Session { get; private set; }
-        public PlayerHandle Player { get; private set; }
+        public string GameName { get; private set; }
+        public bool isHost { get; private set; }
+        public bool isReadyToLoad { get; set; }
 
-        public bool isReadyToLoad {get; private set;}
-        public bool isExisting { get;private set; }
-
-        public static GameHandle New(SessionHandle session, bool isExisting) {
+        public static GameHandle New(string gameName, bool isHost) {
             GameHandle gh = new GameObject("game_handle").AddComponent<GameHandle>();
-            gh.Session = session;
-            gh.isExisting = isExisting;
+            gh.GameName = gameName;
+            gh.isHost = isHost;
             return gh;
         }
 
-        public void Load() {
-            isReadyToLoad = true;
+        private void OnEnable() {
+            Debug.LogWarningFormat("[+] {0} callback: OnEnable ... [{1}]", gameObject.name, Time.time);
         }
 
-        private void OnEnable() {
-            StartCoroutine(this.Init());
+        private void OnDisable() {
+            Debug.LogWarningFormat("[+] {0} callback: OnDisable ... [{1}]", gameObject.name, Time.time);
         }
 
         private void OnDestroy() {
-             Debug.LogFormat("game handle destroyed");
+            Debug.LogWarningFormat("[+] {0} callback: OnDestroy ... [{1}]", gameObject.name, Time.time);
         }
     }
 }

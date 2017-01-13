@@ -34,6 +34,7 @@ namespace UnityLib.UI {
 
         private ClientHandle clientHandle;
         private SessionHandle sessionHandle;
+        private GameHandle gameHandle;
 
         public void Init() {
             Button[] buttons = new Button[] {
@@ -61,7 +62,12 @@ namespace UnityLib.UI {
 
                     StartCoroutine(clientHandle.RequestHostKey(
                         () => {
-                            sessionHandle = SessionHandle.New(clientHandle.SessionKey);
+                            if (sessionHandle == null) { // TODO: do better when we come around a second time rather than just null check
+                                Debug.LogFormat("-- [+] registered a host session handle ... [{0}]", Time.time);
+                                sessionHandle = SessionHandle.New(clientHandle.SessionKey);
+                            } else {
+                                Debug.LogFormat("-- [+] already registered a host session handle (must be coming around again) ... [{0}]", Time.time);
+                            }
                         }
                     ));
                 }
@@ -120,22 +126,36 @@ namespace UnityLib.UI {
 
             createSession.onClick.AddListener(
                 () => {
+                    bool hostNameIsValid = false;
                     sessionname = sessionNameInputField.text;
 
                     headerConfirm.text = "create session with name:";
                     inputToConfirm.text = sessionname;
 
-                    StartCoroutine(sessionHandle.VerifyName(sessionname, null));
+                    Action<bool> onAvailability = (isAvailable) => {
+                        hostNameIsValid = isAvailable;
+                    };
+
+                    StartCoroutine(sessionHandle.VerifyName(sessionname, onAvailability));
 
                     mainMenuController.ShowConfirmation(
                         confirmationPanel,
                         confirmButton,
                         () => {
-                            Debug.LogFormat("[+] sent host session request to server ... [{0}]", Time.time);
+                            Debug.LogFormat("[+] request sent to server, host game ... [{0}]", Time.time);
 
-                            currentLevel = mainMenuController.SwitchLevel(-1);
+                            if (hostNameIsValid) {
+                                Debug.LogWarningFormat("-- [+] {0} unique name: {1} ... [{2}]", sessionname, hostNameIsValid, Time.time);
+                                currentLevel = mainMenuController.SwitchLevel(-1);
 
-                            // sessionHandle.StartCoroutine(sessionHandle.CreateHostSession(sessionname));
+                                Debug.LogWarning("-- -- -- [+] spwned game seession");
+
+                                gameHandle = GameHandle.New(sessionname, true);
+                                StartCoroutine(sessionHandle.LoadGameHandler(gameHandle, null));
+                            } else {
+                                Debug.LogErrorFormat("-- [--] {0} unique name: {1} ... [{2}]", sessionname, hostNameIsValid, Time.time);
+                                currentLevel = mainMenuController.SwitchLevel(1);
+                            }
                         }
                     );
                 }

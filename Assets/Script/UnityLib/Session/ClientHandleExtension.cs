@@ -39,7 +39,6 @@ namespace UnityLib {
             Handler<JsonInt> keyHandler = new Handler<JsonInt>(ch.json.HandleID);
             JsonInt id = null;
 
-            // LEFT OFF HEREREREER!!
             keyHandler.POST(ClientHandle.RequestHostingKey.Route);
 
             do {
@@ -51,8 +50,13 @@ namespace UnityLib {
                 }
             } while (true);
 
-            ch.SessionKey = id.value;
-            ch.Role = ClientHandle.RoleType.Host;
+            if (!ch.hasSessionKey) { // TODO: make this more roboust, see: MainMenuView:newSessionListener
+                ch.SessionKey = id.value;
+                ch.hasSessionKey = true;
+                ch.Role = ClientHandle.RoleType.Host;
+            } else {
+                Debug.LogFormat("-- -- [+] client already has a session key [client handle id: {0}] [session key: {1}]", ch.HandleID, ch.SessionKey, Time.time);
+            }
 
             if (onSuccess != null) {
                 onSuccess();
