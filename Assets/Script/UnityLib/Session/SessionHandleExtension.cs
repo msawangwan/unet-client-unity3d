@@ -35,12 +35,15 @@ namespace UnityLib {
         public static IEnumerator LoadGameHandler(this SessionHandle sh, GameHandle gh, Action onComplete) {
             Debug.LogFormat("-- [+] session handle is loading the game handler ... [{0}]", Time.time);
 
+            gh.LoadAsNew(null);
+            // Handler<JsonInt> gkHandler
             // 1. get the seed for this game
             // - call a gamehandlerext coroutine which takes a bool (host or not) and then spawns the world from seed
 
             do {
                 Debug.LogFormat("-- -- [+] loading (WIP) ... [{0}]", Time.time);
                 yield return new WaitForSeconds(5.0f); // null
+                gh.isReadyToLoad = true;
                 if (true) {
                     break;
                 }
