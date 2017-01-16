@@ -33,27 +33,32 @@ namespace UnityLib {
         }
 
         public static IEnumerator LoadGameHandler(this SessionHandle sh, GameHandle gh, Action onComplete) {
-            Debug.LogFormat("-- [+] session handle is loading the game handler ... [{0}]", Time.time);
+            Debug.LogFormat("-- [+] session handle is initialising the game handler [gamename: {1}] ... [{0}]", Time.time, gh.GameName);
+            int gameKey = -1;
 
-            gh.LoadAsNew(null);
-            // Handler<JsonInt> gkHandler
-            // 1. get the seed for this game
-            // - call a gamehandlerext coroutine which takes a bool (host or not) and then spawns the world from seed
+            Handler<JsonInt> loadGameHandler = new Handler<JsonInt>(
+                new JsonString(gh.GameName).Marshall()
+            );
+
+            loadGameHandler.POST(SessionHandle.LoadGame.Route);
 
             do {
-                Debug.LogFormat("-- -- [+] loading (WIP) ... [{0}]", Time.time);
-                yield return new WaitForSeconds(5.0f); // null
-                gh.isReadyToLoad = true;
-                if (true) {
+                Debug.LogFormat("-- -- [+] init game handler ... [{0}]", Time.time);
+                yield return null;
+                if (loadGameHandler.hasLoadedResource) {
+                    gameKey = loadGameHandler.onDone().value;
                     break;
                 }
             } while (true);
 
+            gh.GameKey = gameKey;
+            gh.isReadyToLoad = true;
+
             if (onComplete != null) {
-                onComplete();
+                onComplete(); // join
             }
 
-            Debug.LogFormat("-- [+] session handle completed loading game handler ... [{0}]", Time.time);
+            Debug.LogFormat("-- [+] session handle completed game handler init [gamhandler key: {1}] ... [{0}]", Time.time, gameKey);
         }
     }
 

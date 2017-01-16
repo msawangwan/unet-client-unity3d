@@ -72,7 +72,7 @@ namespace UnityLib.Net {
             try {
                 endpoint = resource;
 
-                Debug.LogFormat("[+] POST {0} [{1}]", endpoint, Time.time);
+                Debug.LogFormat("-- [+] handler POST {0} [{1}]", endpoint, Time.time);
 
                 HandlerContext context = new HandlerContext();
 
@@ -123,8 +123,8 @@ namespace UnityLib.Net {
                 context.Reader = new StreamReader(context.IOStream);
                 context.json = context.Reader.ReadToEnd();
 
-                Debug.LogFormat("[+] resource @ [{0}]", endpoint);
-                Debug.LogFormat(" - [+] yielded (json): {0} ", context.json);
+                Debug.LogFormat(" -- [+] handler got response from: [{0}]", endpoint);
+                Debug.LogFormat(" -- -- [+] yielded (json): {0} ", context.json);
 
                 onDone = () => {
                     return JsonUtility.FromJson<T>(context.json);

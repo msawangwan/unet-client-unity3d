@@ -50,19 +50,18 @@ namespace UnityLib {
                 }
             } while (true);
 
-            if (!ch.hasSessionKey) { // TODO: make this more roboust, see: MainMenuView:newSessionListener
-                ch.SessionKey = id.value;
-                ch.hasSessionKey = true;
-                ch.Role = ClientHandle.RoleType.Host;
-            } else {
+            if (id.value == -1) {
                 Debug.LogFormat("-- -- [+] client already has a session key [client handle id: {0}] [session key: {1}]", ch.HandleID, ch.SessionKey, Time.time);
+            } else {
+                ch.SessionKey = id.value;
+                ch.Role = ClientHandle.RoleType.Host;
+                Debug.LogFormat("-- [+] got host key [client handle id: {0}] [session key: {1}]", ch.HandleID, ch.SessionKey, Time.time);
             }
 
             if (onSuccess != null) {
                 onSuccess();
             }
 
-            Debug.LogFormat("-- [+] got host key [client handle id: {0}] [session key: {1}]", ch.HandleID, ch.SessionKey, Time.time);
         }
 
         public static IEnumerator RequestJoinKey(this ClientHandle ch, Action<string[]> onSuccess) {

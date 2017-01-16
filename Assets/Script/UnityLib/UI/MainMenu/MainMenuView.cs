@@ -60,16 +60,14 @@ namespace UnityLib.UI {
 
                     currentLevel = mainMenuController.SwitchLevel(2);
 
-                    StartCoroutine(clientHandle.RequestHostKey(
-                        () => {
-                            if (sessionHandle == null) { // TODO: do better when we come around a second time rather than just null check
-                                Debug.LogFormat("-- [+] registered a host session handle ... [{0}]", Time.time);
-                                sessionHandle = SessionHandle.New(clientHandle.SessionKey);
-                            } else {
-                                Debug.LogFormat("-- [+] already registered a host session handle (must be coming around again) ... [{0}]", Time.time);
-                            }
-                        }
-                    ));
+                    if (sessionHandle == null) { // TODO: do better when we come around a second time rather than just null check
+                        Debug.LogFormat("-- [+] registered a host session handle ... [{0}]", Time.time);
+                        sessionHandle = SessionHandle.New(clientHandle.SessionKey);
+                    } else {
+                        Debug.LogFormat("-- [+] already registered a host session handle (must be coming around again) ... [{0}]", Time.time);
+                    }
+
+                    StartCoroutine(clientHandle.RequestHostKey(null));
                 }
             );
 
@@ -151,7 +149,16 @@ namespace UnityLib.UI {
                                 Debug.LogWarning("-- -- -- [+] spwned game seession");
 
                                 gameHandle = GameHandle.New(sessionname, true);
-                                StartCoroutine(sessionHandle.LoadGameHandler(gameHandle, null));
+
+                                Action loadThenJoin = () => {
+                                    StartCoroutine(gameHandle.LoadWorld(
+                                        () => {
+                                            StartCoroutine(gameHandle.Join(null));
+                                        }
+                                    ));
+                                };
+
+                                StartCoroutine(sessionHandle.LoadGameHandler(gameHandle, loadThenJoin));
                             } else {
                                 Debug.LogErrorFormat("-- [--] {0} unique name: {1} ... [{2}]", sessionname, hostNameIsValid, Time.time);
                                 currentLevel = mainMenuController.SwitchLevel(1);
