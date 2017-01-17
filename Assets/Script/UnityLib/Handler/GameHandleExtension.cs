@@ -5,15 +5,14 @@ using UnityLib.Net;
 
 namespace UnityLib {
     public static class GameHandleExtension {
-        public static IEnumerator LoadWorld(this GameHandle gh, Action onComplete) {
-            Debug.LogFormat("-- [+] new game world is loading ... [{0}]", Time.time);
+        public static IEnumerator LoadWorldAsHost(this GameHandle gh, Action onComplete) {
+            Debug.LogFormat("-- [+] new game world is loading (host) ... [{0}]", Time.time);
 
-            Handler<JsonEmpty> loadWorldHandler = new Handler<JsonEmpty>(
-                // new JsonInt(gh.GameKey).Marshall()
+            Handler<JsonEmpty> hostWorldHandler = new Handler<JsonEmpty>(
                 new JsonStringWithKey(gh.GameKey, gh.GameName).Marshall()
             );
 
-            loadWorldHandler.POST(GameHandle.LoadGameWorld.Route);
+            hostWorldHandler.POST(GameHandle.LoadGameWorld.Route);
 
             do {
                 Debug.LogFormat("-- -- [+] loading ... [{0}]", Time.time);
@@ -24,7 +23,26 @@ namespace UnityLib {
                 onComplete();
             }
 
-            Debug.LogFormat("-- [+] loaded game world ... [{0}]", Time.time);
+            Debug.LogFormat("-- [+] loaded game world as host... [{0}]", Time.time);
+        }
+
+        public static IEnumerator LoadWorldAsClient(this GameHandle gh, Action onComplete) {
+            Debug.LogFormat("-- [+] new game world is loading (client) ... [{0}]", Time.time);
+
+            Handler<JsonEmpty> clientWorldhandler = new Handler<JsonEmpty>(
+                new JsonStringWithKey(gh.GameKey, gh.GameName).Marshall()
+            );
+
+            do {
+                Debug.LogFormat("-- -- [+] loading ... [{0}]", Time.time);
+                yield return null;
+            } while (!gh.isReadyToLoad);
+
+            if (onComplete != null) {
+                onComplete();
+            }
+
+            Debug.LogFormat("-- [+] loaded game world as client ... [{0}]", Time.time);
         }
 
         public static IEnumerator Join(this GameHandle gh, string playername, Action onComplete) {

@@ -32,21 +32,21 @@ namespace UnityLib {
             }
         }
 
-        public static IEnumerator LoadGameHandler(this SessionHandle sh, GameHandle gh, Action onComplete) {
-            Debug.LogFormat("-- [+] session handle is initialising the game handler [gamename: {1}] ... [{0}]", Time.time, gh.GameName);
+        public static IEnumerator StartHostSession(this SessionHandle sh, GameHandle gh, Action onComplete) {
+            Debug.LogFormat("-- [+] session handle starting host session [gamename: {1}] ... [{0}]", Time.time, gh.GameName);
             int gameKey = -1;
 
-            Handler<JsonInt> loadGameHandler = new Handler<JsonInt>(
+            Handler<JsonInt> hostSessionHandler = new Handler<JsonInt>(
                 new JsonString(gh.GameName).Marshall()
             );
 
-            loadGameHandler.POST(SessionHandle.LoadGame.Route);
+            hostSessionHandler.POST(SessionHandle.SpawnGameHandlerAsHost.Route);
 
             do {
                 Debug.LogFormat("-- -- [+] init game handler ... [{0}]", Time.time);
                 yield return null;
-                if (loadGameHandler.hasLoadedResource) {
-                    gameKey = loadGameHandler.onDone().value;
+                if (hostSessionHandler.hasLoadedResource) {
+                    gameKey = hostSessionHandler.onDone().value;
                     break;
                 }
             } while (true);
@@ -58,7 +58,37 @@ namespace UnityLib {
                 onComplete(); // join
             }
 
-            Debug.LogFormat("-- [+] session handle completed game handler init [gamhandler key: {1}] ... [{0}]", Time.time, gameKey);
+            Debug.LogFormat("-- [+] session handle host session game handler init [gamhandler key: {1}] ... [{0}]", Time.time, gameKey);
+        }
+
+        public static IEnumerator StartClientSession(this SessionHandle sh, GameHandle gh, Action onCompelte) {
+            Debug.LogFormat("-- [+] session handle starting client session [gamename: {1}] ... [{0}]", Time.time, gh.GameName);
+
+            int gameKey = -1;
+
+            Handler<JsonInt> clientSessionHandler = new Handler<JsonInt>(
+                new JsonString(gh.GameName).Marshall()
+            );
+
+            clientSessionHandler.POST(SessionHandle.SpawnGameHandlerAsClient.Route);
+
+            do {
+                Debug.LogFormat("-- -- [+] init client game handler ... [{0}]", Time.time);
+                yield return null;
+                if (clientSessionHandler.hasLoadedResource) {
+                    gameKey = clientSessionHandler.onDone().value;
+                    break;
+                }
+            } while (true);
+
+            gh.GameKey = gameKey;
+            gh.isReadyToLoad = true;
+
+            if (onCompelte != null) {
+                onCompelte(); // join
+            }
+
+            Debug.LogFormat("-- [+] session client session loaded [gamename: {1}] [gameid: {2}] ... [{0}]", Time.time, gh.GameName, gh.GameKey);
         }
     }
 }

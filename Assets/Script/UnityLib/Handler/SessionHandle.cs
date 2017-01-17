@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 namespace UnityLib {
     public class SessionHandle : MonoBehaviour {
         public static readonly Resource VerifyName = new Resource("session/handle/name/verification");
-        public static readonly Resource LoadGame = new Resource("session/handle/game/load");
+        public static readonly Resource SpawnGameHandlerAsHost = new Resource("session/handle/game/load/host");
+        public static readonly Resource SpawnGameHandlerAsClient = new Resource("session/handle/game/load/client");
 
         public GameHandle GameHandler {
             get;

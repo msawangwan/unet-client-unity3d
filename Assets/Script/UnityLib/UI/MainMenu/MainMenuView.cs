@@ -30,10 +30,11 @@ namespace UnityLib.UI {
         private MainMenuLevel currentLevel;
 
         private string playername;
-        private string sessionname;
+        private string gamename;
 
         private ClientHandle clientHandle;
         private SessionHandle sessionHandle;
+        private LobbyHandle lobbyHandle;
         private GameHandle gameHandle;
         private PollHandle pollHandle;
 
@@ -61,6 +62,10 @@ namespace UnityLib.UI {
                 }
             };
 
+            Action startPoller = () => {
+                StartCoroutine(pollHandle.CheckGameStart(gameHandle.GameKey, null));
+            };
+    
             newSession.onClick.AddListener(
                 () => {
                     createSession.gameObject.SetActive(true);
@@ -87,23 +92,43 @@ namespace UnityLib.UI {
 
                     getSessionkey();
 
+                    if (lobbyHandle == null) {
+                        lobbyHandle = new LobbyHandle();
+                    }
+
                     Action<string[]> onFetch = (listing) => {
-                        foreach (string item in listing) {
+                        foreach (string gamenamestr in listing) {
                             GameObject go = Instantiate(lobbyListingPrefab, Vector3.zero, Quaternion.identity, lobbyList.transform);
-                            go.GetComponentInChildren<Text>().text = item;
+                            go.GetComponentInChildren<Text>().text = gamenamestr;
                             go.GetComponent<Button>().onClick.RemoveAllListeners();
                             go.GetComponent<Button>().onClick.AddListener(
                                 () => {
+                                    Debug.LogFormat("-- -- -- [+] extracted button text [gamename: {0}] ... [{1}]", gamenamestr, Time.time);
+
+                                    gamename = gamenamestr;
+                                    gameHandle = GameHandle.New(gamename, false);
+
                                     currentLevel.gameObject.SetActive(false);
-                                    // StartCoroutine(sessionHandle.Join(item));
+
+                                    Action loadAsClientThenJoin = () => {
+                                        StartCoroutine(gameHandle.LoadWorldAsClient(
+                                            () => {
+                                                StartCoroutine(gameHandle.Join(clientHandle.ClientName, startPoller));
+                                            }
+                                        ));
+                                    };
+
+                                    StartCoroutine(sessionHandle.StartClientSession(gameHandle, loadAsClientThenJoin));
                                 }
                             );
                         }
                     };
 
-                    // StartCoroutine(sessionHandle.FetchLobbyList(onFetch));
-
-                    StartCoroutine(clientHandle.RequestSessionKey(null));
+                    StartCoroutine(clientHandle.RequestSessionKey(
+                        () => {
+                            StartCoroutine(lobbyHandle.FetchGameList(onFetch));
+                        }
+                    ));
                 }
             );
 
@@ -132,16 +157,16 @@ namespace UnityLib.UI {
             createSession.onClick.AddListener(
                 () => {
                     bool hostNameIsValid = false;
-                    sessionname = sessionNameInputField.text;
+                    gamename = sessionNameInputField.text;
 
                     headerConfirm.text = "create session with name:";
-                    inputToConfirm.text = sessionname;
+                    inputToConfirm.text = gamename;
 
                     Action<bool> onAvailability = (isAvailable) => {
                         hostNameIsValid = isAvailable;
                     };
 
-                    StartCoroutine(sessionHandle.VerifyName(sessionname, onAvailability));
+                    StartCoroutine(sessionHandle.VerifyName(gamename, onAvailability));
 
                     mainMenuController.ShowConfirmation(
                         confirmationPanel,
@@ -150,29 +175,25 @@ namespace UnityLib.UI {
                             Debug.LogFormat("[+] request sent to server, host game ... [{0}]", Time.time);
 
                             if (hostNameIsValid) {
-                                Debug.LogWarningFormat("-- [+] {0} unique name: {1} ... [{2}]", sessionname, hostNameIsValid, Time.time);
+                                Debug.LogWarningFormat("-- [+] {0} unique name: {1} ... [{2}]", gamename, hostNameIsValid, Time.time);
                                 currentLevel = mainMenuController.SwitchLevel(-1);
 
                                 Debug.LogWarning("-- -- -- [+] spwned game seession");
 
-                                gameHandle = GameHandle.New(sessionname, true);
+                                gameHandle = GameHandle.New(gamename, true);
                                 pollHandle = PollHandle.New();
 
-                                Action startPoller = () => {
-                                    StartCoroutine(pollHandle.CheckGameStart(gameHandle.GameKey, null));
-                                };
-
-                                Action loadThenJoin = () => {
-                                    StartCoroutine(gameHandle.LoadWorld(
+                                Action loadAsHostThenJoin = () => {
+                                    StartCoroutine(gameHandle.LoadWorldAsHost(
                                         () => {
                                             StartCoroutine(gameHandle.Join(clientHandle.ClientName, startPoller));
                                         }
                                     ));
                                 };
 
-                                StartCoroutine(sessionHandle.LoadGameHandler(gameHandle, loadThenJoin));
+                                StartCoroutine(sessionHandle.StartHostSession(gameHandle, loadAsHostThenJoin));
                             } else {
-                                Debug.LogErrorFormat("-- [--] {0} unique name: {1} ... [{2}]", sessionname, hostNameIsValid, Time.time);
+                                Debug.LogErrorFormat("-- [--] {0} unique name: {1} ... [{2}]", gamename, hostNameIsValid, Time.time);
                                 currentLevel = mainMenuController.SwitchLevel(1);
                             }
                         }
