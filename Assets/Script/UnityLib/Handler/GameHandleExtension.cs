@@ -9,7 +9,8 @@ namespace UnityLib {
             Debug.LogFormat("-- [+] new game world is loading ... [{0}]", Time.time);
 
             Handler<JsonEmpty> loadWorldHandler = new Handler<JsonEmpty>(
-                new JsonInt(gh.GameKey).Marshall()
+                // new JsonInt(gh.GameKey).Marshall()
+                new JsonStringWithKey(gh.GameKey, gh.GameName).Marshall()
             );
 
             loadWorldHandler.POST(GameHandle.LoadGameWorld.Route);
@@ -28,7 +29,6 @@ namespace UnityLib {
 
         public static IEnumerator Join(this GameHandle gh, string playername, Action onComplete) {
             Handler<JsonLong> joinHandler = new Handler<JsonLong>(
-                // new JsonBoolWithKey(gh.GameKey, gh.isHost).Marshall()
                 new GameHandle.JoinRequest(gh.GameKey, playername, gh.isHost).Marshall()
             );
 

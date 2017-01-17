@@ -5,6 +5,12 @@ using UnityLib.Net;
 
 namespace UnityLib {
     public class GameHandle : MonoBehaviour {
+        // [System.Serializable]
+        // public class CreateRequest : IJSONer {
+        //     public int gameKey;
+        //     public string gameName;
+        // }
+
         [System.Serializable]
         public class JoinRequest : IJSONer {
             public int gameKey;
@@ -16,6 +22,7 @@ namespace UnityLib {
 
             public string Marshall() { return JsonUtility.ToJson(this); }
         }
+
         public static readonly Resource LoadGameWorld = new Resource("game/world/load");
         public static readonly Resource JoinGameWorld = new Resource("game/world/join");
 

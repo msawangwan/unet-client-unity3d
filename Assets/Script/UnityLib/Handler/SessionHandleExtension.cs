@@ -61,5 +61,4 @@ namespace UnityLib {
             Debug.LogFormat("-- [+] session handle completed game handler init [gamhandler key: {1}] ... [{0}]", Time.time, gameKey);
         }
     }
-
 }
