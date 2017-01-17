@@ -1,9 +1,9 @@
-﻿namespace UnityLib {
-    [System.Serializable]
-    public class Simulation {
-        public string label;
-        public long seed;
+﻿// namespace UnityLib {
+//     [System.Serializable]
+//     public class Simulation {
+//         public string label;
+//         public long seed;
 
-        public string[] players;
-    }
-}
+//         public string[] players;
+//     }
+// }

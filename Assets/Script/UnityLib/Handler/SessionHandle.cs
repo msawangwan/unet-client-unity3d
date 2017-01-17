@@ -33,7 +33,7 @@ namespace UnityLib {
 
         public void Init(int key) {
             this.SessionKey = key;
-            StartCoroutine(Load(1));
+            StartCoroutine(Load(Globals.sceneindex_sessionhandler));
         }
 
         public static SessionHandle New(int key) {
@@ -44,12 +44,14 @@ namespace UnityLib {
 
         private IEnumerator Load(int sceneIndex) {
             SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
+
             Scene scene = SceneManager.GetSceneAt(sceneIndex);
+            WaitForEndOfFrame wf = new WaitForEndOfFrame();
 
             Debug.LogFormat("-- [*] session handle scene load [index: {1}] [name: {2}] ... [{0}]", Time.time, sceneIndex, scene.name);
 
             do {
-                yield return new WaitForEndOfFrame();
+                yield return wf;
                 Debug.LogFormat("-- -- [*] loading ... [{0}]", Time.time);
             } while (!scene.isLoaded);
 

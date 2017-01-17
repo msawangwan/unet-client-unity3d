@@ -3,6 +3,16 @@ using UnityEngine;
 
 namespace UnityLib {
     public class Globals : SingletonBehaviour<Globals> {
+        public static readonly int sceneindex_clienthandler  = 0;
+        public static readonly int sceneindex_sessionhandler = 1;
+        public static readonly int sceneindex_lobbyhandler   = 2;
+        public static readonly int sceneindex_gamehandler    = 3;
+        public static readonly int sceneindex_worldhandler   = 4;
+
+        public static readonly string scenename_lobbyhandle = "lobby_handle";
+        public static readonly string scenename_gamehandle = "game_handle";
+        public static readonly string scenename_worldhandle = "world_handle";
+
         public ControllerBehaviour titleMenuController;
         public ControllerBehaviour popupMenuController;
 

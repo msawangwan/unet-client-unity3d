@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityLib.Net;
 
@@ -14,6 +13,7 @@ namespace UnityLib {
 
             LobbyHandle.GameList gameList = null;
 
+            // TODO: HANDLE CASE WHERE THERE ARE NO LOBBIES!!!!
             do {
                 Debug.LogFormat("-- -- [+] fetching ...[{0}]", Time.time);
                 yield return null;
