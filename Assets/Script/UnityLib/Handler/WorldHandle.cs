@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityLib.Net;
+using UnityAdt;
 
 namespace UnityLib {
     public class WorldHandle : MonoBehaviour {
         public static WorldHandle WorldHandleInstance = null;
-        
+
+        public pRNG PRNG {
+            get;
+            private set;
+        }
+
         public GameHandle.WorldParameters WorldParameters {
             get;
             private set;
@@ -21,6 +27,7 @@ namespace UnityLib {
             WorldHandleInstance = wh;
 
             wh.WorldParameters = worldparameters;
+            wh.PRNG = new pRNG((ulong)worldparameters.worldSeed);
 
             return wh;
         }

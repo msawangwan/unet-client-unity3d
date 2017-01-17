@@ -1,4 +1,6 @@
-﻿namespace UnityLib.Framework.Client {
+﻿//TODO: DEPRECATE THIS -- TO DEPRECATED!!!
+
+namespace UnityLib.Framework.Client {
     [System.Serializable]
     public class StarMap {
         public long seed;

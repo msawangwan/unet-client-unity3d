@@ -2,7 +2,7 @@
 using UnityAdt;
 using UnityEngine;
 
-namespace UnityLib.Framework.Client {
+namespace UnityLib {
     public class Quadrant : MonoBehaviour {
         private static List<int> ids = new List<int>();
         private static int id = -1;
