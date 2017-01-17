@@ -17,15 +17,16 @@ namespace UnityLib {
 
         [System.Serializable]
         public class WorldParameters : IJSONer {
-            long worldSeed;
-            int nodeMaxSpawnAttempts;
-            int nodeCount;
-            float nodeRadius;
-            float worldScale;
+            public int nodeMaxSpawnAttempts;
+            public int nodeCount;
+            public float nodeRadius;
+            public float worldScale;
+            public long worldSeed;
 
             public WorldParameters() {}
 
             public string Marshall() { return JsonUtility.ToJson(this); }
+            public override string ToString() { return string.Format("[node count: {0}][node radius: {1}][world scale: {2}][max spawn attempts: {3}][world seed: {4}]", nodeCount, nodeRadius, worldScale, nodeMaxSpawnAttempts, worldSeed); }
         }
 
         public static readonly Resource LoadGameWorld = new Resource("game/world/load");
@@ -33,11 +34,15 @@ namespace UnityLib {
 
         public string GameName { get; private set; }
         public int GameKey { get; set; }
-        public long GameSeed { get; set; } // TODO: deprecate, should be in the world handle
         public bool isHost { get; private set; }
         public bool isReadyToLoad { get; set; }
 
-        public WorldHandle worldHandler { get; set; }
+        public WorldHandle worldHandler { get; private set; }
+
+        public void LoadWorld(GameHandle.WorldParameters worldParameters) {
+            this.worldHandler = WorldHandle.New(worldParameters);
+            StartCoroutine(this.worldHandler.LoadWorldScene(null));
+        }
 
         public static GameHandle New(string gameName, bool isHost) {
             GameHandle gh = new GameObject(string.Format("game_handle_[{0}]", gameName)).AddComponent<GameHandle>();

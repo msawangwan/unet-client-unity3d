@@ -46,18 +46,20 @@ namespace UnityLib {
         }
 
         public static IEnumerator Join(this GameHandle gh, string playername, Action onComplete) {
-            Handler<GameHandle.WorldParameters> joinHandler = new Handler<GameHandle.WorldParameters>( // TODO: needs to get all game params not just seed
+            GameHandle.WorldParameters worldparameters = null;
+
+            Handler<GameHandle.WorldParameters> joinHandler = new Handler<GameHandle.WorldParameters>(
                 new GameHandle.JoinRequest(gh.GameKey, playername, gh.isHost).Marshall()
             );
 
-            joinHandler.POST(GameHandle.JoinGameWorld.Route); // get the world seed
+            joinHandler.POST(GameHandle.JoinGameWorld.Route); // requests all game params from the server
 
             do {
+                Debug.LogFormat("-- -- [+] joining ... [{0}]", Time.time);
                 yield return null;
                 if (joinHandler.hasLoadedResource) {
-                    GameHandle.WorldParameters seed = joinHandler.onDone();
-                    // gh.GameSeed = seed.value;
-                    // Debug.LogFormat("-- -- -- [+] server sent world seed: {0}", gh.GameSeed);
+                    worldparameters = joinHandler.onDone();
+                    Debug.LogFormat("-- [+] server sent game world parameters {0}", worldparameters.ToString());
                     break;
                 }
             } while (true);
@@ -72,7 +74,7 @@ namespace UnityLib {
                 onComplete();
             }
 
-            gh.worldHandler = WorldHandle.New(); // PASS IN THE PARAMTERS HERE!!!
+            gh.LoadWorld(worldparameters);
 
             Debug.LogFormat("-- [+] joined game successfully");
         }
