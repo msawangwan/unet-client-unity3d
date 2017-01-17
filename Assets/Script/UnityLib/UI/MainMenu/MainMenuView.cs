@@ -111,7 +111,7 @@ namespace UnityLib.UI {
                                     currentLevel.gameObject.SetActive(false);
 
                                     Action loadAsClientThenJoin = () => {
-                                        StartCoroutine(gameHandle.LoadWorldAsClient(
+                                        StartCoroutine(gameHandle.SendClientGameParameters(
                                             () => {
                                                 StartCoroutine(gameHandle.Join(clientHandle.ClientName, startPoller));
                                             }
@@ -184,7 +184,7 @@ namespace UnityLib.UI {
                                 pollHandle = PollHandle.New();
 
                                 Action loadAsHostThenJoin = () => {
-                                    StartCoroutine(gameHandle.LoadWorldAsHost(
+                                    StartCoroutine(gameHandle.SendHostGameParameters(
                                         () => {
                                             StartCoroutine(gameHandle.Join(clientHandle.ClientName, startPoller));
                                         }
