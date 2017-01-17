@@ -32,14 +32,14 @@ namespace UnityLib {
             Debug.LogFormat("-- [+] registered client [name: {0}] [id: {1}]", ch.ClientName, ch.HandleID);
         }
 
-        public static IEnumerator RequestHostKey(this ClientHandle ch, Action onSuccess) {
+        public static IEnumerator RequestSessionKey(this ClientHandle ch, Action onSuccess) {
             Debug.LogFormat("-- [+] {0} is requesting a host key ... [{1}]", ch.name, Time.time);
-            Debug.LogFormat("{0}", ClientHandle.RequestHostingKey.ToString());
+            Debug.LogFormat("{0}", ClientHandle.GetSessionKey.ToString());
 
             Handler<JsonInt> keyHandler = new Handler<JsonInt>(ch.json.HandleID);
             JsonInt id = null;
 
-            keyHandler.POST(ClientHandle.RequestHostingKey.Route);
+            keyHandler.POST(ClientHandle.GetSessionKey.Route);
 
             do {
                 yield return null;

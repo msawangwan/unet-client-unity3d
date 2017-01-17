@@ -35,6 +35,7 @@ namespace UnityLib.UI {
         private ClientHandle clientHandle;
         private SessionHandle sessionHandle;
         private GameHandle gameHandle;
+        private PollHandle pollHandle;
 
         public void Init() {
             Button[] buttons = new Button[] {
@@ -51,6 +52,15 @@ namespace UnityLib.UI {
                 b.onClick.RemoveAllListeners();
             }
 
+            Action getSessionkey = () => {
+                if (sessionHandle == null) { // TODO: do better when we come around a second time rather than just null check
+                    Debug.LogFormat("-- [+] registered a host session handle ... [{0}]", Time.time);
+                    sessionHandle = SessionHandle.New(clientHandle.SessionKey);
+                } else {
+                    Debug.LogFormat("-- [+] already registered a host session handle (must be coming around again) ... [{0}]", Time.time);
+                }
+            };
+
             newSession.onClick.AddListener(
                 () => {
                     createSession.gameObject.SetActive(true);
@@ -60,14 +70,9 @@ namespace UnityLib.UI {
 
                     currentLevel = mainMenuController.SwitchLevel(2);
 
-                    if (sessionHandle == null) { // TODO: do better when we come around a second time rather than just null check
-                        Debug.LogFormat("-- [+] registered a host session handle ... [{0}]", Time.time);
-                        sessionHandle = SessionHandle.New(clientHandle.SessionKey);
-                    } else {
-                        Debug.LogFormat("-- [+] already registered a host session handle (must be coming around again) ... [{0}]", Time.time);
-                    }
+                    getSessionkey();
 
-                    StartCoroutine(clientHandle.RequestHostKey(null));
+                    StartCoroutine(clientHandle.RequestSessionKey(null));
                 }
             );
 
@@ -79,6 +84,8 @@ namespace UnityLib.UI {
                     findSessionPanel.SetActive(true);
 
                     currentLevel = mainMenuController.SwitchLevel(2);
+
+                    getSessionkey();
 
                     Action<string[]> onFetch = (listing) => {
                         foreach (string item in listing) {
@@ -96,7 +103,7 @@ namespace UnityLib.UI {
 
                     // StartCoroutine(sessionHandle.FetchLobbyList(onFetch));
 
-                    StartCoroutine(clientHandle.RequestJoinKey(onFetch));
+                    StartCoroutine(clientHandle.RequestSessionKey(null));
                 }
             );
 
@@ -149,11 +156,16 @@ namespace UnityLib.UI {
                                 Debug.LogWarning("-- -- -- [+] spwned game seession");
 
                                 gameHandle = GameHandle.New(sessionname, true);
+                                pollHandle = PollHandle.New();
+
+                                Action startPoller = () => {
+                                    StartCoroutine(pollHandle.CheckGameStart(gameHandle.GameKey, null));
+                                };
 
                                 Action loadThenJoin = () => {
                                     StartCoroutine(gameHandle.LoadWorld(
                                         () => {
-                                            StartCoroutine(gameHandle.Join(null));
+                                            StartCoroutine(gameHandle.Join(clientHandle.ClientName, startPoller));
                                         }
                                     ));
                                 };

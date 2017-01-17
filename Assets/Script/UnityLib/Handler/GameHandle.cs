@@ -5,8 +5,19 @@ using UnityLib.Net;
 
 namespace UnityLib {
     public class GameHandle : MonoBehaviour {
-        public static Resource LoadGameWorld = new Resource("game/world/load");
-        public static Resource JoinGameWorld = new Resource("game/world/join");
+        [System.Serializable]
+        public class JoinRequest : IJSONer {
+            public int gameKey;
+            public string playerName;
+            public bool host;
+
+            public JoinRequest() {}
+            public JoinRequest(int gameKey, string playerName, bool host) { this.gameKey = gameKey; this.playerName = playerName; this.host = host; }
+
+            public string Marshall() { return JsonUtility.ToJson(this); }
+        }
+        public static readonly Resource LoadGameWorld = new Resource("game/world/load");
+        public static readonly Resource JoinGameWorld = new Resource("game/world/join");
 
         public string GameName { get; private set; }
         public int GameKey { get; set; }

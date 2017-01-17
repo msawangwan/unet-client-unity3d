@@ -26,9 +26,10 @@ namespace UnityLib {
             Debug.LogFormat("-- [+] loaded game world ... [{0}]", Time.time);
         }
 
-        public static IEnumerator Join(this GameHandle gh, Action onComplete) {
+        public static IEnumerator Join(this GameHandle gh, string playername, Action onComplete) {
             Handler<JsonLong> joinHandler = new Handler<JsonLong>(
-                new JsonBoolWithKey(gh.GameKey, gh.isHost).Marshall()
+                // new JsonBoolWithKey(gh.GameKey, gh.isHost).Marshall()
+                new GameHandle.JoinRequest(gh.GameKey, playername, gh.isHost).Marshall()
             );
 
             joinHandler.POST(GameHandle.JoinGameWorld.Route); // get the world seed
@@ -37,6 +38,7 @@ namespace UnityLib {
                 yield return null;
                 if (joinHandler.hasLoadedResource) {
                     JsonLong seed = joinHandler.onDone();
+                    // her e we send event 
                     Debug.LogFormat("GOT THE SEEEED {0}", seed.value);
                     break;
                 }
