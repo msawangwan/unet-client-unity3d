@@ -41,7 +41,6 @@ namespace UnityLib.UI {
             if (next == -1) {
                 ViewOff();
                 return currentLevel;
-                // return view.gameObject.GetComponent<MainMenuPanel>();
             }
 
             currentLevel = levels[next];

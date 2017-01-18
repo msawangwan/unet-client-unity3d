@@ -62,9 +62,13 @@ namespace UnityLib.UI {
                 }
             };
 
-            Action exitMenu = () => { currentLevel = mainMenuController.SwitchLevel(-1); }; // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
+            Action exitMenu = () => { // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
+                Debug.LogFormat("[+] cleanup all menu routines [{0}]", Time.time);
+                currentLevel = mainMenuController.SwitchLevel(-1); 
+            };
 
             Action startPoller = () => {
+                Debug.LogFormat("[+] started polling for game start ... [{0}]", Time.time);
                 currentLevel.gameObject.SetActive(false);
                 StartCoroutine(pollHandle.CheckGameStart(gameHandle.GameKey, exitMenu));
             };
