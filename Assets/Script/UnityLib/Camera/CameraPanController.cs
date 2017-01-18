@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityLib.Framework.Client {
+namespace UnityLib {
     public class CameraPanController : MonoBehaviour {
         public float SmoothTime = 0.3f;
         public float MaxSpeed = 20.0f;

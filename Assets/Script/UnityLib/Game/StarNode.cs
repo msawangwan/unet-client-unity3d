@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityLib.UI;
 
-namespace UnityLib.Framework.Client {
+namespace UnityLib {
     public class StarNode : MonoBehaviour {
         private PopupController popupController;
 

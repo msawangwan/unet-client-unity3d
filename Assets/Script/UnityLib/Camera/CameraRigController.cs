@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityLib.Framework.Client {
+namespace UnityLib {
     public class CameraRigController : SingletonBehaviour<CameraRigController> {
         public CameraZoomController zoomController;
         public CameraPanController panController;

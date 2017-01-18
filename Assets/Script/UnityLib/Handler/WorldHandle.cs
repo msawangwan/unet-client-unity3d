@@ -10,12 +10,17 @@ namespace UnityLib {
         public static WorldHandle WorldHandleInstance = null;
         public static Scene WorldSceneInstance = default(Scene);
 
-        public pRNG PRNG {
+        public World WorldInstance {
+            get;
+            set;
+        }
+
+        public GameHandle.WorldParameters WorldParameters {
             get;
             private set;
         }
 
-        public GameHandle.WorldParameters WorldParameters {
+        public pRNG PRNG {
             get;
             private set;
         }
@@ -25,8 +30,6 @@ namespace UnityLib {
                 Destroy(WorldHandleInstance);
             }
 
-            // SceneManager.LoadSceneAsync(Globals.sceneindex_worldhandler, LoadSceneMode.Additive);
-
             WorldHandle wh = new GameObject("world_handler").AddComponent<WorldHandle>();
 
             WorldSceneInstance = SceneManager.CreateScene(Globals.scenename_worldhandle);
@@ -34,6 +37,8 @@ namespace UnityLib {
 
             wh.WorldParameters = worldparameters;
             wh.PRNG = new pRNG((ulong)worldparameters.worldSeed);
+
+            SceneManager.MoveGameObjectToScene(WorldHandleInstance.gameObject, WorldSceneInstance);
 
             return wh;
         }

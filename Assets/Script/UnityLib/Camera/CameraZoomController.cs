@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UnityLib.Framework.Client {
+namespace UnityLib {
     public class CameraZoomController : MonoBehaviour {
         public float ZoomSpeedMultiplier = 3.0f;
         public float SpeedSmoothingMultiplier = 0.1f;

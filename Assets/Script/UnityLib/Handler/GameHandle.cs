@@ -46,6 +46,9 @@ namespace UnityLib {
 
         public static GameHandle New(string gameName, bool isHost) {
             GameHandle gh = new GameObject(string.Format("game_handle_[{0}]", gameName)).AddComponent<GameHandle>();
+            // TODO SceneManager.CREATESCNHEE
+            // CameraRigController.S.EnableMovement();
+//             SceneManager.MoveGameObjectToScene(CameraRigController.S.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
             gh.GameName = gameName;
             gh.isHost = isHost;
             return gh;

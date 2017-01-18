@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class World : MonoBehaviour {
+namespace UnityLib {
+    public class World {
+        public Quadrant RootNode;
+        public List<GameObject> ChildNodes;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        public World() {}
+
+        public World(Quadrant rootNode, List<GameObject> childNodes) {
+            this.RootNode = rootNode;
+            this.ChildNodes = childNodes;
+        }
+    }
 }
