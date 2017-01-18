@@ -70,7 +70,7 @@ namespace UnityLib.UI {
             Action startPoller = () => {
                 Debug.LogFormat("[+] started polling for game start ... [{0}]", Time.time);
                 currentLevel.gameObject.SetActive(false);
-                StartCoroutine(pollHandle.CheckGameStart(gameHandle.GameKey, exitMenu));
+                StartCoroutine(pollHandle.WaitForGameStart(gameHandle.GameKey, exitMenu));
             };
     
             newSession.onClick.AddListener(

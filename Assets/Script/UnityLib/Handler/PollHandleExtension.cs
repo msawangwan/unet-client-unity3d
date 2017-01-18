@@ -6,25 +6,36 @@ using UnityLib.Net;
 
 namespace UnityLib {
     public static class PollHandleExtension {
-        public static IEnumerator CheckGameStart(this PollHandle ph, int gamekey, Action onComplete) {
-            WaitForSeconds ws = new WaitForSeconds(PollHandle.PollInterval);
-
+        public static IEnumerator WaitForGameStart(this PollHandle ph, int gamekey, Action onComplete) {
             Handler<JsonInt> startHandler = new Handler<JsonInt>(
                 new JsonInt(gamekey).Marshall()
             );
 
             startHandler.POST(PollHandle.PollForGameStart.Route);
 
-            do {
-                yield return ws;
-                Debug.LogFormat("-- -- [+] polling (game start) ... [{0}]", Time.time);
-                if (startHandler.hasLoadedResource) {
-                    JsonInt n = startHandler.onDone();
-                    break;
+            yield return new WaitUntil( // TODO: maybe use WaitForSeconds instead
+                () => {
+                    Debug.LogFormat("-- -- [+] waiting for game start ... ");
+
+                    if (startHandler.hasLoadedResource) {
+                        ph.GameStartKey = startHandler.onDone().value;
+                        return true;
+                    }
+
+                    return false;
                 }
-            } while (true);
+            );
 
             Debug.LogFormat("[+] finished poll start");
+        }
+
+        public static IEnumerator WaitForTurnStart(this PollHandle ph, int gamekey, Action onComplete) {
+            yield return new WaitUntil(
+                () => {
+                    Debug.LogFormat("-- -- [+] waiting for next turn ... ");
+                    return true;
+                }
+            );
         }
     }
 }

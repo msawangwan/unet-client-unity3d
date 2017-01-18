@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace UnityLib {
     public class Globals : SingletonBehaviour<Globals> {
+        public enum ApplicationState {
+            None = 0,
+            Menu = 1,
+            Game = 2,
+        }
+
         public static readonly int sceneindex_clienthandler  = 0;
         public static readonly int sceneindex_sessionhandler = 1;
         public static readonly int sceneindex_lobbyhandler   = 2;
@@ -23,14 +29,20 @@ namespace UnityLib {
 
         private ControllerBehaviour[] allControllers;
 
+        public Globals.ApplicationState AppState = Globals.ApplicationState.None;
+
         private IEnumerator Start() {
+            if (AppState == Globals.ApplicationState.None) {
+                AppState = Globals.ApplicationState.Menu; // set the initial application state here
+            }
+
             allControllers = new ControllerBehaviour[] {
                 titleMenuController,
                 popupMenuController,
                 RouteHandle,
                 menuLoopController,
                 gameLoopController,
-        };
+            };
 
             bool isInitComplete = false;
 

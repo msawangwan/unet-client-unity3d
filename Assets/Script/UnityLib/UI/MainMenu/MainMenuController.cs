@@ -61,8 +61,10 @@ namespace UnityLib.UI {
             view.gameObject.SetActive(false);
         }
         
-        private void Start() {
-            if (!view.gameObject.activeInHierarchy) {
+        private IEnumerator Start() {
+            do {
+                yield return null;
+            } while (Globals.S.AppState != Globals.ApplicationState.Menu); {
                 view.gameObject.SetActive(true);
             }
 

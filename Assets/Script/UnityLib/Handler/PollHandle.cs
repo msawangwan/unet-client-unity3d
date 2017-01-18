@@ -14,6 +14,8 @@ namespace UnityLib {
             }
         }
 
+        public int GameStartKey { get; set; }
+
         public static PollHandle New() {
             PollHandle ph = new GameObject("poll_handle").AddComponent<PollHandle>();
             return ph;
