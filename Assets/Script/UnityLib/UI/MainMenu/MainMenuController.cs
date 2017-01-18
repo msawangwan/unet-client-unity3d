@@ -18,11 +18,6 @@ namespace UnityLib.UI {
         private string currentPlayerName;
         private string currentSessionName;
 
-        public SessionHandle session { get; set; } // deprecate
-        public string SessionName { get; set; } // deprecate
-
-        public string NameChoice { get; set; } // deprecate
-
         public void ShowConfirmation(GameObject panel, Button button, Action action) {
             if (action != null) {
                 if (button != null) {
@@ -44,7 +39,9 @@ namespace UnityLib.UI {
             currentLevel.gameObject.SetActive(false);
 
             if (next == -1) {
+                ViewOff();
                 return currentLevel;
+                // return view.gameObject.GetComponent<MainMenuPanel>();
             }
 
             currentLevel = levels[next];
@@ -60,8 +57,16 @@ namespace UnityLib.UI {
         public void Cancel() {
             levels[3].gameObject.SetActive(false);
         }
+
+        private void ViewOff() {
+            view.gameObject.SetActive(false);
+        }
         
         private void Start() {
+            if (!view.gameObject.activeInHierarchy) {
+                view.gameObject.SetActive(true);
+            }
+
             foreach (var l in levels) {
                 if (l.levelIndex == 0) {
                     l.gameObject.SetActive(true);

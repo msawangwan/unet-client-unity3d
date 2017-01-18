@@ -32,12 +32,12 @@ namespace UnityLib {
 
             WorldHandle wh = new GameObject("world_handler").AddComponent<WorldHandle>();
 
-            WorldSceneInstance = SceneManager.CreateScene(Globals.scenename_worldhandle);
             WorldHandleInstance = wh;
 
             wh.WorldParameters = worldparameters;
             wh.PRNG = new pRNG((ulong)worldparameters.worldSeed);
 
+            WorldSceneInstance = SceneManager.CreateScene(Globals.scenename_worldhandle);
             SceneManager.MoveGameObjectToScene(WorldHandleInstance.gameObject, WorldSceneInstance);
 
             return wh;

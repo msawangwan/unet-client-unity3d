@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityAdt;
-using UnityLib.Net;
 
 namespace UnityLib {
     public static class WorldHandleExtension  {

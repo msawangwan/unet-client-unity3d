@@ -54,7 +54,7 @@ namespace UnityLib.UI {
             }
 
             Action getSessionkey = () => {
-                if (sessionHandle == null) { // TODO: do better when we come around a second time rather than just null check
+                if (sessionHandle == null) { // WARNING: is this robust enough?
                     Debug.LogFormat("-- [+] registered a host session handle ... [{0}]", Time.time);
                     sessionHandle = SessionHandle.New(clientHandle.SessionKey);
                 } else {
@@ -62,8 +62,11 @@ namespace UnityLib.UI {
                 }
             };
 
+            Action exitMenu = () => { currentLevel = mainMenuController.SwitchLevel(-1); }; // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
+
             Action startPoller = () => {
-                StartCoroutine(pollHandle.CheckGameStart(gameHandle.GameKey, null));
+                currentLevel.gameObject.SetActive(false);
+                StartCoroutine(pollHandle.CheckGameStart(gameHandle.GameKey, exitMenu));
             };
     
             newSession.onClick.AddListener(
@@ -107,8 +110,6 @@ namespace UnityLib.UI {
 
                                     gamename = gamenamestr;
                                     gameHandle = GameHandle.New(gamename, false);
-
-                                    currentLevel.gameObject.SetActive(false);
 
                                     Action loadAsClientThenJoin = () => {
                                         StartCoroutine(gameHandle.SendClientGameParameters(
@@ -176,9 +177,8 @@ namespace UnityLib.UI {
 
                             if (hostNameIsValid) {
                                 Debug.LogWarningFormat("-- [+] {0} unique name: {1} ... [{2}]", gamename, hostNameIsValid, Time.time);
-                                currentLevel = mainMenuController.SwitchLevel(-1);
 
-                                Debug.LogWarning("-- -- -- [+] spwned game seession");
+                                Debug.LogWarning("-- -- -- [+] spwned game session");
 
                                 gameHandle = GameHandle.New(gamename, true);
                                 pollHandle = PollHandle.New();

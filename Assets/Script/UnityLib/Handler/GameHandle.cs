@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityLib.Net;
 
 namespace UnityLib {
@@ -46,11 +47,17 @@ namespace UnityLib {
 
         public static GameHandle New(string gameName, bool isHost) {
             GameHandle gh = new GameObject(string.Format("game_handle_[{0}]", gameName)).AddComponent<GameHandle>();
-            // TODO SceneManager.CREATESCNHEE
-            // CameraRigController.S.EnableMovement();
-//             SceneManager.MoveGameObjectToScene(CameraRigController.S.gameObject, SceneManager.GetSceneAt(kGAME_PLAY));
+
             gh.GameName = gameName;
             gh.isHost = isHost;
+            
+            Scene gameHandleScene = SceneManager.CreateScene(Globals.scenename_gamehandle);
+
+            SceneManager.MoveGameObjectToScene(gh.gameObject, gameHandleScene);
+            SceneManager.MoveGameObjectToScene(CameraRigController.S.gameObject, gameHandleScene);
+
+            CameraRigController.S.EnableMovement(); // TODO: do this elsewhere??
+
             return gh;
         }
 
