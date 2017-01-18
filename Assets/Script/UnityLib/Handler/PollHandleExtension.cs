@@ -17,11 +17,14 @@ namespace UnityLib {
 
             do {
                 yield return ws;
-                Debug.LogFormat("[+] polling for game start ...[{0}]", Time.time);
+                Debug.LogFormat("-- -- [+] polling (game start) ... [{0}]", Time.time);
                 if (startHandler.hasLoadedResource) {
                     JsonInt n = startHandler.onDone();
+                    break;
                 }
             } while (true);
+
+            Debug.LogFormat("[+] finished poll start");
         }
     }
 }
