@@ -18,13 +18,14 @@ namespace UnityLib {
                     Debug.LogFormat("-- -- [+] waiting for game start ... ");
 
                     if (startHandler.hasLoadedResource) {
-                        ph.GameStartKey = startHandler.onDone().value;
                         return true;
                     }
 
                     return false;
                 }
             );
+
+            ph.GameStartKey = startHandler.onDone().value;
 
             Debug.LogFormat("[+] finished poll start");
         }

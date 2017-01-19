@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityLib.UI {
+namespace UnityLib {
     public class PopupPanel : MonoBehaviour {
         [SerializeField] private PopupInstance instance;
         [SerializeField] private bool rootPanel;

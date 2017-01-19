@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UnityLib.UI {
+namespace UnityLib {
     public class MainMenuView : MonoBehaviour {
         [SerializeField] private MainMenuController mainMenuController;
 
@@ -62,15 +62,21 @@ namespace UnityLib.UI {
                 }
             };
 
-            Action exitMenu = () => { // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
+            Action onContextChanged = () => { // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
                 Debug.LogFormat("[+] cleanup all menu routines [{0}]", Time.time);
                 currentLevel = mainMenuController.SwitchLevel(-1); 
             };
 
-            Action startPoller = () => {
+            Action onGameLoadCompleted = () => {
                 Debug.LogFormat("[+] started polling for game start ... [{0}]", Time.time);
                 currentLevel.gameObject.SetActive(false);
-                StartCoroutine(pollHandle.WaitForGameStart(gameHandle.GameKey, exitMenu));
+                StartCoroutine(mainMenuController.GameHUDCtrl.BeginWaitAndPollGameStart(
+                    () => {
+                        StartCoroutine(pollHandle.WaitForGameStart(gameHandle.GameKey, onContextChanged)); // maybe this should start in the gamehudcontroller
+                    }
+                ));
+
+                // StartCoroutine(pollHandle.WaitForGameStart(gameHandle.GameKey, onContextChanged)); // maybe this should start in the gamehudcontroller
             };
     
             newSession.onClick.AddListener(
@@ -113,12 +119,14 @@ namespace UnityLib.UI {
                                     Debug.LogFormat("-- -- -- [+] extracted button text [gamename: {0}] ... [{1}]", gamenamestr, Time.time);
 
                                     gamename = gamenamestr;
+                                    
                                     gameHandle = GameHandle.New(gamename, false);
+                                    pollHandle = PollHandle.New();
 
                                     Action loadAsClientThenJoin = () => {
                                         StartCoroutine(gameHandle.SendClientGameParameters(
                                             () => {
-                                                StartCoroutine(gameHandle.Join(clientHandle.ClientName, startPoller));
+                                                StartCoroutine(gameHandle.Join(clientHandle.ClientName, onGameLoadCompleted));
                                             }
                                         ));
                                     };
@@ -190,7 +198,7 @@ namespace UnityLib.UI {
                                 Action loadAsHostThenJoin = () => {
                                     StartCoroutine(gameHandle.SendHostGameParameters(
                                         () => {
-                                            StartCoroutine(gameHandle.Join(clientHandle.ClientName, startPoller));
+                                            StartCoroutine(gameHandle.Join(clientHandle.ClientName, onGameLoadCompleted));
                                         }
                                     ));
                                 };

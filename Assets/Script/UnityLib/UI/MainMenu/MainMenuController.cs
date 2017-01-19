@@ -3,20 +3,28 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UnityLib.UI {
+namespace UnityLib {
     public class MainMenuController : MonoBehaviour {
+        [SerializeField] GameHUDController gameHUDController;
+
         [SerializeField] MainMenuView view;
         [SerializeField] MainMenuLevel[] levels;
         [SerializeField] MainMenuPanel newSession;
         [SerializeField] MainMenuPanel findSession;
-        [SerializeField] GameObject lobbyList;
 
+        [SerializeField] GameObject lobbyList;
         [SerializeField] GameObject lobbyListingPrefab;
 
         private MainMenuLevel currentLevel;
 
         private string currentPlayerName;
         private string currentSessionName;
+
+        public GameHUDController GameHUDCtrl {
+            get {
+                return gameHUDController;
+            }
+        }
 
         public void ShowConfirmation(GameObject panel, Button button, Action action) {
             if (action != null) {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityLib.UI {
+namespace UnityLib {
     public class PopupController : ControllerBehaviour {
         public PopupView PopupView;
 

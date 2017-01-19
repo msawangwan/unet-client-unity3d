@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityLib.UI {
+namespace UnityLib {
     public class MainMenuLevel : MonoBehaviour {
         public int levelIndex;
         public Dictionary<int, MainMenuPanel> SubLevels = new Dictionary<int, MainMenuPanel>();

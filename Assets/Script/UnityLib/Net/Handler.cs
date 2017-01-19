@@ -23,7 +23,7 @@ namespace UnityLib.Net {
         }
 
         public System.Func<T> onDone { 
-            get; 
+            get;
             private set;
         }
 

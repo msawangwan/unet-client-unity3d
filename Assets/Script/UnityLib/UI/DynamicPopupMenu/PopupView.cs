@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UnityLib.UI {
+namespace UnityLib {
     public class PopupView : MonoBehaviour {
         public PopupController controller;
 

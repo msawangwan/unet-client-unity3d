@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityLib.UI;
+using UnityLib;
 
 namespace UnityLib {
     public class StarNode : MonoBehaviour {

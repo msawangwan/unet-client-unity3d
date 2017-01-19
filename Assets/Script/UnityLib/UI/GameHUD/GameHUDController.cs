@@ -2,18 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityLib.UI {
+namespace UnityLib {
     public class GameHUDController : MonoBehaviour {
-        // private IEnumerator Start() {
-        //     yield return new WaitUntil(
-        //         ()=> {
-        //             if (Globals.S.AppState == Globals.ApplicationState.Game) {
-        //                 Debug.LogWarningFormat("[+] entered application state [game], activating gamehudcontroller ... [{0}]", Time.time);
-        //                 return true;
-        //             }
-        //             return false;
-        //         }
-        //     );
-        // }
+        [SerializeField] MainMenuController mainMenuController;
+    
+        [SerializeField] GameHUDView view;
+
+        public MainMenuController MainMenuCtrl {
+            get {
+                return mainMenuController;
+            }
+        }
+
+        private IEnumerator Start() {
+            view.gameObject.SetActive(false);
+
+            yield return new WaitUntil(
+                ()=> {
+                    if (Globals.S.AppState == Globals.ApplicationState.Game) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            Debug.LogWarningFormat("[+] entered application state [game], activating gamehudcontroller ... [{0}]", Time.time);
+
+            view.gameObject.SetActive(true);
+        }
     }
 }
