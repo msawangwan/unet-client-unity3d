@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityLib.Net;
 
@@ -27,7 +26,7 @@ namespace UnityLib {
 
             ph.GameStartKey = startHandler.onDone().value;
 
-            Debug.LogFormat("[+] finished poll start");
+            Debug.LogFormat("[+] poll handler got start signal, terminating start routine");
         }
 
         public static IEnumerator WaitForTurnStart(this PollHandle ph, int gamekey, Action onComplete) {

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityLib.Net;
 
 namespace UnityLib {
@@ -16,8 +14,8 @@ namespace UnityLib {
 
         public int GameStartKey { get; set; }
 
-        public static PollHandle New() {
-            PollHandle ph = new GameObject("poll_handle").AddComponent<PollHandle>();
+        public static PollHandle New(string playername = "") {
+            PollHandle ph = new GameObject(string.Format("poll_handle_[{0}]", playername)).AddComponent<PollHandle>();
             return ph;
         }
 

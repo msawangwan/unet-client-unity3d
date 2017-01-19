@@ -75,8 +75,6 @@ namespace UnityLib {
                         StartCoroutine(pollHandle.WaitForGameStart(gameHandle.GameKey, onContextChanged)); // maybe this should start in the gamehudcontroller
                     }
                 ));
-
-                // StartCoroutine(pollHandle.WaitForGameStart(gameHandle.GameKey, onContextChanged)); // maybe this should start in the gamehudcontroller
             };
     
             newSession.onClick.AddListener(
@@ -120,8 +118,8 @@ namespace UnityLib {
 
                                     gamename = gamenamestr;
                                     
-                                    gameHandle = GameHandle.New(gamename, false);
-                                    pollHandle = PollHandle.New();
+                                    gameHandle = GameHandle.New(gamename, false); // TODO: wrap these calls in a func or something
+                                    pollHandle = PollHandle.New(gamename); // TODO: wrap these calls in a func or something
 
                                     Action loadAsClientThenJoin = () => {
                                         StartCoroutine(gameHandle.SendClientGameParameters(
@@ -192,8 +190,8 @@ namespace UnityLib {
 
                                 Debug.LogWarning("-- -- -- [+] spwned game session");
 
-                                gameHandle = GameHandle.New(gamename, true);
-                                pollHandle = PollHandle.New();
+                                gameHandle = GameHandle.New(gamename, true); // TODO: wrap these calls in a func or something
+                                pollHandle = PollHandle.New(); // TODO: wrap these calls in a func or something
 
                                 Action loadAsHostThenJoin = () => {
                                     StartCoroutine(gameHandle.SendHostGameParameters(
