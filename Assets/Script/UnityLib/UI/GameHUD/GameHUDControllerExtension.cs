@@ -15,5 +15,11 @@ namespace UnityLib {
                 onComplete();
             }
         }
+
+        public static IEnumerator FetchPlayerNames(this GameHUDController ghudc, Action onComplete) {
+            yield return null;
+
+            
+        }
     }
 }

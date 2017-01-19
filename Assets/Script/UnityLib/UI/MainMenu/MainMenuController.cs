@@ -70,11 +70,13 @@ namespace UnityLib {
         }
         
         private IEnumerator Start() {
-            do {
-                yield return null;
-            } while (Globals.S.AppState != Globals.ApplicationState.Menu); {
-                view.gameObject.SetActive(true);
-            }
+            yield return new WaitUntil(
+                () => {
+                    return Globals.S.AppState == Globals.ApplicationState.Menu;
+                }
+            );
+
+            view.gameObject.SetActive(true);
 
             foreach (var l in levels) {
                 if (l.levelIndex == 0) {

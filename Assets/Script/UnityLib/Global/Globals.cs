@@ -29,7 +29,17 @@ namespace UnityLib {
 
         private ControllerBehaviour[] allControllers;
 
-        public Globals.ApplicationState AppState = Globals.ApplicationState.None;
+        private Globals.ApplicationState appState = Globals.ApplicationState.None;
+
+        public Globals.ApplicationState AppState {
+            get {
+                return appState;
+            }
+            set {
+                appState = value;
+                Debug.LogWarningFormat("** [+] app state was changed to [{0}][{1}]", appState, Time.time);
+            }
+        }
 
         private IEnumerator Start() {
             if (AppState == Globals.ApplicationState.None) {
@@ -53,6 +63,7 @@ namespace UnityLib {
                     if (controller == null) {
                         continue;
                     }
+
                     if (controller.onInitComplete) {
                         isInitComplete = true;
                     } else {

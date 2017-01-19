@@ -54,11 +54,7 @@ namespace UnityLib {
             Scene gameHandleScene = SceneManager.CreateScene(Globals.scenename_gamehandle);
 
             SceneManager.MoveGameObjectToScene(gh.gameObject, gameHandleScene);
-            SceneManager.MoveGameObjectToScene(CameraRigController.S.gameObject, gameHandleScene);
-
-            // CameraRigController.S.EnableMovement(); // TODO: do this elsewhere??
-
-            // Globals.S.AppState = Globals.ApplicationState.Game; // TODO: revisit this and where to switch at a later date
+            // SceneManager.MoveGameObjectToScene(CameraRigController.S.gameObject, gameHandleScene);
 
             return gh;
         }
