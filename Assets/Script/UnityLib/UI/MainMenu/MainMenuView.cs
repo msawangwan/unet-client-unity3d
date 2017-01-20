@@ -62,9 +62,12 @@ namespace UnityLib {
                 }
             };
 
-            Action onContextChanged = () => { // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
+            Action<int, string> onContextChanged = (hashedgamekey, opponentname) => { // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
                 Debug.LogFormat("[+] cleanup all menu routines [{0}]", Time.time);
-                currentLevel = mainMenuController.SwitchLevel(-1); 
+                Debug.LogFormat("[+] enabled gamehudcontroller [hashed game key {0}][opponent name {1}]", hashedgamekey, opponentname);
+                mainMenuController.GameHUDCtrl.GameKey = hashedgamekey;
+                mainMenuController.GameHUDCtrl.OpponentName = opponentname;
+                currentLevel = mainMenuController.SwitchLevel(-1);
             };
 
             Action onGameLoadCompleted = () => {
@@ -72,7 +75,7 @@ namespace UnityLib {
                 currentLevel.gameObject.SetActive(false);
                 StartCoroutine(mainMenuController.GameHUDCtrl.BeginWaitAndPollGameStart(
                     () => {
-                        StartCoroutine(pollHandle.WaitForGameStart(gameHandle.GameKey, onContextChanged)); // maybe this should start in the gamehudcontroller
+                        StartCoroutine(pollHandle.WaitForGameStart(gameHandle.GameKey, clientHandle.ClientName, onContextChanged)); // maybe this should start in the gamehudcontroller
                     }
                 ));
             };

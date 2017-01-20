@@ -5,9 +5,9 @@ using UnityLib.Net;
 
 namespace UnityLib {
     public static class PollHandleExtension {
-        public static IEnumerator WaitForGameStart(this PollHandle ph, int gamekey, Action onComplete) {
-            Handler<JsonInt> startHandler = new Handler<JsonInt>(
-                new JsonInt(gamekey).Marshall()
+        public static IEnumerator WaitForGameStart(this PollHandle ph, int gamekey, string playername, Action<int, string> onComplete) { // use ID instead of name??
+            Handler<JsonStringWithKey> startHandler = new Handler<JsonStringWithKey>(
+                new PollHandle.PlayerReadyNotification(gamekey, playername).Marshall()
             );
 
             startHandler.POST(PollHandle.PollForGameStart.Route);
@@ -24,9 +24,15 @@ namespace UnityLib {
                 }
             );
 
-            ph.GameStartKey = startHandler.onDone().value;
+            JsonStringWithKey j = startHandler.onDone();
+            int hashedgamekey = j.key;
+            string opponent = j.value;
 
-            Debug.LogFormat("[+] poll handler got start signal, terminating start routine");
+            if (onComplete != null) {
+                onComplete(hashedgamekey, opponent);
+            }
+
+            Debug.LogFormat("[+] poll handler got start signal and terminated start routine");
         }
 
         public static IEnumerator WaitForTurnStart(this PollHandle ph, int gamekey, Action onComplete) {

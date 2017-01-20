@@ -14,6 +14,9 @@ namespace UnityLib {
             }
         }
 
+        public int GameKey { get; set; }
+        public string OpponentName { get; set; }
+
         private IEnumerator Start() {
             view.gameObject.SetActive(false);
 

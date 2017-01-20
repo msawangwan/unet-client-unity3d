@@ -3,6 +3,15 @@ using UnityLib.Net;
 
 namespace UnityLib {
     public class PollHandle : MonoBehaviour {
+        public class PlayerReadyNotification : IJSONer {
+            public int gameID;
+            public string playerName;
+
+            public PlayerReadyNotification() {}
+            public PlayerReadyNotification(int gameID, string playerName) { this.gameID = gameID; this.playerName = playerName; }
+            public string Marshall() { return JsonUtility.ToJson(this); }
+        }
+
         public static readonly Resource PollForGameStart = new Resource("poll/start");
         public static readonly Resource PollForGameUpdate = new Resource("poll/update");
 
