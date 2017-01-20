@@ -58,16 +58,16 @@ namespace UnityLib {
                     Debug.LogFormat("-- [+] registered a host session handle ... [{0}]", Time.time);
                     sessionHandle = SessionHandle.New(clientHandle.SessionKey);
                 } else {
-                    Debug.LogFormat("-- [+] already registered a host session handle (must be coming around again) ... [{0}]", Time.time);
+                    Debug.LogFormat("-- [+] already registered a host session handle ... [{0}]", Time.time);
                 }
             };
 
-            Action<int, string> onContextChanged = (hashedgamekey, opponentname) => { // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
+            Action<int, string> onContextChanged = (hashedgamekey, opponentname) => {
                 Debug.LogFormat("[+] cleanup all menu routines [{0}]", Time.time);
-                Debug.LogFormat("[+] enabled gamehudcontroller [hashed game key {0}][opponent name {1}]", hashedgamekey, opponentname);
+                Debug.LogFormat("[+] enabled gamehudcontroller [hashed game key: {0}][opponent name: {1}]", hashedgamekey, opponentname);
                 mainMenuController.GameHUDCtrl.GameKey = hashedgamekey;
                 mainMenuController.GameHUDCtrl.OpponentName = opponentname;
-                currentLevel = mainMenuController.SwitchLevel(-1);
+                currentLevel = mainMenuController.SwitchLevel(-1); // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
             };
 
             Action onGameLoadCompleted = () => {
