@@ -1,16 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityLib {
     public class GameHUDController : MonoBehaviour {
         [SerializeField] MainMenuController mainMenuController;
-    
+
         [SerializeField] GameHUDView view;
 
         public MainMenuController MainMenuCtrl {
             get {
                 return mainMenuController;
+            }
+        }
+
+        public GameHUDView View {
+            get {
+                return view;
             }
         }
 

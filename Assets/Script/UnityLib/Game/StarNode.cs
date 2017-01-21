@@ -1,19 +1,15 @@
 ﻿using UnityEngine;
-using UnityLib;
 
 namespace UnityLib {
-    public class StarNode : MonoBehaviour {
-        private PopupController popupController;
+    public class Star : SelectableNode {
+        [System.Serializable]
+        public class AsJson : IJSONer {
+            public float x;
+            public float y;
+            public bool isValid;
 
-        private void OnMouseDown() {
-            CameraRigController.S.panController.CenterOnSelected(gameObject.transform.position);
-            popupController.Activate(gameObject.transform.position);
+            public string Marshall() { return JsonUtility.ToJson(this); }
         }
 
-        private void OnEnable() {
-            if (!popupController) {
-                popupController = Globals.S.popupMenuController as PopupController;
-            }
-        }
     }
 }

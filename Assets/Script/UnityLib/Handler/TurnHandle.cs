@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurnHandle : MonoBehaviour {
+namespace UnityLib {
+    public class TurnHandle : MonoBehaviour {
+        public Player PlayerInstance;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        public static TurnHandle New() {
+            TurnHandle th = new GameObject("turn_handle").AddComponent<TurnHandle>();
+            return th;
+        }
+    }
 }

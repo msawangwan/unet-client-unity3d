@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 namespace UnityLib {
     public class WorldHandle : MonoBehaviour {
         public static WorldHandle WorldHandleInstance = null;
-        public static Scene WorldSceneInstance = default(Scene);
+        public static Scene WorldSceneInstance = default(Scene); // TODO: look at the wrapper GameHandle.GameScene
 
         public World WorldInstance {
             get;
@@ -34,8 +34,8 @@ namespace UnityLib {
             wh.WorldParameters = worldparameters;
             wh.PRNG = new pRNG((ulong)worldparameters.worldSeed);
 
-            WorldSceneInstance = SceneManager.CreateScene(Globals.scenename_worldhandle);
-            SceneManager.MoveGameObjectToScene(WorldHandleInstance.gameObject, WorldSceneInstance);
+            // WorldSceneInstance = SceneManager.CreateScene(Globals.scenename_worldhandle);
+            // SceneManager.MoveGameObjectToScene(WorldHandleInstance.gameObject, WorldSceneInstance);
 
             return wh;
         }

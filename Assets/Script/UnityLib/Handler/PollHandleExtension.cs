@@ -10,6 +10,9 @@ namespace UnityLib {
                 new PollHandle.PlayerReadyNotification(gamekey, playername).Marshall()
             );
 
+            ph.GameHandler.Instance.PlayerName = playername;
+            ph.GameHandler.Instance.OpponentName = "<waiting for player to join ...>";;
+
             startHandler.POST(PollHandle.PollForGameStart.Route);
 
             yield return new WaitUntil( // TODO: maybe use WaitForSeconds instead
@@ -25,14 +28,17 @@ namespace UnityLib {
             );
 
             JsonStringWithKey j = startHandler.onDone();
+
             int hashedgamekey = j.key;
             string opponent = j.value;
 
             if (onComplete != null) {
-                onComplete(hashedgamekey, opponent);
+                onComplete(hashedgamekey, opponent); // don't actually need  this me thinks
             }
 
             Debug.LogFormat("[+] poll handler got start signal and terminated start routine");
+
+            ph.GameHandler.Instance.OpponentName = opponent;
         }
 
         public static IEnumerator WaitForTurnStart(this PollHandle ph, int gamekey, Action onComplete) {

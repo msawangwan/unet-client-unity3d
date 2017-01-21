@@ -2,15 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurnHandleExtension : MonoBehaviour {
+namespace UnityLib {
+    public static class TurnHandleExtension {
+        public static IEnumerator SpoolUp(this TurnHandle th) {
+            Debug.LogWarningFormat("[+] turn handler spooling up ... [{0}]", Time.time);
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+            do {
+                yield return Wait.ForEndOfFrame;
+            } while (true);
+
+            Debug.LogWarningFormat("[+] turn handler spooling up ... [{0}]", Time.time);
+        }
+
+        public static IEnumerator ExecuteTurnTick(this TurnHandle th, int turnnumber) {
+            do {
+                yield return Wait.ForEndOfFrame;
+            } while (true);
+        }
+    }
 }

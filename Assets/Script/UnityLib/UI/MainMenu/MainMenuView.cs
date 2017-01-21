@@ -65,8 +65,10 @@ namespace UnityLib {
             Action<int, string> onContextChanged = (hashedgamekey, opponentname) => {
                 Debug.LogFormat("[+] cleanup all menu routines [{0}]", Time.time);
                 Debug.LogFormat("[+] enabled gamehudcontroller [hashed game key: {0}][opponent name: {1}]", hashedgamekey, opponentname);
-                mainMenuController.GameHUDCtrl.GameKey = hashedgamekey;
-                mainMenuController.GameHUDCtrl.OpponentName = opponentname;
+
+                // mainMenuController.GameHUDCtrl.GameKey = hashedgamekey;
+                // mainMenuController.GameHUDCtrl.OpponentName = opponentname;
+
                 currentLevel = mainMenuController.SwitchLevel(-1); // WARNING: potential bugs from this, will kill all coroutines running on the mainmenuview
             };
 
@@ -121,8 +123,8 @@ namespace UnityLib {
 
                                     gamename = gamenamestr;
                                     
-                                    gameHandle = GameHandle.New(gamename, false); // TODO: wrap these calls in a func or something
-                                    pollHandle = PollHandle.New(gamename); // TODO: wrap these calls in a func or something
+                                    gameHandle = GameHandle.New(mainMenuController.GameHUDCtrl, gamename, false); // TODO: wrap these calls in a func or something
+                                    pollHandle = PollHandle.New(gameHandle, gamename); // TODO: wrap these calls in a func or something
 
                                     Action loadAsClientThenJoin = () => {
                                         StartCoroutine(gameHandle.SendClientGameParameters(
@@ -193,8 +195,8 @@ namespace UnityLib {
 
                                 Debug.LogWarning("-- -- -- [+] spwned game session");
 
-                                gameHandle = GameHandle.New(gamename, true); // TODO: wrap these calls in a func or something
-                                pollHandle = PollHandle.New(); // TODO: wrap these calls in a func or something
+                                gameHandle = GameHandle.New(mainMenuController.GameHUDCtrl, gamename, true); // TODO: wrap these calls in a func or something
+                                pollHandle = PollHandle.New(gameHandle, gamename); // TODO: wrap these calls in a func or something
 
                                 Action loadAsHostThenJoin = () => {
                                     StartCoroutine(gameHandle.SendHostGameParameters(

@@ -74,7 +74,7 @@ namespace UnityLib {
                 onComplete();
             }
 
-            gh.LoadWorld(worldparameters);
+            gh.LoadWorldHandle(worldparameters);
 
             Debug.LogFormat("-- [+] joined game successfully");
         }

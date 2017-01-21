@@ -31,7 +31,7 @@ namespace UnityLib {
 
             foreach (GameObject go in goNodes) {
                 Debug.LogWarningFormat("node [position: {0} {1}]", go.transform.position.x, go.transform.position.y);
-                go.AddComponent<StarNode>();
+                go.AddComponent<Star>();
             }
 
             Debug.LogFormat("[+] finished spawning world node objects... {0}", Time.time);

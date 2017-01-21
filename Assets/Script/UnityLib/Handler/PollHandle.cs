@@ -21,10 +21,21 @@ namespace UnityLib {
             }
         }
 
+        private GameHandle gameHandler;
+
+        public GameHandle GameHandler {
+            get {
+                return gameHandler;
+            }
+        }
+
         public int GameStartKey { get; set; }
 
-        public static PollHandle New(string playername = "") {
+        public static PollHandle New(GameHandle gh, string playername = "") {
             PollHandle ph = new GameObject(string.Format("poll_handle_[{0}]", playername)).AddComponent<PollHandle>();
+            ph.gameHandler = gh;
+            ph.gameHandler.Instance.RaisePlayerNameChanged += (nametext) => { ph.gameHandler.GameHUDCtrl.View.SetNameTextField(nametext, false); };
+            ph.gameHandler.Instance.RaiseOpponentNameChanged += (nametext) => { ph.gameHandler.GameHUDCtrl.View.SetNameTextField(nametext, true); };
             return ph;
         }
 
@@ -33,6 +44,8 @@ namespace UnityLib {
         }
 
         private void OnDisable() {
+            gameHandler.Instance.RaisePlayerNameChanged -= (nametext) => { gameHandler.GameHUDCtrl.View.SetNameTextField(nametext, false); };
+            gameHandler.Instance.RaiseOpponentNameChanged -= (nametext) => { gameHandler.GameHUDCtrl.View.SetNameTextField(nametext, true); };
             Debug.LogWarningFormat("[+] {0} callback: OnDisable ... [{1}]", gameObject.name, Time.time);
         }
 
