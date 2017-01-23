@@ -159,40 +159,45 @@ namespace UnityLib {
         }
 
         public static IEnumerator PollForUpdate(this GameHandle gh) {
-            Handler<JsonEmpty> turnPollHandler = null;
+            Handler<JsonInt> turnPollHandler = null;
             Handler<JsonEmpty> sendTurnUpdateHandler = null;
-            bool isPollingForTurn = true;
+            // bool isPollingForTurn = true;
             do {
                 yield return Wait.ForEndOfFrame;
-                if (turnPollHandler == null && isPollingForTurn) {
-                    turnPollHandler = new Handler<JsonEmpty>(
+                if (turnPollHandler == null && !gh.hasTurn) {
+                    turnPollHandler = new Handler<JsonInt>(
                         new GameHandle.PlayerTurnPollRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index).Marshall()
                     );
                     turnPollHandler.POST(GameHandle.PollForTurnSignalRoute.Route);
                     continue;
                 }
 
-                if (turnPollHandler != null && isPollingForTurn) {
+                if (turnPollHandler != null && !gh.hasTurn) {
                     if (turnPollHandler.hasLoadedResource) {
-                        gh.hasTurn = true;
+                        JsonInt toact = turnPollHandler.onDone();
+                        if (toact.value == gh.playerHandler.PlayerInstance.Index) {
+                            Debug.LogFormat("[+] player got response from server that it's players turn");
+                            gh.hasTurn = true;
+                            // isPollingForTurn = false;
+                        }
                         turnPollHandler = null;
-                        isPollingForTurn = false;
                     }
                     continue;
                 }
 
-                if (sendTurnUpdateHandler == null && !isPollingForTurn) {
+                if (sendTurnUpdateHandler == null && gh.hasTurn) {
                     sendTurnUpdateHandler = new Handler<JsonEmpty>();
                     continue;
                 }
 
-                if (sendTurnUpdateHandler != null && !isPollingForTurn) {
+                if (sendTurnUpdateHandler != null && gh.hasTurn) {
                     if (gh.OnTurnSent != null) { //i.e. a button press, means we sent our turn
                         gh.OnTurnSent(sendTurnUpdateHandler);
                         yield return new WaitUntil( // block until we set the handler null elsewhere
                             ()=>{
                                 if (sendTurnUpdateHandler == null) {
-                                    isPollingForTurn = true;
+                                    // isPollingForTurn = true;
+                                    gh.hasTurn = false;
                                     return true;
                                 }
                                 return false;
