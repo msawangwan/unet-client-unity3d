@@ -166,6 +166,7 @@ namespace UnityLib {
             do {
                 yield return Wait.ForEndOfFrame;
                 if (turnPollHandler == null && !gh.hasTurn) {
+                    Debug.LogFormat("-- [+] start polling for turn");
                     turnPollHandler = new Handler<JsonInt>(
                         new GameHandle.PlayerTurnPollRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index).Marshall()
                     );
@@ -174,13 +175,16 @@ namespace UnityLib {
                 }
 
                 if (turnPollHandler != null && !gh.hasTurn) {
+                    Debug.LogFormat("-- [+] polling for turn");
                     if (turnPollHandler.hasLoadedResource) {
+                        Debug.LogFormat("-- [+] read poll response to check if turn");
                         JsonInt toact = turnPollHandler.onDone();
                         if (toact.value == gh.playerHandler.PlayerInstance.Index) {
                             Debug.LogFormat("[+] player got response from server that it's players turn");
                             gh.hasTurn = true;
                             // isPollingForTurn = false;
                         }
+                        Debug.LogFormat("-- [+] not our turn so lets start it over");
                         turnPollHandler = null;
                     }
                     continue;

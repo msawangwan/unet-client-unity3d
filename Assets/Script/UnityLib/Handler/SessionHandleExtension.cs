@@ -51,7 +51,8 @@ namespace UnityLib {
                 }
             } while (true);
 
-            gh.GameKey = gameKey;
+            gh.GameKey = gameKey; // todo: deprecate replaced by gh.Instance.Key
+            gh.Instance.Key = gameKey;
             gh.isReadyToLoad = true;
 
             if (onComplete != null) {
@@ -81,7 +82,8 @@ namespace UnityLib {
                 }
             } while (true);
 
-            gh.GameKey = gameKey;
+            gh.GameKey = gameKey; // todo: deprecate replaced by gh.Instance.Key
+            gh.Instance.Key = gameKey;
             gh.isReadyToLoad = true;
 
             if (onCompelte != null) {
