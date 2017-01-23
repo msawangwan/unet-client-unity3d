@@ -173,11 +173,11 @@ namespace UnityLib {
             }
         }
 
-        public static IEnumerator NotifyHQSetOrNot(this GameHandle gh, Star star, Action onComplete) {
-            do {
-                yield return Wait.ForEndOfFrame;
-            } while (true);
-        }
+        // public static IEnumerator NotifyHQSetOrNot(this GameHandle gh, Star star, Action onComplete) {
+        //     do {
+        //         yield return Wait.ForEndOfFrame;
+        //     } while (true);
+        // }
 
         public static IEnumerator PollForUpdate(this GameHandle gh) {
             Handler<JsonInt> turnPollHandler = null;
@@ -197,22 +197,40 @@ namespace UnityLib {
                 }
 
                 if (turnPollHandler != null && !gh.hasTurn) {
-                    Debug.LogFormat("-- [+] polling for turn");
-                    if (turnPollHandler.hasLoadedResource) {
-                        Debug.LogFormat("-- [+] read poll response to check if turn");
-                        JsonInt toact = turnPollHandler.onDone();
-                        if (toact.value == gh.playerHandler.PlayerInstance.Index) {
-                            Debug.LogFormat("[+] player got response from server that it's players turn");
-                            gh.hasTurn = true;
-                        } else {
-                            Debug.LogFormat("-- [+] not our turn so lets wait for x seconds until next poll request");
-                            yield return ws; // wait sometime before our next attempt
-                            Debug.LogFormat("-- [+] starting next poll request");
+                    Debug.LogFormat("-- [+] start long polling for turn...");
+                    yield return new WaitUntil(
+                        ()=>{
+                            if (turnPollHandler.hasLoadedResource) {
+                                Debug.LogFormat("-- -- [+] ok it's our turn now, killing long poll");
+                                // gh.hasTurn = true;
+                                // JsonInt toAct = turnPollHandler.onDone();
+                                return true;
+                            }
+                            return false;
                         }
-                        turnPollHandler = null;
-                    }
+                    );
+                    gh.hasTurn = true;
+                    turnPollHandler = null;
                     continue;
                 }
+
+                // if (turnPollHandler != null && !gh.hasTurn) {
+                //     Debug.LogFormat("-- [+] polling for turn");
+                //     if (turnPollHandler.hasLoadedResource) {
+                //         Debug.LogFormat("-- [+] read poll response to check if turn");
+                //         JsonInt toact = turnPollHandler.onDone();
+                //         if (toact.value == gh.playerHandler.PlayerInstance.Index) {
+                //             Debug.LogFormat("[+] player got response from server that it's players turn");
+                //             gh.hasTurn = true;
+                //         } else {
+                //             Debug.LogFormat("-- [+] not our turn so lets wait for x seconds until next poll request");
+                //             yield return ws; // wait sometime before our next attempt
+                //             Debug.LogFormat("-- [+] starting next poll request");
+                //         }
+                //         turnPollHandler = null;
+                //     }
+                //     continue;
+                // }
 
                 if (sendTurnUpdateHandler == null && gh.hasTurn) {
                     Debug.LogFormat("[+] player has turn, creating server turn handler");
