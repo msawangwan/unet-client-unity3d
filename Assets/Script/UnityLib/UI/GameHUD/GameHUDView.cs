@@ -69,6 +69,16 @@ namespace UnityLib {
             playerNameFieldText.text = name;
         }
 
+        public IEnumerator DisableWhen(bool condition) {
+            yield return new WaitUntil(()=>{
+                if (condition) {
+                    return true;
+                }
+                return false;
+            });
+            actionOverlayPanelContainer.SetActive(false);
+        }
+
         public void Init() {
             Debug.LogWarningFormat("init gamehudview");
         }
@@ -98,15 +108,6 @@ namespace UnityLib {
                     return true;
                 }
             );
-        }
-
-        private static IEnumerator DisableWhen(GameObject go, Predicate<bool> p) {
-            yield return new WaitUntil(()=>{
-                // if (p()) {
-
-                // }
-                return false;
-            });
         }
 
         // TODO: temp solution

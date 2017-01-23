@@ -8,9 +8,32 @@ namespace UnityLib {
         public float y { get { return transform.position.y; } }
 
         public string AsRedisKey() {
-            float xx = (float)((int)(x*100)) / 100;
-            float yy = (float)((int)(y*100)) / 100;
-            return string.Format("{0}:{1}", xx, yy);
+            float xx = (float)((int)(x * 100)) / 100;
+            float yy = (float)((int)(y * 100)) / 100;
+
+            string sx = string.Format("{0}", xx);
+            string sy = string.Format("{0}", yy);
+            
+            if (!sx.Contains(".")) {
+                sx = string.Format("{0}.{1}", xx, "00");
+            } else {
+                string[] sxx = sx.Split('.');
+                if (sxx[1].Length != 2) {
+                    sx = string.Format("{0}{1}", sx, "0");
+                }
+            }
+
+            if (!sy.Contains(".")) {
+                sy = string.Format("{0}.{1}", yy, "00");
+            } else {
+                string[] syy = sy.Split('.');
+                if (syy[1].Length != 2) {
+                    sy = string.Format("{0}{1}", sy, "0");
+                }
+            }
+
+            // return string.Format("{0}:{1}", xx, yy);
+            return string.Format("{0}:{1}", sx, sy);
         }
 
         public void RegisterWithGameHandler(GameHandle gameHandler) {

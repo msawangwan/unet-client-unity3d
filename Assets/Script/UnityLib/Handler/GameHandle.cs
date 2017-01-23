@@ -97,7 +97,6 @@ namespace UnityLib {
 
         public GameHUDController GameHUDCtrl { get; private set; }
 
-        // public Action<Handler<JsonEmpty>> OnTurnSent;
         public Func<Handler<JsonEmpty>> OnTurnCompleted; // returns a handler to call on turn completed
 
         public void LoadWorldHandle(World.Parameters worldParameters) {
