@@ -162,7 +162,9 @@ namespace UnityLib {
         public static IEnumerator PollForUpdate(this GameHandle gh) {
             Handler<JsonInt> turnPollHandler = null;
             Handler<JsonEmpty> sendTurnUpdateHandler = null;
-            // bool isPollingForTurn = true;
+            
+            WaitForSeconds ws = new WaitForSeconds(1.25f);
+
             do {
                 yield return Wait.ForEndOfFrame;
                 if (turnPollHandler == null && !gh.hasTurn) {
@@ -182,9 +184,11 @@ namespace UnityLib {
                         if (toact.value == gh.playerHandler.PlayerInstance.Index) {
                             Debug.LogFormat("[+] player got response from server that it's players turn");
                             gh.hasTurn = true;
-                            // isPollingForTurn = false;
+                        } else {
+                            Debug.LogFormat("-- [+] not our turn so lets wait for x seconds until next poll request");
+                            yield return ws; // wait sometime before our next attempt
+                            Debug.LogFormat("-- [+] starting next poll request");
                         }
-                        Debug.LogFormat("-- [+] not our turn so lets start it over");
                         turnPollHandler = null;
                     }
                     continue;
@@ -201,7 +205,6 @@ namespace UnityLib {
                         yield return new WaitUntil( // block until we set the handler null elsewhere
                             ()=>{
                                 if (sendTurnUpdateHandler == null) {
-                                    // isPollingForTurn = true;
                                     gh.hasTurn = false;
                                     return true;
                                 }
