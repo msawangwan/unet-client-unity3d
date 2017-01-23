@@ -95,6 +95,7 @@ namespace UnityLib {
                 gh.PlayerName,
                 () => {
                     gh.StartCoroutine(gh.EnterPlayerSetup(null));
+                    gh.StartCoroutine(gh.PollForUpdate());
                 }
             );
 
