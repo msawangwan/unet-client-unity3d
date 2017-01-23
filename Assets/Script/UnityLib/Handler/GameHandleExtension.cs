@@ -140,7 +140,7 @@ namespace UnityLib {
             } while (true);
         }
 
-        public static IEnumerator CheckNodeValidHQ(this GameHandle gh, Star star, Action onComplete) {
+        public static IEnumerator CheckNodeValidHQ(this GameHandle gh, Star star) {
             Debug.LogFormat("[+] player requesting node as hq");
             if (!gh.hasHq) {
                 Handler<JsonBool> checkHQHandler = new Handler<JsonBool>(
@@ -167,17 +167,13 @@ namespace UnityLib {
                             new GameHandle.PlayerTurnCompleteRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index).Marshall()
                         );
                     };
+                } else {
+                    Debug.Log("[+] choose another hq");
                 }
             } else {
                 Debug.LogFormat("[+] player already has hq");
             }
         }
-
-        // public static IEnumerator NotifyHQSetOrNot(this GameHandle gh, Star star, Action onComplete) {
-        //     do {
-        //         yield return Wait.ForEndOfFrame;
-        //     } while (true);
-        // }
 
         public static IEnumerator PollForUpdate(this GameHandle gh) {
             Handler<JsonInt> turnPollHandler = null;
@@ -202,8 +198,6 @@ namespace UnityLib {
                         ()=>{
                             if (turnPollHandler.hasLoadedResource) {
                                 Debug.LogFormat("-- -- [+] ok it's our turn now, killing long poll");
-                                // gh.hasTurn = true;
-                                // JsonInt toAct = turnPollHandler.onDone();
                                 return true;
                             }
                             return false;
@@ -213,24 +207,6 @@ namespace UnityLib {
                     turnPollHandler = null;
                     continue;
                 }
-
-                // if (turnPollHandler != null && !gh.hasTurn) {
-                //     Debug.LogFormat("-- [+] polling for turn");
-                //     if (turnPollHandler.hasLoadedResource) {
-                //         Debug.LogFormat("-- [+] read poll response to check if turn");
-                //         JsonInt toact = turnPollHandler.onDone();
-                //         if (toact.value == gh.playerHandler.PlayerInstance.Index) {
-                //             Debug.LogFormat("[+] player got response from server that it's players turn");
-                //             gh.hasTurn = true;
-                //         } else {
-                //             Debug.LogFormat("-- [+] not our turn so lets wait for x seconds until next poll request");
-                //             yield return ws; // wait sometime before our next attempt
-                //             Debug.LogFormat("-- [+] starting next poll request");
-                //         }
-                //         turnPollHandler = null;
-                //     }
-                //     continue;
-                // }
 
                 if (sendTurnUpdateHandler == null && gh.hasTurn) {
                     Debug.LogFormat("[+] player has turn, creating server turn handler");
@@ -250,15 +226,13 @@ namespace UnityLib {
                                     Debug.LogFormat("[+] server responded to turn completed request ...");
                                     return true;
                                 }
-                                // if (sendTurnUpdateHandler == null) {
-                                //     return true;
-                                // }
                                 return false;
                             }
                         );
                         Debug.LogFormat("[+] turn sent! will now go back to waiting for turn...");
                         gh.hasTurn = false;
                         sendTurnUpdateHandler = null;
+                        gh.OnTurnCompleted = null;
                     }
                     continue;
                 }

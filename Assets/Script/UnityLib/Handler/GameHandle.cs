@@ -123,7 +123,7 @@ namespace UnityLib {
                 GameHUDCtrl.View.DisplayActionButtonAndOnPressExecute(
                     "choose hq",
                     ()=>{
-                        StartCoroutine(this.CheckNodeValidHQ(star, null));
+                        StartCoroutine(this.CheckNodeValidHQ(star));
                     }
                 ); // call game/world/player/hq/validation
             }
