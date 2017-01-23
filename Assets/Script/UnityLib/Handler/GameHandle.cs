@@ -39,6 +39,17 @@ namespace UnityLib {
         }
 
         [System.Serializable]
+        public class PlayerTurnCompleteRequest : IJSONer { // UHHHH this is the exact same as the above so refactor
+            public int gameID;
+            public int playerIndex;
+
+            public PlayerTurnCompleteRequest() {}
+            public PlayerTurnCompleteRequest(int gameID, int playerIndex) { this.gameID = gameID; this.playerIndex = playerIndex; }
+
+            public string Marshall() { return JsonUtility.ToJson(this); }
+        }
+
+        [System.Serializable]
         public class CheckNodeHQRequest : IJSONer {
             public int gameID;
             public int playerIndex;
@@ -62,7 +73,8 @@ namespace UnityLib {
         public static readonly Resource SendPlayerReadyRoute = new Resource("game/world/player/signal/ready");
 
         public static readonly Resource PollForTurnSignalRoute = new Resource("game/turn/poll");
-        public static readonly Resource SendTurnRoute = new Resource("game/turn/update");
+        public static readonly Resource SendTurnCompletedRoute = new Resource("game/turn/complete");
+        // public static readonly Resource SendTurnRoute = new Resource("game/turn/update");
 
         public static GameScene GameSceneInstance;
 
@@ -85,7 +97,8 @@ namespace UnityLib {
 
         public GameHUDController GameHUDCtrl { get; private set; }
 
-        public Action<Handler<JsonEmpty>> OnTurnSent;
+        // public Action<Handler<JsonEmpty>> OnTurnSent;
+        public Func<Handler<JsonEmpty>> OnTurnCompleted; // returns a handler to call on turn completed
 
         public void LoadWorldHandle(World.Parameters worldParameters) {
             this.worldHandler = WorldHandle.New(worldParameters);

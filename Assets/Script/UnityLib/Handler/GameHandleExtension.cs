@@ -123,6 +123,7 @@ namespace UnityLib {
                 yield return new WaitUntil(
                     () => {
                         if (!gh.hasTurn) {
+                            Debug.LogFormat("waiting for opponent to set an hq ..");
                             return false;
                         }
                         return true;
@@ -161,7 +162,11 @@ namespace UnityLib {
                 if (isValidHQ.value) {
                     Debug.LogFormat("[+] set hq [{0}][{1}]",gh.playerHandler.PlayerInstance.Name, star.AsRedisKey());
                     gh.hasHq = true;
-                    // TODO send player ready sig??
+                    gh.OnTurnCompleted = () => { // send to server we;re done without turn
+                        return new Handler<JsonEmpty>(
+                            new GameHandle.PlayerTurnCompleteRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index).Marshall()
+                        );
+                    };
                 }
             } else {
                 Debug.LogFormat("[+] player already has hq");
@@ -176,7 +181,7 @@ namespace UnityLib {
 
         public static IEnumerator PollForUpdate(this GameHandle gh) {
             Handler<JsonInt> turnPollHandler = null;
-            Handler<JsonEmpty> sendTurnUpdateHandler = null;
+            Handler<JsonEmpty> sendTurnUpdateHandler = null; // TODO: not actually using this might not even need it
             
             WaitForSeconds ws = new WaitForSeconds(1.25f);
 
@@ -210,22 +215,32 @@ namespace UnityLib {
                 }
 
                 if (sendTurnUpdateHandler == null && gh.hasTurn) {
+                    Debug.LogFormat("[+] player has turn, creating server turn handler");
                     sendTurnUpdateHandler = new Handler<JsonEmpty>();
                     continue;
                 }
 
                 if (sendTurnUpdateHandler != null && gh.hasTurn) {
-                    if (gh.OnTurnSent != null) { //i.e. a button press, means we sent our turn
-                        gh.OnTurnSent(sendTurnUpdateHandler);
+                    Debug.LogFormat("[+] checking if player has completed their turn");
+                    if (gh.OnTurnCompleted != null) { //i.e. a button press, means we sent our turn
+                        Debug.LogFormat("[+] sending turn to server ...");
+                        Handler<JsonEmpty> turncompleted = gh.OnTurnCompleted();
+                        turncompleted.POST(GameHandle.SendTurnCompletedRoute.Route);
                         yield return new WaitUntil( // block until we set the handler null elsewhere
                             ()=>{
-                                if (sendTurnUpdateHandler == null) {
-                                    gh.hasTurn = false;
+                                if (turncompleted.hasLoadedResource) {
+                                    Debug.LogFormat("[+] server responded to turn completed request ...");
                                     return true;
                                 }
+                                // if (sendTurnUpdateHandler == null) {
+                                //     return true;
+                                // }
                                 return false;
                             }
                         );
+                        Debug.LogFormat("[+] turn sent! will now go back to waiting for turn...");
+                        gh.hasTurn = false;
+                        sendTurnUpdateHandler = null;
                     }
                     continue;
                 }
