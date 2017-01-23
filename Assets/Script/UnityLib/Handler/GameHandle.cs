@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityLib.Net;
 
@@ -17,17 +18,36 @@ namespace UnityLib {
         }
 
         [System.Serializable]
-        public class WorldParameters : IJSONer {
-            public int nodeMaxSpawnAttempts;
-            public int nodeCount;
-            public float nodeRadius;
-            public float worldScale;
-            public long worldSeed;
+        public class JoinResponse : IJSONer {
+            public Player.Parameters playerParameters;
+            public World.Parameters worldParameters;
 
-            public WorldParameters() {}
+            public JoinResponse() {}
 
             public string Marshall() { return JsonUtility.ToJson(this); }
-            public override string ToString() { return string.Format("[node count: {0}][node radius: {1}][world scale: {2}][max spawn attempts: {3}][world seed: {4}]", nodeCount, nodeRadius, worldScale, nodeMaxSpawnAttempts, worldSeed); }
+        }
+
+        [System.Serializable]
+        public class PlayerTurnPollRequest : IJSONer {
+            public int gameID;
+            public int playerIndex;
+
+            public PlayerTurnPollRequest() {}
+            public PlayerTurnPollRequest(int gameID, int playerIndex) { this.gameID = gameID; this.playerIndex = playerIndex; }
+
+            public string Marshall() { return JsonUtility.ToJson(this); }
+        }
+
+        [System.Serializable]
+        public class CheckNodeHQRequest : IJSONer {
+            public int gameID;
+            public int playerIndex;
+            public string nodeString;
+
+            public CheckNodeHQRequest() {}
+            public CheckNodeHQRequest(int gameID, string nodeString) { this.gameID = gameID; this.nodeString = nodeString; }
+
+            public string Marshall() { return JsonUtility.ToJson(this); }
         }
 
         public class GameScene {
@@ -38,35 +58,62 @@ namespace UnityLib {
 
         public static readonly Resource LoadGameWorld = new Resource("game/world/load");
         public static readonly Resource JoinGameWorld = new Resource("game/world/join");
+        public static readonly Resource ValidatePlayerHQChoiceRoute = new Resource("game/world/player/hq/validation");
+        public static readonly Resource SendPlayerReadyRoute = new Resource("game/world/player/signal/ready");
+
+        public static readonly Resource PollForTurnSignalRoute = new Resource("game/turn/poll");
+        public static readonly Resource SendTurnRoute = new Resource("game/turn/update");
 
         public static GameScene GameSceneInstance;
 
+        public delegate Star selected();
+
         public Game Instance { get; set; }
 
+        public string PlayerName { get; set; }
         public string GameName { get; private set; }
         public int GameKey { get; set; }
 
         public bool isHost { get; private set; }
         public bool isReadyToLoad { get; set; }
+        public bool hasTurn { get; set; }
+        public bool hasHq { get; set; }
 
+        public PollHandle pollHandler { get; private set; }
         public WorldHandle worldHandler { get; private set; }
-        public TurnHandle turnHandler { get; private set; }
+        public PlayerHandle playerHandler { get; private set; }
 
         public GameHUDController GameHUDCtrl { get; private set; }
 
-        public void LoadWorldHandle(GameHandle.WorldParameters worldParameters) {
+        public Action<Handler<JsonEmpty>> OnTurnSent;
+
+        public void LoadWorldHandle(World.Parameters worldParameters) {
             this.worldHandler = WorldHandle.New(worldParameters);
 
             WorldHandle.WorldSceneInstance = SceneManager.CreateScene(Globals.scenename_worldhandle);
             SceneManager.MoveGameObjectToScene(WorldHandle.WorldHandleInstance.gameObject, WorldHandle.WorldSceneInstance);
             
-            StartCoroutine(this.worldHandler.LoadWorldScene(null));
+            StartCoroutine(this.worldHandler.LoadWorldScene(this, null));
         }
 
-        public void LoadTurnHandler() {
-            this.turnHandler = TurnHandle.New();
-            SceneManager.MoveGameObjectToScene(this.turnHandler.gameObject, GameHandle.GameSceneInstance.instance);
-            StartCoroutine(this.turnHandler.SpoolUp());
+        public void LoadPollHandler(PollHandle ph) {
+            this.pollHandler = ph;
+        }
+
+        public void LoadPlayerHandle(string playername) {
+            this.playerHandler = PlayerHandle.New(playername);
+        }
+
+        public void Notified(selected s) {
+            Star star = s();
+            if (hasTurn && !hasHq) {
+                GameHUDCtrl.View.DisplayActionButtonAndOnPressExecute(
+                    "choose hq",
+                    ()=>{
+                        StartCoroutine(this.CheckNodeValidHQ(star, null));
+                    }
+                ); // call game/world/player/hq/validation
+            }
         }
 
         public static GameHandle New(GameHUDController gamehudctrl, string gameName, bool isHost) {

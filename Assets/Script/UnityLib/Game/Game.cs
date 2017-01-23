@@ -1,9 +1,5 @@
 ﻿using System;
-/// <summary>
-/// - select a home base
-///     - check with server
-///
-/// </summary>
+
 namespace UnityLib {
     public class Game {
         public enum Phase {
@@ -17,6 +13,7 @@ namespace UnityLib {
         private int turnnumber;
         private string playername;
         private string opponentname;
+        private Game.Phase gamePhase;
 
         private Action<string> put = (s) => { UnityEngine.Debug.LogWarningFormat("-- -- [+] game value set [{0}]", s); };
 
@@ -72,10 +69,24 @@ namespace UnityLib {
             }
         }
 
+        public Game.Phase GamePhase {
+            get {
+                return gamePhase;
+            }
+            set {
+                gamePhase = value;
+                if (RaiseGamePhasedChanged != null) {
+                    RaiseGamePhasedChanged(gamePhase);
+                }
+                put("game phase: " + gamePhase);
+            }
+        }
+
         public Action<int> RaiseGameKeyChanged;
         public Action<int> RaiseTurnNumberChanged;
         public Action<string> RaisePlayerNameChanged;
         public Action<string> RaiseOpponentNameChanged;
+        public Action<Game.Phase> RaiseGamePhasedChanged;
 
         private Game() {}
 

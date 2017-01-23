@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace UnityLib {
     public static class WorldHandleExtension  {
-        public static IEnumerator LoadWorldScene(this WorldHandle wh, Action onComplete) {
+        public static IEnumerator LoadWorldScene(this WorldHandle wh, GameHandle gh, Action onComplete) {
             Debug.LogFormat("[+] loading world scene ... {0}", Time.time);
 
             do {
@@ -30,8 +30,10 @@ namespace UnityLib {
             }
 
             foreach (GameObject go in goNodes) {
-                Debug.LogWarningFormat("node [position: {0} {1}]", go.transform.position.x, go.transform.position.y);
-                go.AddComponent<Star>();
+                Star s = go.AddComponent<Star>();
+                s.RegisterWithGameHandler(gh);
+                wh.WorldInstance.Stars.Add(s.AsRedisKey(), s);
+                Debug.LogWarningFormat("node [{0}]", s.AsRedisKey());
             }
 
             Debug.LogFormat("[+] finished spawning world node objects... {0}", Time.time);

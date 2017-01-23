@@ -5,7 +5,7 @@ using UnityLib.Net;
 
 namespace UnityLib {
     public static class PollHandleExtension {
-        public static IEnumerator WaitForGameStart(this PollHandle ph, int gamekey, string playername, Action<int, string> onComplete) { // use ID instead of name??
+        public static IEnumerator WaitForGameStart(this PollHandle ph, int gamekey, string playername, Action onComplete) { // use ID instead of name??
             Handler<JsonStringWithKey> startHandler = new Handler<JsonStringWithKey>(
                 new PollHandle.PlayerReadyNotification(gamekey, playername).Marshall()
             );
@@ -33,21 +33,36 @@ namespace UnityLib {
             string opponent = j.value;
 
             if (onComplete != null) {
-                onComplete(hashedgamekey, opponent); // don't actually need  this me thinks
+                onComplete();
             }
 
-            Debug.LogFormat("[+] poll handler got start signal and terminated start routine");
+            Debug.LogFormat("[+] poll handler got start signal and ending wait routine now entering setup");
 
             ph.GameHandler.Instance.OpponentName = opponent;
         }
 
-        public static IEnumerator WaitForTurnStart(this PollHandle ph, int gamekey, Action onComplete) {
-            yield return new WaitUntil(
-                () => {
-                    Debug.LogFormat("-- -- [+] waiting for next turn ... ");
-                    return true;
-                }
-            );
+        public static IEnumerator WaitForOpponentReady(this PollHandle ph) {
+            yield return Wait.ForEndOfFrame;
+
+            Handler<JsonEmpty> onchangehandler = new Handler<JsonEmpty>();
         }
+
+        // public static IEnumerator PlayerSetup(this PollHandle ph, int gamekey, Action onComplete) {
+        //     yield return new WaitUntil(
+        //         () => {
+        //             Debug.LogFormat("-- -- [+] Waiting for player setup ... ");
+        //             return true;
+        //         }
+        //     );
+        // }
+
+        // public static IEnumerator WaitForTurnStart(this PollHandle ph, int gamekey, Action onComplete) {
+        //     yield return new WaitUntil(
+        //         () => {
+        //             Debug.LogFormat("-- -- [+] waiting for next turn ... ");
+        //             return true;
+        //         }
+        //     );
+        // }
     }
 }

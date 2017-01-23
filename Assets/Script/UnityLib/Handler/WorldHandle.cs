@@ -12,7 +12,7 @@ namespace UnityLib {
             set;
         }
 
-        public GameHandle.WorldParameters WorldParameters {
+        public World.Parameters WorldParameters {
             get;
             private set;
         }
@@ -22,7 +22,7 @@ namespace UnityLib {
             private set;
         }
 
-        public static WorldHandle New(GameHandle.WorldParameters worldparameters) {
+        public static WorldHandle New(World.Parameters worldparameters) {
             if (WorldHandleInstance != null) { // destroy the old world and create a new one, TODO: also delete any old scenes
                 Destroy(WorldHandleInstance);
             }
@@ -33,9 +33,6 @@ namespace UnityLib {
 
             wh.WorldParameters = worldparameters;
             wh.PRNG = new pRNG((ulong)worldparameters.worldSeed);
-
-            // WorldSceneInstance = SceneManager.CreateScene(Globals.scenename_worldhandle);
-            // SceneManager.MoveGameObjectToScene(WorldHandleInstance.gameObject, WorldSceneInstance);
 
             return wh;
         }

@@ -14,7 +14,7 @@ namespace UnityLib {
             public string HandleID;
         }
 
-        public static readonly Resource Registration      = new Resource("client/handle/register");
+        public static readonly Resource Registration = new Resource("client/handle/register");
         public static readonly Resource GetSessionKey = new Resource("client/handle/session/key");
 
         public PayloadData json { 
