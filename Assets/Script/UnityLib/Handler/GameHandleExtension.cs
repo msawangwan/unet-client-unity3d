@@ -189,7 +189,7 @@ namespace UnityLib {
                 if (sendTurnUpdateHandler != null && !isPollingForTurn) {
                     if (gh.OnTurnSent != null) { //i.e. a button press, means we sent our turn
                         gh.OnTurnSent(sendTurnUpdateHandler);
-                        yield return new WaitWhile( // block until we set the handler null elsewhere
+                        yield return new WaitUntil( // block until we set the handler null elsewhere
                             ()=>{
                                 if (sendTurnUpdateHandler == null) {
                                     isPollingForTurn = true;
