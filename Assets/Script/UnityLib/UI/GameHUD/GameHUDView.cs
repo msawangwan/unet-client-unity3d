@@ -18,6 +18,7 @@ namespace UnityLib {
         [SerializeField] private Button executeActionBtn;
 
         private IEnumerator executingFadeRoutine = null;
+        private IEnumerator executingWaitRoutine = null;
 
         // text color changes based on who's turn it is (a highlight/bold/italized effect)
 
@@ -37,7 +38,7 @@ namespace UnityLib {
             );
         }
 
-        public void SetTextHUDMessageOverlay(string alertmsg) {
+        public void SetTextHUDMessageOverlayThenFade(string alertmsg) {
             actionText.text = alertmsg;
             actionOverlayPanelContainer.SetActive(true);
             if (executingFadeRoutine == null) {
@@ -47,7 +48,15 @@ namespace UnityLib {
                 Debug.LogErrorFormat(gameObject, "fade routine is already running cant load another");
             }
         }
+
+        public void SetTextHUDMessageOverlay(string alertmsg) {
+            actionText.text = alertmsg;
+            actionOverlayPanelContainer.SetActive(true);
+        }
         
+        public void ClearTextHUDMessageOverlay() {
+            actionOverlayPanelContainer.SetActive(false);
+        }
 
         public void SetTextHUDNameField(string name, bool isOpponentName) {
             Debug.LogFormat("set name [name: {0}][opponent: {1}]", name, isOpponentName);
@@ -89,6 +98,15 @@ namespace UnityLib {
                     return true;
                 }
             );
+        }
+
+        private static IEnumerator DisableWhen(GameObject go, Predicate<bool> p) {
+            yield return new WaitUntil(()=>{
+                // if (p()) {
+
+                // }
+                return false;
+            });
         }
 
         // TODO: temp solution

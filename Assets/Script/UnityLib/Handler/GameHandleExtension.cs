@@ -116,7 +116,22 @@ namespace UnityLib {
                 }
             );
 
-            gh.GameHUDCtrl.View.SetTextHUDMessageOverlay("ready up: select an HQ node");
+            if (gh.hasTurn) {
+                gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("ready p{0}: select an HQ node", gh.playerHandler.PlayerInstance.Index));
+            } else {
+                gh.GameHUDCtrl.View.SetTextHUDMessageOverlay("waiting for opponent to select an hq...");
+                yield return new WaitUntil(
+                    () => {
+                        if (!gh.hasTurn) {
+                            return false;
+                        }
+                        return true;
+                    }
+                );
+                gh.GameHUDCtrl.View.ClearTextHUDMessageOverlay();
+                gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("ready p{0}: select an HQ node", gh.playerHandler.PlayerInstance.Index));
+            }
+
 
             do {
                 Debug.Log("[+] player readyup phase");
