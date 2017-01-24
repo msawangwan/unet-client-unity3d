@@ -120,17 +120,17 @@ namespace UnityLib {
                 gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("ready p{0}: select an HQ node", gh.playerHandler.PlayerInstance.Index));
             } else {
                 gh.GameHUDCtrl.View.SetTextHUDMessageOverlay("waiting for opponent to select an hq...");
-                yield return gh.GameHUDCtrl.View.DisableWhen(gh.hasTurn);
-                // yield return new WaitUntil(
-                //     () => {
-                //         if (!gh.hasTurn) {
-                //             Debug.LogFormat("waiting for opponent to set an hq ..");
-                //             return false;
-                //         }
-                //         return true;
-                //     }
-                // );
-                // gh.GameHUDCtrl.View.ClearTextHUDMessageOverlay();
+                // yield return gh.GameHUDCtrl.View.DisableWhen(gh.hasTurn);
+                yield return new WaitUntil(
+                    () => {
+                        if (!gh.hasTurn) {
+                            Debug.LogFormat("waiting for opponent to set an hq ..");
+                            return false;
+                        }
+                        return true;
+                    }
+                );
+                gh.GameHUDCtrl.View.ClearTextHUDMessageOverlay();
                 gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("ready p{0}: select an HQ node", gh.playerHandler.PlayerInstance.Index));
             }
 

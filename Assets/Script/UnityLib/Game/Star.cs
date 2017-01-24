@@ -11,9 +11,10 @@ namespace UnityLib {
             float xx = (float)((int)(x * 100)) / 100;
             float yy = (float)((int)(y * 100)) / 100;
 
+            // todo: test the robust-ness of this
             string sx = string.Format("{0}", xx);
             string sy = string.Format("{0}", yy);
-            
+
             if (!sx.Contains(".")) {
                 sx = string.Format("{0}.{1}", xx, "00");
             } else {
@@ -32,7 +33,6 @@ namespace UnityLib {
                 }
             }
 
-            // return string.Format("{0}:{1}", xx, yy);
             return string.Format("{0}:{1}", sx, sy);
         }
 
