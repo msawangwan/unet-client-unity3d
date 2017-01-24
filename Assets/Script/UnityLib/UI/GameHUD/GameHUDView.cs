@@ -21,7 +21,7 @@ namespace UnityLib {
         private IEnumerator executingFadeRoutine = null;
         private IEnumerator executingWaitRoutine = null;
 
-        // text color changes based on who's turn it is (a highlight/bold/italized effect)
+        // TODO: text color changes based on who's turn it is (a highlight/bold/italized effect)
 
         public void OnTurnEndAndButtonPress(Action onPress) {
             endTurnButton.onClick.RemoveAllListeners();
@@ -57,6 +57,7 @@ namespace UnityLib {
                 executingFadeRoutine = FadeOut(actionOverlayPanelContainer);
                 StartCoroutine(executingFadeRoutine);
             } else {
+                // TODO: add TO A QUEUE then drain the queue
                 Debug.LogErrorFormat(gameObject, "fade routine is already running cant load another");
             }
         }
@@ -90,7 +91,7 @@ namespace UnityLib {
 
             if (cgroup != null) {
                 cgroup.alpha = 1.0f;
-                
+
                 yield return new WaitForSeconds(delay);
 
 
