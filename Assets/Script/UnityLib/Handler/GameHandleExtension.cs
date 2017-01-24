@@ -169,15 +169,6 @@ namespace UnityLib {
             }
         }
 
-        // public static IEnumerator SendEndOfTurn(this GameHandle gh) {
-        //     yield return Wait.ForEndOfFrame;
-        //     gh.GameHUDCtrl.View.OnTurnEndAndButtonPress(
-        //         ()=> {
-        //             gh.OnTurnCompleted = () => { return new Handler<JsonEmpty>(); };
-        //         }
-        //     );
-        // }
-
         public static IEnumerator PollForUpdate(this GameHandle gh) {
             Handler<JsonInt> turnPollHandler = null;
             WaitForSeconds ws = new WaitForSeconds(1.25f);
@@ -200,6 +191,7 @@ namespace UnityLib {
                         () => {
                             if (turnPollHandler.hasLoadedResource) {
                                 Debug.LogFormat("-- -- [+] ok it's our turn now, killing long poll and loading the end turn button");
+                                gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("p{0}: it's your turn", gh.playerHandler.PlayerInstance.Index));
                                 gh.GameHUDCtrl.View.OnTurnEndAndButtonPress(
                                     ()=> {
                                         gh.OnTurnCompleted = () => {
@@ -207,6 +199,8 @@ namespace UnityLib {
                                                 new GameHandle.PlayerTurnCompleteRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index).Marshall()
                                             ); 
                                         };
+                                        // TODO: DRAIN THE QUEUE HERE!!!
+                                        gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("p{0}: ended turn", gh.playerHandler.PlayerInstance.Index));
                                     }
                                 );
                                 return true;
