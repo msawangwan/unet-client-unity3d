@@ -46,23 +46,5 @@ namespace UnityLib {
 
             Handler<JsonEmpty> onchangehandler = new Handler<JsonEmpty>();
         }
-
-        // public static IEnumerator PlayerSetup(this PollHandle ph, int gamekey, Action onComplete) {
-        //     yield return new WaitUntil(
-        //         () => {
-        //             Debug.LogFormat("-- -- [+] Waiting for player setup ... ");
-        //             return true;
-        //         }
-        //     );
-        // }
-
-        // public static IEnumerator WaitForTurnStart(this PollHandle ph, int gamekey, Action onComplete) {
-        //     yield return new WaitUntil(
-        //         () => {
-        //             Debug.LogFormat("-- -- [+] waiting for next turn ... ");
-        //             return true;
-        //         }
-        //     );
-        // }
     }
 }

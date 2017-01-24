@@ -16,11 +16,23 @@ namespace UnityLib {
         [SerializeField] private GameObject actionOverlayPanelContainer;
         [SerializeField] private GameObject executeActionPanelContainer;
         [SerializeField] private Button executeActionBtn;
+        [SerializeField] private Button endTurnButton;
 
         private IEnumerator executingFadeRoutine = null;
         private IEnumerator executingWaitRoutine = null;
 
         // text color changes based on who's turn it is (a highlight/bold/italized effect)
+
+        public void OnTurnEndAndButtonPress(Action onPress) {
+            endTurnButton.onClick.RemoveAllListeners();
+            endTurnButton.onClick.AddListener(
+                () => {
+                    if (onPress != null) {
+                        onPress();
+                    }
+                }
+            );
+        }
 
         public void DisplayActionButtonAndOnPressExecute(string text, Action onPress) {
             actionToConfirmBtnText.text = text;
@@ -67,16 +79,6 @@ namespace UnityLib {
             }
 
             playerNameFieldText.text = name;
-        }
-
-        public IEnumerator DisableWhen(bool condition) {
-            yield return new WaitUntil(()=>{
-                if (condition) {
-                    return true;
-                }
-                return false;
-            });
-            actionOverlayPanelContainer.SetActive(false);
         }
 
         public void Init() {

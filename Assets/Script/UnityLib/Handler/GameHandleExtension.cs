@@ -120,7 +120,6 @@ namespace UnityLib {
                 gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("ready p{0}: select an HQ node", gh.playerHandler.PlayerInstance.Index));
             } else {
                 gh.GameHUDCtrl.View.SetTextHUDMessageOverlay("waiting for opponent to select an hq...");
-                // yield return gh.GameHUDCtrl.View.DisableWhen(gh.hasTurn);
                 yield return new WaitUntil(
                     () => {
                         if (!gh.hasTurn) {
@@ -133,12 +132,6 @@ namespace UnityLib {
                 gh.GameHUDCtrl.View.ClearTextHUDMessageOverlay();
                 gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("ready p{0}: select an HQ node", gh.playerHandler.PlayerInstance.Index));
             }
-
-
-            do {
-                Debug.Log("[+] player readyup phase");
-                yield return Wait.ForEndOfFrame;
-            } while (true);
         }
 
         public static IEnumerator CheckNodeValidHQ(this GameHandle gh, Star star) {
@@ -176,12 +169,19 @@ namespace UnityLib {
             }
         }
 
+        // public static IEnumerator SendEndOfTurn(this GameHandle gh) {
+        //     yield return Wait.ForEndOfFrame;
+        //     gh.GameHUDCtrl.View.OnTurnEndAndButtonPress(
+        //         ()=> {
+        //             gh.OnTurnCompleted = () => { return new Handler<JsonEmpty>(); };
+        //         }
+        //     );
+        // }
+
         public static IEnumerator PollForUpdate(this GameHandle gh) {
             Handler<JsonInt> turnPollHandler = null;
-            // Handler<JsonEmpty> sendTurnUpdateHandler = null; // TODO: not actually using this might not even need it
-            bool turnToAct = false;
-
             WaitForSeconds ws = new WaitForSeconds(1.25f);
+            bool turnToAct = false;
 
             do {
                 yield return Wait.ForEndOfFrame;
@@ -199,7 +199,12 @@ namespace UnityLib {
                     yield return new WaitUntil(
                         () => {
                             if (turnPollHandler.hasLoadedResource) {
-                                Debug.LogFormat("-- -- [+] ok it's our turn now, killing long poll");
+                                Debug.LogFormat("-- -- [+] ok it's our turn now, killing long poll and loading the end turn button");
+                                gh.GameHUDCtrl.View.OnTurnEndAndButtonPress(
+                                    ()=> {
+                                        gh.OnTurnCompleted = () => { return new Handler<JsonEmpty>(); };
+                                    }
+                                );
                                 return true;
                             }
                             return false;
@@ -211,13 +216,6 @@ namespace UnityLib {
                     continue;
                 }
 
-                // if (sendTurnUpdateHandler == null && gh.hasTurn) {
-                //     Debug.LogFormat("[+] player has turn, creating server turn handler");
-                //     sendTurnUpdateHandler = new Handler<JsonEmpty>();
-                //     continue;
-                // }
-
-                // if (turnPollHandler == null && gh.hasTurn)
                 if (turnToAct && gh.hasTurn) {
                     Debug.LogFormat("[+] checking if player has completed their turn");
                     if (gh.OnTurnCompleted != null) { //i.e. a button press, means we sent our turn
