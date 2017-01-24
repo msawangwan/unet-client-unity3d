@@ -4071,7 +4071,7 @@ MonoBehaviour:
   actionOverlayPanelContainer: {fileID: 1522084997}
   executeActionPanelContainer: {fileID: 544041517}
   executeActionBtn: {fileID: 1750997426}
-  endTurnButton: {fileID: 0}
+  endTurnButton: {fileID: 1162194602}
 --- !u!114 &641052527
 MonoBehaviour:
   m_ObjectHideFlags: 0
