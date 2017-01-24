@@ -89,9 +89,10 @@ namespace UnityLib {
             CanvasGroup cgroup = go.GetComponent<CanvasGroup>();
 
             if (cgroup != null) {
+                cgroup.alpha = 1.0f;
+                
                 yield return new WaitForSeconds(delay);
 
-                cgroup.alpha = 1.0f;
 
                 while (cgroup.alpha > 0) {
                     cgroup.alpha -= rate;

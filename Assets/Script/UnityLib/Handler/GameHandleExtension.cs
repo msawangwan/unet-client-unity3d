@@ -177,7 +177,7 @@ namespace UnityLib {
             do {
                 yield return Wait.ForEndOfFrame;
                 if (turnPollHandler == null && !gh.hasTurn) {
-                    Debug.LogFormat("-- [+] start polling for turn");
+                    Debug.LogFormat("-- [+] start polling for turn [{0}]", Time.time);
                     turnPollHandler = new Handler<JsonInt>(
                         new GameHandle.PlayerTurnPollRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index).Marshall()
                     );
@@ -190,8 +190,8 @@ namespace UnityLib {
                     yield return new WaitUntil(
                         () => {
                             if (turnPollHandler.hasLoadedResource) {
-                                Debug.LogFormat("-- -- [+] ok it's our turn now, killing long poll and loading the end turn button");
-                                gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("p{0}: it's your turn", gh.playerHandler.PlayerInstance.Index));
+                                Debug.LogFormat("-- -- [+] ok it's our turn now, killing long poll and loading the end turn button [{0}]", Time.time);
+                                // gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("p{0}: it's your turn", gh.playerHandler.PlayerInstance.Index));
                                 gh.GameHUDCtrl.View.OnTurnEndAndButtonPress(
                                     ()=> {
                                         gh.OnTurnCompleted = () => {
@@ -200,7 +200,7 @@ namespace UnityLib {
                                             ); 
                                         };
                                         // TODO: DRAIN THE QUEUE HERE!!!
-                                        gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("p{0}: ended turn", gh.playerHandler.PlayerInstance.Index));
+                                        // gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("p{0}: ended turn", gh.playerHandler.PlayerInstance.Index));
                                     }
                                 );
                                 return true;
@@ -211,6 +211,7 @@ namespace UnityLib {
                     gh.hasTurn = true;
                     turnToAct = true;
                     turnPollHandler = null;
+                    gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("p{0}: it's your turn", gh.playerHandler.PlayerInstance.Index));
                     continue;
                 }
 
@@ -229,6 +230,7 @@ namespace UnityLib {
                                 return false;
                             }
                         );
+                        gh.GameHUDCtrl.View.SetTextHUDMessageOverlayThenFade(string.Format("p{0}: ended turn", gh.playerHandler.PlayerInstance.Index));
                         Debug.LogFormat("[+] turn sent! will now go back to polling until it's my turn again...");
                         gh.hasTurn = false;
                         gh.OnTurnCompleted = null;
