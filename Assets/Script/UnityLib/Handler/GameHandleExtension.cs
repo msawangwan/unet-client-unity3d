@@ -202,7 +202,11 @@ namespace UnityLib {
                                 Debug.LogFormat("-- -- [+] ok it's our turn now, killing long poll and loading the end turn button");
                                 gh.GameHUDCtrl.View.OnTurnEndAndButtonPress(
                                     ()=> {
-                                        gh.OnTurnCompleted = () => { return new Handler<JsonEmpty>(); };
+                                        gh.OnTurnCompleted = () => {
+                                            return new Handler<JsonEmpty>(
+                                                new GameHandle.PlayerTurnCompleteRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index).Marshall()
+                                            ); 
+                                        };
                                     }
                                 );
                                 return true;
