@@ -19,11 +19,18 @@ namespace UnityLib {
         }
 
         private string redisKey = "";
+        private bool cached = false;
+
+        public Star.State StarState { get; private set; }
+        public Star.Properties StarProperties { get; private set; }
 
         public GameHandle gameHandler { get; private set; }
 
         public float x { get { return transform.position.x; } }
         public float y { get { return transform.position.y; } }
+
+        public bool Cached { get { return cached; } }
+
 
         // takes x,y pair of coords and first truncates and then concats them into one as a redis string
         public string AsRedisKey {
@@ -57,6 +64,10 @@ namespace UnityLib {
             }
         }
 
+        public void CacheStarProperties(Star.Properties properties) {
+            this.StarProperties = properties;
+        }
+
         public void RegisterWithGameHandler(GameHandle gameHandler) {
             this.gameHandler = gameHandler;
         }
@@ -70,17 +81,27 @@ namespace UnityLib {
 
         protected override void Notify() {
             if (gameHandler == null) return;
-            switch (gameHandler.Instance.GamePhase) {
-                case Game.Phase.Ready:
-                    gameHandler.Notified(() => this);
-                    return;
-                case Game.Phase.Turn:
-                    return;
-                case Game.Phase.End:
-                    return;
-                default:
-                    return;
-            }
+            gameHandler.Notified(() => this);
+            // switch (gameHandler.Instance.GamePhase) {
+            //     case Game.Phase.Ready:
+            //         gameHandler.Notified(() => this);
+            //         return;
+            //     case Game.Phase.Turn:
+            //         return;
+            //     case Game.Phase.End:
+            //         return;
+            //     default:
+            //         return;
+            // }
         }
+
+        // private void LoadProperties() {
+        //     base.Pressed += () => {
+        //         if (!cached) {
+        //             Debug.LogFormat("-- [+] loading properties for [node: {0}] and caching the data", gameObject.name);
+        //             cached = true;
+        //         }
+        //     };
+        // }
     }
 }

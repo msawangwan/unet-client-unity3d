@@ -13,7 +13,7 @@ namespace UnityLib {
                 Debug.LogFormat("-- -- [+] loading world ... {0}", Time.time);
                 yield return null;
                 if (WorldHandle.WorldSceneInstance.isLoaded) {
-                Debug.LogFormat("-- -- -- [+] world loaded {0}", Time.time);
+                    Debug.LogFormat("-- -- -- [+] world loaded {0}", Time.time);
                     break;
                 }
             } while (true);

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityLib.Net;
@@ -97,6 +99,9 @@ namespace UnityLib {
 
         public GameHUDController GameHUDCtrl { get; private set; }
 
+        public Queue<IEnumerator> requestHandlers = new Queue<IEnumerator>(); // TODO: refactor all handlers to use this
+        public Queue<IEnumerator> blockingRequestHandlers = new Queue<IEnumerator>(); // TODO: refactor all handlers to use this
+
         public Func<Handler<JsonEmpty>> OnTurnCompleted; // returns a handler to call on turn completed
 
         public void LoadWorldHandle(World.Parameters worldParameters) {
@@ -118,6 +123,12 @@ namespace UnityLib {
 
         public void Notified(selected s) {
             Star star = s();
+
+            if (!star.Cached) {
+                Debug.LogFormat("[+] node is not cached, loading into cache");
+                // todo: cache the star data , get the data from server and BLOCK
+            }
+
             if (hasTurn && !hasHq) {
                 GameHUDCtrl.View.DisplayActionButtonAndOnPressExecute(
                     "choose hq",
