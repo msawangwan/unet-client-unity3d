@@ -36,25 +36,6 @@ namespace UnityLib {
         public string AsRedisKey {
             get {
                 if (redisKey.Length == 0) {
-                    // float xx = (float)((int)(x * 100)) / 100;
-                    // float yy = (float)((int)(y * 100)) / 100;
-
-                    // string sx = string.Format("{0}", xx);
-                    // string sy = string.Format("{0}", yy);
-
-                    // // todo: test the robust-ness of this
-                    // Func<float, string, string> trunc = (component, s) => {
-                    //     if (!s.Contains(".")) {
-                    //         s = string.Format("{0}.{1}", component, "00");
-                    //     } else {
-                    //         string[] ss = s.Split('.');
-                    //         if (ss[1].Length != 2) {
-                    //             s = string.Format("{0}{1}", s, "0");
-                    //         }
-                    //     }
-                    //     return s;
-                    // };
-                    // todo: test the robust-ness of this
                     Func<float, string> trunc = (component) => {
                         float c = (float)((int)(component * 100)) / 100;
                         string s = string.Format("{0}", c);
@@ -68,12 +49,6 @@ namespace UnityLib {
                         }
                         return s;
                     };
-                    // string sx = trunc(x);
-                    // string sy = trunc(y);
-                    // string sx = trunc(xx, sx);
-                    // string sy = trunc(yy, sy);
-
-                    // redisKey = string.Format("{0}:{1}", sx, sy);
                     redisKey = string.Format("{0}:{1}", trunc(x), trunc(y));
                 }
                 return redisKey;
