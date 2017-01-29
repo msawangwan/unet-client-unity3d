@@ -1,39 +1,60 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace UnityLib {
     public class Star : SelectableNode {
+        public class State {
+            public bool IsHQ;
+            public bool Occupied;
+            public int Occupant;
+        }
+
+        public class Properties {
+            public string Name;
+            public string Info;
+            public int Capactiy;
+            public int DeployCost;
+            public int MoveCost;
+            public int AttackPenalty;
+        }
+
+        private string redisKey = "";
+
         public GameHandle gameHandler { get; private set; }
 
         public float x { get { return transform.position.x; } }
         public float y { get { return transform.position.y; } }
 
-        public string AsRedisKey() {
-            float xx = (float)((int)(x * 100)) / 100;
-            float yy = (float)((int)(y * 100)) / 100;
+        // takes x,y pair of coords and first truncates and then concats them into one as a redis string
+        public string AsRedisKey {
+            get {
+                if (redisKey.Length == 0) {
+                    float xx = (float)((int)(x * 100)) / 100;
+                    float yy = (float)((int)(y * 100)) / 100;
 
-            // todo: test the robust-ness of this
-            string sx = string.Format("{0}", xx);
-            string sy = string.Format("{0}", yy);
+                    string sx = string.Format("{0}", xx);
+                    string sy = string.Format("{0}", yy);
 
-            if (!sx.Contains(".")) {
-                sx = string.Format("{0}.{1}", xx, "00");
-            } else {
-                string[] sxx = sx.Split('.');
-                if (sxx[1].Length != 2) {
-                    sx = string.Format("{0}{1}", sx, "0");
+                    // todo: test the robust-ness of this
+                    Func<float, string, string> trunc = (component, s) => {
+                        if (!s.Contains(".")) {
+                            s = string.Format("{0}.{1}", component, "00");
+                        } else {
+                            string[] ss = s.Split('.');
+                            if (ss[1].Length != 2) {
+                                s = string.Format("{0}{1}", s, "0");
+                            }
+                        }
+                        return s;
+                    };
+
+                    sx = trunc(xx, sx);
+                    sy = trunc(yy, sy);
+
+                    redisKey = string.Format("{0}:{1}", sx, sy);
                 }
+                return redisKey;
             }
-
-            if (!sy.Contains(".")) {
-                sy = string.Format("{0}.{1}", yy, "00");
-            } else {
-                string[] syy = sy.Split('.');
-                if (syy[1].Length != 2) {
-                    sy = string.Format("{0}{1}", sy, "0");
-                }
-            }
-
-            return string.Format("{0}:{1}", sx, sy);
         }
 
         public void RegisterWithGameHandler(GameHandle gameHandler) {

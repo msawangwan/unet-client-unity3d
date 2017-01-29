@@ -138,7 +138,7 @@ namespace UnityLib {
             Debug.LogFormat("[+] player requesting node as hq");
             if (!gh.hasHq) {
                 Handler<JsonBool> checkHQHandler = new Handler<JsonBool>(
-                    new GameHandle.CheckNodeHQRequest(gh.GameKey, star.AsRedisKey()).Marshall()
+                    new GameHandle.CheckNodeHQRequest(gh.GameKey, star.AsRedisKey).Marshall()
                 );
 
                 checkHQHandler.POST(GameHandle.ValidatePlayerHQChoiceRoute.Route);
@@ -154,7 +154,7 @@ namespace UnityLib {
                 JsonBool isValidHQ = checkHQHandler.onDone();
                 Debug.LogFormat("[+] is valid hq choice [{0}]", isValidHQ.value);
                 if (isValidHQ.value) {
-                    Debug.LogFormat("[+] set hq [{0}][{1}]",gh.playerHandler.PlayerInstance.Name, star.AsRedisKey());
+                    Debug.LogFormat("[+] set hq [{0}][{1}]",gh.playerHandler.PlayerInstance.Name, star.AsRedisKey);
                     gh.hasHq = true;
                     gh.OnTurnCompleted = () => { // send to server we;re done without turn
                         return new Handler<JsonEmpty>(

@@ -34,8 +34,8 @@ namespace UnityLib {
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
                 sr.sprite = Resources.Load<Sprite>("Sprite\\32x32_gray-button");
                 s.RegisterWithGameHandler(gh);
-                wh.WorldInstance.Stars.Add(s.AsRedisKey(), s);
-                Debug.LogWarningFormat("node [{0}]", s.AsRedisKey());
+                wh.WorldInstance.Stars.Add(s.AsRedisKey, s);
+                Debug.LogWarningFormat("node [{0}]", s.AsRedisKey);
             }
 
             Debug.LogFormat("[+] finished spawning world node objects... {0}", Time.time);
