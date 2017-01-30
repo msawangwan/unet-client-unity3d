@@ -8183,7 +8183,7 @@ MonoBehaviour:
   RemoteGateway: tyrant.systems
   ServicePort: 80
   ApiPrefix: api
-  IsClientOnLAN: 1
+  IsClientOnLAN: 0
 --- !u!1 &1215748327
 GameObject:
   m_ObjectHideFlags: 0

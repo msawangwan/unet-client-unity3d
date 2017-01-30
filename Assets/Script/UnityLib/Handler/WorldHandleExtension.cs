@@ -32,8 +32,9 @@ namespace UnityLib {
             foreach (GameObject go in goNodes) {
                 Star s = go.AddComponent<Star>();
                 s.AttachListener(() => { gh.Notified(() => s); });
-                // s.CacheStarData(Star.EmptyProperties, Star.EmptyState);
-                // s.AttachListener(() => { gh.PopupCtrl.PopupView.SetCurrent(s.StarState, s.StarProperties); });
+                s.AttachListener(() => { gh.PopupCtrl.PopupView.Load(() => s); });
+                // s.CacheStarData(Star.NullProperties, Star.NullState);
+                // s.AttachListener(() => { gh.PopupCtrl.PopupView.SetCurrent(s.CachedState, s.CachedProperties); });
                 // s.RegisterWithGameHandler(gh);
 
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();

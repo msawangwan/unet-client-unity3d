@@ -31,19 +31,20 @@ namespace UnityLib {
         private int currentSelectedMoveCost;
         private int currentSelectedAttackPenalty;
 
-        // TODO: GET THIS WORKING!!
-        public IEnumerator SetCurrent(string key, Star.State state, Star.Properties prop) {
-            if (currentKey != key) {
+        public void Load(GameHandle.OnStarNodeSelectedCallback sel) {
+            StartCoroutine(Cache(sel()));
+        }
 
-            }
+        private IEnumerator Cache(Star star) {
+            yield return new WaitUntil(() => { return star.CachedProperties != null && star.CachedState != null; });
+            currentSelectedName = star.CachedProperties.name;
+            currentSelectedInfo = star.CachedProperties.info;
+            currentSelectedCapacity = star.CachedProperties.capactiy;
+            currentSelectedDeployCost = star.CachedProperties.deployCost;
+            currentSelectedMoveCost = star.CachedProperties.moveCost;
+            currentSelectedAttackPenalty = star.CachedProperties.attackPenalty;
             yield return Wait.ForEndOfFrame;
-            yield return new WaitUntil(() => { return state != null && prop != null; });
-            currentSelectedName = prop.name;
-            currentSelectedInfo = prop.info;
-            currentSelectedCapacity = prop.capactiy;
-            currentSelectedDeployCost = prop.deployCost;
-            currentSelectedMoveCost = prop.moveCost;
-            currentSelectedAttackPenalty = prop.attackPenalty;
+            headerNameText.text = currentSelectedName;
         }
 
         public void Init() {
@@ -91,11 +92,6 @@ namespace UnityLib {
                     controller.UpOneLevel();
                 }
             );
-        }
-
-        private void OnEnable() {
-            Debug.LogFormat("MY NAME::::: {0}", currentSelectedName);
-            headerNameText.text = currentSelectedName;
         }
     }
 }

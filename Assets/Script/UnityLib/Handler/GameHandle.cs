@@ -104,7 +104,7 @@ namespace UnityLib {
 
         public static GameScene GameSceneInstance;
 
-        public delegate Star selected();
+        public delegate Star OnStarNodeSelectedCallback();
 
         private GameUpdate updateLoop = null;
 
@@ -157,16 +157,14 @@ namespace UnityLib {
             this.playerHandler = PlayerHandle.New(playername);
         }
 
-        public void Notified(selected s) {
+        public void Notified(OnStarNodeSelectedCallback s) {
             Star star = s();
 
             if (!star.Cached) {
                 Debug.LogFormat("[+] node data is not cached, loading into cache ...");
                 UpdateLoop.AddBlocking(this.CacheNode(star));
             }
-
-            UpdateLoop.AddNonblocking(PopupCtrl.PopupView.SetCurrent(star.AsRedisKey, star.StarState, star.StarProperties));
-
+            
             if (hasTurn && !hasHq) {
                 GameHUDCtrl.View.DisplayActionButtonAndOnPressExecute(
                     "choose hq",
