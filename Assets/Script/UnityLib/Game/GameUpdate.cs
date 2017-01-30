@@ -63,13 +63,16 @@ namespace UnityLib {
                 if (blocking) {
                     if (currentBlocking == null) {
                         currentBlocking = nextBlockingRequest;
+                        Debug.LogFormat("[+] blocking now ... [{0}]", Time.time);
                         yield return currentBlocking;
+                        Debug.LogFormat("[+] done blocking [{0}]", Time.time);
                         currentBlocking = null;
                     }
                     continue;
                 }
                 if (nonblocking) {
                     currentNonblocking = nextNonblocking;
+                    Debug.LogFormat("[+] started a reqest [{0}]", Time.time);
                     StartCoroutine(currentNonblocking);
                 }
                 yield return Wait.ForEndOfFrame;

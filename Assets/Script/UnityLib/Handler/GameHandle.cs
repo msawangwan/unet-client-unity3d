@@ -136,6 +136,7 @@ namespace UnityLib {
         public PlayerHandle playerHandler { get; private set; }
 
         public GameHUDController GameHUDCtrl { get; private set; }
+        public PopupController PopupCtrl { get; private set; }
 
         public Func<Handler<JsonEmpty>> OnTurnCompleted; // returns a handler to call on turn completed
 
@@ -164,6 +165,8 @@ namespace UnityLib {
                 UpdateLoop.AddBlocking(this.CacheNode(star));
             }
 
+            UpdateLoop.AddNonblocking(PopupCtrl.PopupView.SetCurrent(star.AsRedisKey, star.StarState, star.StarProperties));
+
             if (hasTurn && !hasHq) {
                 GameHUDCtrl.View.DisplayActionButtonAndOnPressExecute(
                     "choose hq",
@@ -174,11 +177,12 @@ namespace UnityLib {
             }
         }
 
-        public static GameHandle New(GameHUDController gamehudctrl, string gameName, bool isHost) {
+        public static GameHandle New(GameHUDController gamehudctrl, PopupController popupctrl, string gameName, bool isHost) {
             GameHandle gh = new GameObject(string.Format("game_handle_[{0}]", gameName)).AddComponent<GameHandle>();
 
             gh.Instance = Game.New("", "");
             gh.GameHUDCtrl = gamehudctrl;
+            gh.PopupCtrl = popupctrl;
             gh.GameName = gameName;
             gh.isHost = isHost;
 

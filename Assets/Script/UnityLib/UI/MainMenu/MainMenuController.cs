@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 namespace UnityLib {
     public class MainMenuController : MonoBehaviour {
+        // TODO: move this to the main game controller (currently, GameHandle)
         [SerializeField] GameHUDController gameHUDController;
+        [SerializeField] PopupController popupController;
 
         [SerializeField] MainMenuView view;
         [SerializeField] MainMenuLevel[] levels;
@@ -20,9 +22,17 @@ namespace UnityLib {
         private string currentPlayerName;
         private string currentSessionName;
 
+        // TODO: move this to the main game controller (currently, GameHandle)
         public GameHUDController GameHUDCtrl {
             get {
                 return gameHUDController;
+            }
+        }
+
+        // TODO: move this to the main game controller (currently, GameHandle)
+        public PopupController PopupCtrl {
+            get {
+                return popupController;
             }
         }
 

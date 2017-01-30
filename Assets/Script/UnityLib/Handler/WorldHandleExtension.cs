@@ -31,9 +31,14 @@ namespace UnityLib {
 
             foreach (GameObject go in goNodes) {
                 Star s = go.AddComponent<Star>();
+                s.AttachListener(() => { gh.Notified(() => s); });
+                // s.CacheStarData(Star.EmptyProperties, Star.EmptyState);
+                // s.AttachListener(() => { gh.PopupCtrl.PopupView.SetCurrent(s.StarState, s.StarProperties); });
+                // s.RegisterWithGameHandler(gh);
+
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
                 sr.sprite = Resources.Load<Sprite>("Sprite\\32x32_gray-button");
-                s.RegisterWithGameHandler(gh);
+
                 wh.WorldInstance.Stars.Add(s.AsRedisKey, s);
                 Debug.LogWarningFormat("node [{0}]", s.AsRedisKey);
             }

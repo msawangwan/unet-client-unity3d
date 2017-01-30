@@ -183,13 +183,14 @@ namespace UnityLib {
                     if (cacheNodeHanlder.hasLoadedResource) {
                         return true;
                     }
-                    Debug.Log("we're blocking .........");
+                    Debug.Log("-- -- -- -- -- -- -- [+] we're blocking .........");
                     // TODO: update screen with blocking UI animation
                     return false;
                 }
             );
 
-            yield return new WaitForSeconds(5.0f); // TODO: a test
+            GameHandle.CacheNodeResponse cnr = cacheNodeHanlder.onDone();
+            star.CacheStarData(cnr.properties, cnr.state);
 
             gh.GameHUDCtrl.View.DisableLoadingBlockPanel();
         }

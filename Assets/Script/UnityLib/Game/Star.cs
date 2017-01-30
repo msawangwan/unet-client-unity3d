@@ -20,13 +20,16 @@ namespace UnityLib {
             public int attackPenalty;
         }
 
+        public static readonly Star.State EmptyState = new Star.State();
+        public static readonly Star.Properties EmptyProperties = new Star.Properties();
+
         private string redisKey = "";
         private bool cached = false;
 
         public Star.State StarState { get; private set; }
         public Star.Properties StarProperties { get; private set; }
 
-        public GameHandle gameHandler { get; private set; }
+        // public GameHandle gameHandler { get; private set; }
 
         public float x { get { return transform.position.x; } }
         public float y { get { return transform.position.y; } }
@@ -56,12 +59,9 @@ namespace UnityLib {
             }
         }
 
-        public void CacheStarProperties(Star.Properties properties) {
+        public void CacheStarData(Star.Properties properties, Star.State state) {
             this.StarProperties = properties;
-        }
-
-        public void RegisterWithGameHandler(GameHandle gameHandler) {
-            this.gameHandler = gameHandler;
+            this.StarState = state;
         }
 
         public void AttachListener(System.Action action, bool clearAllListeners=false) {
@@ -69,11 +69,6 @@ namespace UnityLib {
                 base.Pressed = null;
             }
             base.Pressed += action;
-        }
-
-        protected override void Notify() {
-            if (gameHandler == null) return;
-            gameHandler.Notified(() => this);
         }
     }
 }

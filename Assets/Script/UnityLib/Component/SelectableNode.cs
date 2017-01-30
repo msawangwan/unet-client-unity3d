@@ -6,7 +6,7 @@ namespace UnityLib {
 
         public System.Action Pressed;
 
-        protected abstract void Notify();
+        // protected abstract void Notify();
 
         private void OnMouseDown() {
             CameraRigController.S.panController.CenterOnSelected(gameObject.transform.position);
@@ -14,7 +14,7 @@ namespace UnityLib {
             if (Pressed != null) {
                 Pressed();
             }
-            Notify();
+            // Notify();
         }
 
         private void OnEnable() {
