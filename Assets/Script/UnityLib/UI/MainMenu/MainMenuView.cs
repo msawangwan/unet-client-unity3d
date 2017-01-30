@@ -71,10 +71,9 @@ namespace UnityLib {
             Action onGameLoadCompleted = () => {
                 Debug.LogFormat("[+] started polling for game start ... [{0}]", Time.time);
                 currentLevel.gameObject.SetActive(false);
-                StartCoroutine(gameHandle.StartPollHandler(
-                    pollHandle,
-                    onContextChanged
-                ));
+                gameHandle.UpdateLoop = GameUpdate.New();
+                gameHandle.UpdateLoop.StartExecution();
+                gameHandle.UpdateLoop.AddNonblocking(gameHandle.StartPollHandler(pollHandle, onContextChanged));
             };
     
             newSession.onClick.AddListener(

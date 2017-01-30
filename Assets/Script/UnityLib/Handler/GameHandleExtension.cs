@@ -156,7 +156,7 @@ namespace UnityLib {
                 if (isValidHQ.value) {
                     Debug.LogFormat("[+] set hq [{0}][{1}]",gh.playerHandler.PlayerInstance.Name, star.AsRedisKey);
                     gh.hasHq = true;
-                    gh.OnTurnCompleted = () => { // send to server we;re done without turn
+                    gh.OnTurnCompleted = () => { // send to server we;re done withour turn
                         return new Handler<JsonEmpty>(
                             new GameHandle.PlayerTurnCompleteRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index).Marshall()
                         );
@@ -167,6 +167,31 @@ namespace UnityLib {
             } else {
                 Debug.LogFormat("[+] player already has hq");
             }
+        }
+
+        public static IEnumerator CacheNode(this GameHandle gh, Star star) {
+            Handler<GameHandle.CacheNodeResponse> cacheNodeHanlder = new Handler<GameHandle.CacheNodeResponse>(
+                new GameHandle.NodeRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index, star.AsRedisKey).Marshall()
+            );
+
+            cacheNodeHanlder.POST(GameHandle.GetNodeAndCacheDataEndPoint.Route);
+
+            gh.GameHUDCtrl.View.DisplayLoadingBlockPanel();
+
+            yield return new WaitUntil(
+                () => {
+                    if (cacheNodeHanlder.hasLoadedResource) {
+                        return true;
+                    }
+                    Debug.Log("we're blocking .........");
+                    // TODO: update screen with blocking UI animation
+                    return false;
+                }
+            );
+
+            yield return new WaitForSeconds(5.0f); // TODO: a test
+
+            gh.GameHUDCtrl.View.DisableLoadingBlockPanel();
         }
 
         public static IEnumerator PollForUpdate(this GameHandle gh) {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +14,7 @@ namespace UnityLib {
         [SerializeField] private Text actionToConfirmBtnText;
         [SerializeField] private GameObject actionOverlayPanelContainer;
         [SerializeField] private GameObject executeActionPanelContainer;
+        [SerializeField] private GameObject loadingBlockContainer;
         [SerializeField] private Button executeActionBtn;
         [SerializeField] private Button endTurnButton;
 
@@ -32,6 +32,14 @@ namespace UnityLib {
                     }
                 }
             );
+        }
+
+        public void DisplayLoadingBlockPanel(string s="loading...") {
+            loadingBlockContainer.SetActive(true);
+        }
+
+        public void DisableLoadingBlockPanel(string s="loading...") {
+            loadingBlockContainer.SetActive(false);
         }
 
         public void DisplayActionButtonAndOnPressExecute(string text, Action onPress) {
@@ -126,6 +134,7 @@ namespace UnityLib {
         private void OnEnable() {
             actionOverlayPanelContainer.SetActive(false);
             executeActionPanelContainer.SetActive(false);
+            loadingBlockContainer.SetActive(false);
         }
     }
 }

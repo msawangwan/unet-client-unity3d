@@ -63,6 +63,29 @@ namespace UnityLib {
             public string Marshall() { return JsonUtility.ToJson(this); }
         }
 
+        [System.Serializable]
+        public class NodeRequest : IJSONer { // TODO: refactor the struct above as it's the same as this one
+            public int gameID;
+            public int playerIndex;
+            public string nodekeyString;
+
+            public NodeRequest() {}
+            public NodeRequest(int gameID, int playerIndex, string nodeString) { this.gameID = gameID; this.playerIndex = playerIndex; this.nodekeyString = nodeString; }
+
+            public string Marshall() { return JsonUtility.ToJson(this); }
+        }
+
+        [System.Serializable]
+        public class CacheNodeResponse : IJSONer {
+            public Star.State state;
+            public Star.Properties properties;
+
+            public CacheNodeResponse() {}
+            public CacheNodeResponse(Star.State state, Star.Properties properties) { this.state = state; this.properties = properties; }
+
+            public string Marshall() { return JsonUtility.ToJson(this); }
+        }
+
         public class GameScene {
             public Scene instance;
             public bool isLoaded;
@@ -72,6 +95,7 @@ namespace UnityLib {
         public static readonly Resource LoadGameWorld = new Resource("game/world/load");
         public static readonly Resource JoinGameWorld = new Resource("game/world/join");
         public static readonly Resource ValidatePlayerHQChoiceRoute = new Resource("game/world/player/hq/validation");
+        public static readonly Resource GetNodeAndCacheDataEndPoint = new Resource("game/world/node/data");
         public static readonly Resource SendPlayerReadyRoute = new Resource("game/world/player/signal/ready");
 
         public static readonly Resource PollForTurnSignalRoute = new Resource("game/turn/poll");
@@ -82,7 +106,21 @@ namespace UnityLib {
 
         public delegate Star selected();
 
+        private GameUpdate updateLoop = null;
+
         public Game Instance { get; set; }
+        public GameUpdate UpdateLoop {
+            get {
+                return updateLoop;
+            }
+            set {
+                if (updateLoop != null) {
+                    Debug.LogFormat("-- -- -- -- [+] already an update loop so we'll destroy the previous one, did you mean to do that??");
+                    updateLoop = null;
+                }
+                updateLoop = value;
+            }
+        }
 
         public string PlayerName { get; set; }
         public string GameName { get; private set; }
@@ -98,9 +136,6 @@ namespace UnityLib {
         public PlayerHandle playerHandler { get; private set; }
 
         public GameHUDController GameHUDCtrl { get; private set; }
-
-        public Queue<IEnumerator> requestHandlers = new Queue<IEnumerator>(); // TODO: refactor all handlers to use this
-        public Queue<IEnumerator> blockingRequestHandlers = new Queue<IEnumerator>(); // TODO: refactor all handlers to use this
 
         public Func<Handler<JsonEmpty>> OnTurnCompleted; // returns a handler to call on turn completed
 
@@ -125,17 +160,17 @@ namespace UnityLib {
             Star star = s();
 
             if (!star.Cached) {
-                Debug.LogFormat("[+] node is not cached, loading into cache");
-                // todo: cache the star data , get the data from server and BLOCK
+                Debug.LogFormat("[+] node data is not cached, loading into cache ...");
+                UpdateLoop.AddBlocking(this.CacheNode(star));
             }
 
             if (hasTurn && !hasHq) {
                 GameHUDCtrl.View.DisplayActionButtonAndOnPressExecute(
                     "choose hq",
-                    ()=>{
-                        StartCoroutine(this.CheckNodeValidHQ(star));
+                    () => {
+                        UpdateLoop.AddNonblocking(this.CheckNodeValidHQ(star));
                     }
-                ); // call game/world/player/hq/validation
+                );
             }
         }
 

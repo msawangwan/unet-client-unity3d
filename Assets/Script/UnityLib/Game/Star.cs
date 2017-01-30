@@ -3,19 +3,21 @@ using UnityEngine;
 
 namespace UnityLib {
     public class Star : SelectableNode {
+        [System.Serializable]
         public class State {
-            public bool IsHQ;
-            public bool Occupied;
-            public int Occupant;
+            public bool isHQ;
+            public bool occupied;
+            public int occupant;
         }
 
+        [System.Serializable]
         public class Properties {
-            public string Name;
-            public string Info;
-            public int Capactiy;
-            public int DeployCost;
-            public int MoveCost;
-            public int AttackPenalty;
+            public string name;
+            public string info;
+            public int capactiy;
+            public int deployCost;
+            public int moveCost;
+            public int attackPenalty;
         }
 
         private string redisKey = "";
@@ -30,7 +32,6 @@ namespace UnityLib {
         public float y { get { return transform.position.y; } }
 
         public bool Cached { get { return cached; } }
-
 
         // takes x,y pair of coords and first truncates and then concats them into one as a redis string
         public string AsRedisKey {
@@ -73,26 +74,6 @@ namespace UnityLib {
         protected override void Notify() {
             if (gameHandler == null) return;
             gameHandler.Notified(() => this);
-            // switch (gameHandler.Instance.GamePhase) {
-            //     case Game.Phase.Ready:
-            //         gameHandler.Notified(() => this);
-            //         return;
-            //     case Game.Phase.Turn:
-            //         return;
-            //     case Game.Phase.End:
-            //         return;
-            //     default:
-            //         return;
-            // }
         }
-
-        // private void LoadProperties() {
-        //     base.Pressed += () => {
-        //         if (!cached) {
-        //             Debug.LogFormat("-- [+] loading properties for [node: {0}] and caching the data", gameObject.name);
-        //             cached = true;
-        //         }
-        //     };
-        // }
     }
 }
