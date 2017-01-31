@@ -23,6 +23,8 @@ namespace UnityLib {
         public static readonly Star.State NullState = new Star.State();
         public static readonly Star.Properties NullProperties = new Star.Properties();
 
+        public static readonly string asset_filepath_sprite = "Sprite\\64x64_planet_scribbled";
+
         private string redisKey = "";
         private bool cached = false;
 

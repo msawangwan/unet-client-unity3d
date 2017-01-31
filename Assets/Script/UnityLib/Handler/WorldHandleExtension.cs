@@ -33,12 +33,9 @@ namespace UnityLib {
                 Star s = go.AddComponent<Star>();
                 s.AttachListener(() => { gh.Notified(() => s); });
                 s.AttachListener(() => { gh.PopupCtrl.PopupView.Load(() => s); });
-                // s.CacheStarData(Star.NullProperties, Star.NullState);
-                // s.AttachListener(() => { gh.PopupCtrl.PopupView.SetCurrent(s.CachedState, s.CachedProperties); });
-                // s.RegisterWithGameHandler(gh);
 
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-                sr.sprite = Resources.Load<Sprite>("Sprite\\32x32_gray-button");
+                sr.sprite = Resources.Load<Sprite>(Star.asset_filepath_sprite);
 
                 wh.WorldInstance.Stars.Add(s.AsRedisKey, s);
                 Debug.LogWarningFormat("node [{0}]", s.AsRedisKey);
