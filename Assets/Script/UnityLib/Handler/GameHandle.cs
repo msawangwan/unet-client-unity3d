@@ -186,7 +186,7 @@ namespace UnityLib {
             gh.GameName = gameName;
             gh.isHost = isHost;
 
-            gh.GameHUDDetailsCtrl.Activate();
+            gh.GameHUDDetailsCtrl.ToggleActive(true);
 
             Scene gameHandleScene = default(Scene);
 

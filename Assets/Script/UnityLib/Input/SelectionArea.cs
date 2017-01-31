@@ -19,8 +19,6 @@ namespace UnityLib {
 
             deselectionTriggerArea = gameObject.GetComponentSafe<BoxCollider2D> ();
             deselectionTriggerArea.size = new Vector2 (verticalSize + SafeBufferAmount, horizontalSize + SafeBufferAmount);
-
-            // transform.position = new Vector3 (transform.position.x, transform.position.y, 100f);
         }
 
         void Awake () {

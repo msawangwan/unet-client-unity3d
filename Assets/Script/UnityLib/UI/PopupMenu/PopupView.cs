@@ -38,11 +38,11 @@ namespace UnityLib {
         private IEnumerator Cache(Star star) {
             yield return new WaitUntil(() => { return star.CachedProperties != null && star.CachedState != null; });
             currentSelectedName = star.CachedProperties.name;
-            currentSelectedInfo = star.CachedProperties.info;
-            currentSelectedCapacity = star.CachedProperties.capactiy;
-            currentSelectedDeployCost = star.CachedProperties.deployCost;
-            currentSelectedMoveCost = star.CachedProperties.moveCost;
-            currentSelectedAttackPenalty = star.CachedProperties.attackPenalty;
+            // currentSelectedInfo = star.CachedProperties.info;
+            // currentSelectedCapacity = star.CachedProperties.capactiy;
+            // currentSelectedDeployCost = star.CachedProperties.deployCost;
+            // currentSelectedMoveCost = star.CachedProperties.moveCost;
+            // currentSelectedAttackPenalty = star.CachedProperties.attackPenalty;
             yield return Wait.ForEndOfFrame;
             headerNameText.text = currentSelectedName;
         }

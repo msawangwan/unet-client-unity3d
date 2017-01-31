@@ -32,7 +32,8 @@ namespace UnityLib {
                 s.Construct(gh.GameHUDDetailsCtrl);
                 s.AttachListener(() => { gh.Notified(() => s); });
                 // s.AttachListener(() => { gh.PopupCtrl.PopupView.Load(() => s); });
-                s.AttachListener(() => { gh.GameHUDDetailsCtrl.ShowNodeDetails(() => s); });
+                // s.AttachListener(() => { gh.GameHUDDetailsCtrl.ShowNodeDetails(() => s); });
+                s.AttachListener(() => { gh.GameHUDDetailsCtrl.ShowDetails(() => s); });
 
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
                 sr.sprite = Resources.Load<Sprite>(Star.asset_filepath_sprite);

@@ -13,11 +13,12 @@ namespace UnityLib {
         [System.Serializable]
         public class Properties {
             public string name;
-            public string info;
-            public int capactiy;
-            public int deployCost;
-            public int moveCost;
-            public int attackPenalty;
+            // public string info;
+            public int defenseBonus;
+            public int capacity;
+            // public int deployCost;
+            // public int moveCost;
+            // public int attackPenalty;
         }
 
         public static readonly Star.State NullState = new Star.State();
@@ -45,11 +46,11 @@ namespace UnityLib {
                     Func<float, string> trunc = (component) => {
                         float c = (float)((int)(component * 100)) / 100;
                         string s = string.Format("{0}", c);
-                        if (!s.Contains(".")) {
-                            s = string.Format("{0}.{1}", component, "00");
+                        if (!s.Contains(".")) { // assumes **
+                            s = string.Format("{0}.{1}", s, "00");
                         } else {
                             string[] ss = s.Split('.');
-                            if (ss[1].Length != 2) {
+                            if (ss[1].Length != 2) { // assumes **.0
                                 s = string.Format("{0}{1}", s, "0");
                             }
                         }
