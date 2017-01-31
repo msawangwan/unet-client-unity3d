@@ -136,6 +136,7 @@ namespace UnityLib {
         public PlayerHandle playerHandler { get; private set; }
 
         public GameHUDController GameHUDCtrl { get; private set; }
+        public GameHUDDetailsPanelController GameHUDDetailsCtrl { get; private set; }
         public PopupController PopupCtrl { get; private set; }
 
         public Func<Handler<JsonEmpty>> OnTurnCompleted; // returns a handler to call on turn completed
@@ -162,7 +163,7 @@ namespace UnityLib {
 
             if (!star.Cached) {
                 Debug.LogFormat("[+] node data is not cached, loading into cache ...");
-                UpdateLoop.AddBlocking(this.CacheNode(star));
+                UpdateLoop.AddBlocking(this.FetchAndCacheNodeData(star));
             }
             
             if (hasTurn && !hasHq) {
@@ -175,14 +176,17 @@ namespace UnityLib {
             }
         }
 
-        public static GameHandle New(GameHUDController gamehudctrl, PopupController popupctrl, string gameName, bool isHost) {
+        public static GameHandle New(GameHUDController gamehudctrl, GameHUDDetailsPanelController gamehuddetailsctrl, PopupController popupctrl, string gameName, bool isHost) {
             GameHandle gh = new GameObject(string.Format("game_handle_[{0}]", gameName)).AddComponent<GameHandle>();
 
             gh.Instance = Game.New("", "");
             gh.GameHUDCtrl = gamehudctrl;
+            gh.GameHUDDetailsCtrl = gamehuddetailsctrl;
             gh.PopupCtrl = popupctrl;
             gh.GameName = gameName;
             gh.isHost = isHost;
+
+            gh.GameHUDDetailsCtrl.Activate();
 
             Scene gameHandleScene = default(Scene);
 

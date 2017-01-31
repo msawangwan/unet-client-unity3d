@@ -2,11 +2,16 @@
 
 namespace UnityLib {
     public abstract class SelectableNode : MonoBehaviour {
+        private GameHUDDetailsPanelController gamehudDetailsPanel;
         // private PopupController popupController;
 
         public System.Action Pressed;
 
-        // protected abstract void Notify();
+        public void Construct(GameHUDDetailsPanelController gamehudDetailsPanel) {
+            if (this.gamehudDetailsPanel == null) {
+                this.gamehudDetailsPanel = gamehudDetailsPanel;
+            }
+        }
 
         private void OnMouseDown() {
             CameraRigController.S.panController.CenterOnSelected(gameObject.transform.position);
@@ -14,7 +19,6 @@ namespace UnityLib {
             if (Pressed != null) {
                 Pressed();
             }
-            // Notify();
         }
 
         private void OnEnable() {

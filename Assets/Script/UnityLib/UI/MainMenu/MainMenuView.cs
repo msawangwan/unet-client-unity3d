@@ -117,7 +117,7 @@ namespace UnityLib {
 
                                     gamename = gamenamestr;
                                     
-                                    gameHandle = GameHandle.New(mainMenuController.GameHUDCtrl, mainMenuController.PopupCtrl, gamename, false); // TODO: wrap these calls in a func or something
+                                    gameHandle = GameHandle.New(mainMenuController.GameHUDCtrl, mainMenuController.GameDetailsCtrl, mainMenuController.PopupCtrl, gamename, false); // TODO: wrap these calls in a func or something
                                     pollHandle = PollHandle.New(gameHandle, gamename); // TODO: wrap these calls in a func or something
 
                                     Action loadAsClientThenJoin = () => {
@@ -189,7 +189,7 @@ namespace UnityLib {
 
                                 Debug.LogWarning("-- -- -- [+] spwned game session");
 
-                                gameHandle = GameHandle.New(mainMenuController.GameHUDCtrl, mainMenuController.PopupCtrl, gamename, true); // TODO: wrap these calls in a func or something
+                                gameHandle = GameHandle.New(mainMenuController.GameHUDCtrl, mainMenuController.GameDetailsCtrl, mainMenuController.PopupCtrl, gamename, true); // TODO: wrap these calls in a func or something
                                 pollHandle = PollHandle.New(gameHandle, gamename); // TODO: wrap these calls in a func or something
 
                                 Action loadAsHostThenJoin = () => {

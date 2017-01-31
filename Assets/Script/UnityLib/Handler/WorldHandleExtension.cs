@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 namespace UnityLib {
     public static class WorldHandleExtension  {
         public static IEnumerator LoadWorldScene(this WorldHandle wh, GameHandle gh, Action onComplete) {
-            Debug.LogFormat("[+] loading world scene ... {0}", Time.time);
-
             do {
                 Debug.LogFormat("-- -- [+] loading world ... {0}", Time.time);
                 yield return null;
@@ -31,8 +29,10 @@ namespace UnityLib {
 
             foreach (GameObject go in goNodes) {
                 Star s = go.AddComponent<Star>();
+                s.Construct(gh.GameHUDDetailsCtrl);
                 s.AttachListener(() => { gh.Notified(() => s); });
-                s.AttachListener(() => { gh.PopupCtrl.PopupView.Load(() => s); });
+                // s.AttachListener(() => { gh.PopupCtrl.PopupView.Load(() => s); });
+                s.AttachListener(() => { gh.GameHUDDetailsCtrl.ShowNodeDetails(() => s); });
 
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
                 sr.sprite = Resources.Load<Sprite>(Star.asset_filepath_sprite);

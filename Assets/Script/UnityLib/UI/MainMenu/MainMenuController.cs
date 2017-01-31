@@ -7,6 +7,7 @@ namespace UnityLib {
     public class MainMenuController : MonoBehaviour {
         // TODO: move this to the main game controller (currently, GameHandle)
         [SerializeField] GameHUDController gameHUDController;
+        [SerializeField] GameHUDDetailsPanelController gameHUDDetailsController;
         [SerializeField] PopupController popupController;
 
         [SerializeField] MainMenuView view;
@@ -26,6 +27,12 @@ namespace UnityLib {
         public GameHUDController GameHUDCtrl {
             get {
                 return gameHUDController;
+            }
+        }
+
+        public GameHUDDetailsPanelController GameDetailsCtrl {
+            get {
+                return gameHUDDetailsController;
             }
         }
 

@@ -169,7 +169,7 @@ namespace UnityLib {
             }
         }
 
-        public static IEnumerator CacheNode(this GameHandle gh, Star star) {
+        public static IEnumerator FetchAndCacheNodeData(this GameHandle gh, Star star) {
             Handler<GameHandle.CacheNodeResponse> cacheNodeHanlder = new Handler<GameHandle.CacheNodeResponse>(
                 new GameHandle.NodeRequest(gh.Instance.Key, gh.playerHandler.PlayerInstance.Index, star.AsRedisKey).Marshall()
             );
