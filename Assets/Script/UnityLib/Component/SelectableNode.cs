@@ -2,7 +2,7 @@
 
 namespace UnityLib {
     public abstract class SelectableNode : MonoBehaviour {
-        private PopupController popupController;
+        // private PopupController popupController;
 
         public System.Action Pressed;
 
@@ -10,7 +10,7 @@ namespace UnityLib {
 
         private void OnMouseDown() {
             CameraRigController.S.panController.CenterOnSelected(gameObject.transform.position);
-            popupController.Activate(gameObject.transform.position);
+            // popupController.Activate(gameObject.transform.position);
             if (Pressed != null) {
                 Pressed();
             }
@@ -18,9 +18,9 @@ namespace UnityLib {
         }
 
         private void OnEnable() {
-            if (!popupController) {
-                popupController = Globals.S.popupMenuController as PopupController;
-            }
+            // if (!popupController) {
+                // popupController = Globals.S.popupMenuController as PopupController;
+            // }
         }
     }
 }
