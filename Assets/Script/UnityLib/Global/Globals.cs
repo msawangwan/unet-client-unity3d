@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace UnityLib {
     public class Globals : SingletonBehaviour<Globals> {
+        // TODO: deprecate
         public enum ApplicationState {
             None = 0,
             Menu = 1,

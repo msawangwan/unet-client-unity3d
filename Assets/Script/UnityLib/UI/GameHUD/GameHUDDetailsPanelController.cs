@@ -44,14 +44,8 @@ namespace UnityLib {
         }
 
         private IEnumerator ShowWhenDataLoaded(Star star) {
-            yield return new WaitUntil(() => { return star.CachedProperties != null && star.CachedState != null; });
-            // if (current == null) {
-            //     current = star;
-            // } else {
-            //     if (current.CachedProperties.name == star.CachedProperties.name) {
-                    
-            //     }
-            // }
+            WaitUntil wu = new WaitUntil(() => { return star.CachedProperties != null && star.CachedState != null; });
+            yield return wu;
             nodeTitleText.text = star.CachedProperties.name;
             defText.text = star.CachedProperties.defenseBonus.ToString();
             capText.text = star.CachedProperties.capacity.ToString();
