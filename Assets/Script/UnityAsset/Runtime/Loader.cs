@@ -17,9 +17,23 @@ namespace UnityAsset {
                     }
                     return store[k];
                 }
+                set {
+                    if (!store.ContainsKey(k)) {
+                        store[k] = value;
+                    }
+                }
             }
 
             public bool alreadyCached(string k) { return store.ContainsKey(k); }
+
+            public bool Delete(string k) {
+                if (!this.alreadyCached(k)) {
+                    return false;
+                }
+                this[k].Dispose();
+                store.Remove(k);
+                return true;
+            }
         }
 
         public class AssetBundleFetchHandler {
@@ -75,6 +89,7 @@ namespace UnityAsset {
                 }
 
                 if (b == null) Debug.LogErrorFormat("tried to load an asset bundle but got null [{0}]", request.resource);
+                else cache[request.resource] = b;
             }
 
             request.onLoad = () => b;
@@ -91,6 +106,10 @@ namespace UnityAsset {
             }
             byte[] bytes = asset.bytes;
             handler.onLoad= () => Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+        }
+
+        public static void Dispose(this AssetBundle bundle, bool all = false) {
+            bundle.Unload(all);
         }
     }
 }

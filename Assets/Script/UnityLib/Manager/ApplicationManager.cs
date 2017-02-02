@@ -56,7 +56,9 @@ namespace UnityLib {
             Loader.AssetBundleJSONHandler handler = new Loader.AssetBundleJSONHandler(Loader.testasset, false);
             yield return bundle.MarshallJSON(handler);
             Debug.Log(handler.onLoad());
-
+            bool res =Loader.BundleCache.Delete(Loader.testpath);
+            Debug.Log("DID WE DELETE: " + res);
+            
             do {
                 if (last != applicationState) {
                     debug_label_applicationState.text = string.Format("app state: {0}", applicationState);
