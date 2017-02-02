@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
+using UnityAsset;
 
 namespace UnityLib {
     public class ApplicationManager : MonoBehaviour {
@@ -49,16 +50,27 @@ namespace UnityLib {
             applicationState = ApplicationManager.GlobalState.Menu;
             var last = ApplicationManager.GlobalState.None;
 
+            Loader.AssetBundleFetchHandler abr = new Loader.AssetBundleFetchHandler(Loader.testpath, false);
+            yield return Loader.BundleCache.Fetch(abr);
+            AssetBundle bundle = abr.onLoad();
+            Loader.AssetBundleJSONHandler handler = new Loader.AssetBundleJSONHandler(Loader.testasset, false);
+            yield return bundle.MarshallJSON(handler);
+            Debug.Log(handler.onLoad());
+
             do {
                 if (last != applicationState) {
                     debug_label_applicationState.text = string.Format("app state: {0}", applicationState);
                     last = applicationState;
                     switch (applicationState) {
                         case ApplicationManager.GlobalState.Menu:
-                            RaiseMenuEnteredCallback();
+                            if (RaiseMenuEnteredCallback != null) {
+                                RaiseMenuEnteredCallback();
+                            }
                             break;
                         case ApplicationManager.GlobalState.Game:
-                            RaiseGameEnteredCallback();
+                            if (RaiseGameEnteredCallback != null) {
+                                RaiseGameEnteredCallback();
+                            }
                             break;
                         default:
                             break;

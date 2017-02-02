@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 782492915
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6e6b2ffa9b0830ec09819a993f092144
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 46db5d3aa23e843b739a0314ee1acbce
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: 1fe0ead8fa397474fbc7835afabc9c62, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/AssetDatabase/Entity/Node/star_03.asset
+- Assets/AssetDatabase/Entity/Node/star_04.asset
+- Assets/AssetDatabase/Entity/Node/star_02.asset
+- Assets/AssetDatabase/Entity/Node/star_00.asset
+- Assets/AssetDatabase/Entity/Node/star_01.asset
+Dependencies: []

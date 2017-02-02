@@ -1,0 +1,13 @@
+ManifestFileVersion: 0
+CRC: 2594451496
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: sprite/prototype/unit/ship
+      Dependencies: {}
+    Info_1:
+      Name: entity/node/star
+      Dependencies: {}
+    Info_2:
+      Name: data/prototype/test
+      Dependencies: {}

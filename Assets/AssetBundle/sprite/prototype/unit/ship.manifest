@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 2635916726
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ffacba7116d30c8bc2cf554f48db2720
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4d24bf54f46935ed9e6cf78ac481bb9d
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/AssetDatabase/Sprite/Prototype/32x32_outline_orange_fill_lblue.png
+- Assets/AssetDatabase/Sprite/Prototype/32x32_outline_purple_fill_neongreen.png
+Dependencies: []
