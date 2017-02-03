@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+namespace UnityLib {
+    public class GameManager : MonoBehaviour {
+        public UpdateHandler update { get; private set; }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        public void Init(UpdateHandler update) {
+            this.update = update;
+        }
+    }
 }

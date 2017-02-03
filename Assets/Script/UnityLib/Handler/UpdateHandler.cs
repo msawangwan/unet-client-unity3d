@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityLib {
-    public class GameUpdate : MonoBehaviour {
+    public class UpdateHandler : MonoBehaviour {
         private Queue<IEnumerator> blockingRequestBuffer = new Queue<IEnumerator>();
         private Queue<IEnumerator> nonblockingRequestBuffer = new Queue<IEnumerator>();
 
@@ -52,8 +52,8 @@ namespace UnityLib {
             nonblockingRequestBuffer.Enqueue(e);
         }
 
-        public static GameUpdate New() {
-            GameUpdate gu = new GameObject("game_update").AddComponent<GameUpdate>();
+        public static UpdateHandler New() {
+            UpdateHandler gu = new GameObject("game_update").AddComponent<UpdateHandler>();
             return gu;
         }
 
@@ -63,16 +63,13 @@ namespace UnityLib {
                 if (blocking) {
                     if (currentBlocking == null) {
                         currentBlocking = nextBlockingRequest;
-                        Debug.LogFormat("[+] blocking now ... [{0}]", Time.time);
                         yield return currentBlocking;
-                        Debug.LogFormat("[+] done blocking [{0}]", Time.time);
                         currentBlocking = null;
                     }
                     continue;
                 }
                 if (nonblocking) {
                     currentNonblocking = nextNonblocking;
-                    Debug.LogFormat("[+] started a reqest [{0}]", Time.time);
                     StartCoroutine(currentNonblocking);
                 }
                 yield return Wait.ForEndOfFrame;

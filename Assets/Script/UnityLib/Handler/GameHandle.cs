@@ -106,10 +106,10 @@ namespace UnityLib {
 
         public delegate Star OnStarNodeSelectedCallback();
 
-        private GameUpdate updateLoop = null;
+        private UpdateHandler updateLoop = null;
 
         public Game Instance { get; set; }
-        public GameUpdate UpdateLoop {
+        public UpdateHandler UpdateLoop {
             get {
                 return updateLoop;
             }

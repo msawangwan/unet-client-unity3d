@@ -62,6 +62,7 @@ namespace UnityLib {
 
                 foreach (var controller in allControllers) {
                     if (controller == null) {
+                        Debug.LogErrorFormat("[+][INIT] skipping null controller [{0}]", Time.time);
                         continue;
                     }
 
