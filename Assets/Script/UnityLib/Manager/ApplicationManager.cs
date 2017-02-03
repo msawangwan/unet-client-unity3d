@@ -12,8 +12,6 @@ namespace UnityLib {
         private const ApplicationManager.GlobalState nullState = ApplicationManager.GlobalState.None;
         private const float pollIntervalInSeconds = 2.5f;
 
-        [SerializeField] private GameManager gameManager;
-        [SerializeField] private UIManager uiManager;
         [SerializeField] private UnityEngine.UI.Text debug_label_applicationState;
 
         private ApplicationManager.GlobalState applicationState = nullState;
@@ -27,6 +25,24 @@ namespace UnityLib {
         public ApplicationManager.GlobalState ApplicationState {
             get {
                 return applicationState;
+            }
+            set {
+                applicationState = value;
+                switch (applicationState) {
+                    case ApplicationManager.GlobalState.Menu:
+                        if (RaiseMenuEnteredCallback != null) {
+                            RaiseMenuEnteredCallback();
+                        }
+                        break;
+                    case ApplicationManager.GlobalState.Game:
+                        if (RaiseGameEnteredCallback != null) {
+                            RaiseGameEnteredCallback();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                Log("set application state");
             }
         }
 
@@ -48,27 +64,12 @@ namespace UnityLib {
         private IEnumerator Start() {
             Log("starting application");
 
-            applicationState = ApplicationManager.GlobalState.Menu;
             var last = ApplicationManager.GlobalState.None;
 
             do {
                 if (last != applicationState) {
                     debug_label_applicationState.text = string.Format("app state: {0}", applicationState);
                     last = applicationState;
-                    switch (applicationState) {
-                        case ApplicationManager.GlobalState.Menu:
-                            if (RaiseMenuEnteredCallback != null) {
-                                RaiseMenuEnteredCallback();
-                            }
-                            break;
-                        case ApplicationManager.GlobalState.Game:
-                            if (RaiseGameEnteredCallback != null) {
-                                RaiseGameEnteredCallback();
-                            }
-                            break;
-                        default:
-                            break;
-                    }
                 }
                 yield return Wait.ForSeconds(pollIntervalInSeconds);
             } while (true);

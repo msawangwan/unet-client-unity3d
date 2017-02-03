@@ -3042,6 +3042,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eef907aa9885b141a0feb35394cc558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initState: 1
+  applicationManager: {fileID: 1627283161}
+  gameManager: {fileID: 658819519}
+  uiManager: {fileID: 1670779823}
 --- !u!4 &362149135
 Transform:
   m_ObjectHideFlags: 0
@@ -12967,8 +12971,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bdfe3ae46921894b9e768c63b8141b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  uiManager: {fileID: 0}
   debug_label_applicationState: {fileID: 1799699897}
 --- !u!4 &1627283162
 Transform:
