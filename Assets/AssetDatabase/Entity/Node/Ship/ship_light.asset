@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c56b3142f298c4da4238bab8ce3788, type: 3}
+  m_Name: ship_light
+  m_EditorClassIdentifier: 
+  Properties:
+    Classification: 0
+    HitPoints: 0
+    AttackPower: 0
+    MoveCost: 0

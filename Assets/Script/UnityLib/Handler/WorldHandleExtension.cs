@@ -31,8 +31,6 @@ namespace UnityLib {
                 Star s = go.AddComponent<Star>();
                 s.Construct(gh.GameHUDDetailsCtrl);
                 s.AttachListener(() => { gh.Notified(() => s); });
-                // s.AttachListener(() => { gh.PopupCtrl.PopupView.Load(() => s); });
-                // s.AttachListener(() => { gh.GameHUDDetailsCtrl.ShowNodeDetails(() => s); });
                 s.AttachListener(() => { gh.GameHUDDetailsCtrl.ShowDetails(() => s); });
 
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();

@@ -6,12 +6,13 @@ namespace UnityLib {
     public class Master : MonoBehaviour {
         private static Master instance = null;
 
-        [SerializeField] public ApplicationManager.GlobalState initState; // set in the inspector
+        [SerializeField] private ApplicationManager.GlobalState initialState; // set in the inspector
 
         [SerializeField] private ApplicationManager applicationManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private UIManager uiManager;
 
+        private Dictionary<string, IManager> managers = new Dictionary<string, IManager>();
 
         public static Master Instance {
             get {
@@ -22,12 +23,27 @@ namespace UnityLib {
             }
         }
 
-        private void Init() {
-            applicationManager.ApplicationState = initState;
+        public IManager this[string label] {
+            get {
+                if (!managers.ContainsKey(label)) {
+                    return null;
+                }
+                return managers[label];
+            }
+            set {
+                if (!managers.ContainsKey(label)) {
+                    managers[label] = value;
+                    Debug.LogFormat("registered [{0}] with label [{1}]", value.ToString(), label);
+                }
+            }
+        }
+
+        private void LoadManagers() {
+            applicationManager.ApplicationState = initialState;
         }
 
         private void Awake() {
-            Init();
+            LoadManagers();
         }
 
         private void OnEnable() {
