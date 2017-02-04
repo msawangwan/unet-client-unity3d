@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: ship_light
   m_EditorClassIdentifier: 
   Properties:
-    Classification: 0
+    Classification: 1
     HitPoints: 0
     AttackPower: 0
     MoveCost: 0
+  SpecialProperties: []

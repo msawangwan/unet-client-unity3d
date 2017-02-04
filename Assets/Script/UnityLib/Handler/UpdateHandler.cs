@@ -73,6 +73,9 @@ namespace UnityLib {
                     StartCoroutine(currentNonblocking);
                 }
                 yield return Wait.ForEndOfFrame;
+                // if (!blocking && !nonblocking) {
+                //     if ()
+                // }
             } while (true);
         }
 

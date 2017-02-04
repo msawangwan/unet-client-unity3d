@@ -3042,7 +3042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eef907aa9885b141a0feb35394cc558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initState: 1
+  initialState: 0
   applicationManager: {fileID: 1627283161}
   gameManager: {fileID: 658819519}
   uiManager: {fileID: 1670779823}
