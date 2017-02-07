@@ -43,6 +43,15 @@ namespace UnityAsset {
             
             public Func<AssetBundle> onLoad;
 
+            public AssetBundle bundle {
+                get {
+                    if (!ready) {
+                        return null;
+                    }
+                    return onLoad();
+                }
+            }
+
             public bool ready { get { return onLoad != null; } }
 
             public AssetBundleFetchHandler() {}
@@ -69,6 +78,7 @@ namespace UnityAsset {
             }
         }
 
+        public const string localDebugPath = "Assets/AssetBundle";
         public const string testpath = "Assets/AssetBundle/data/prototype/test";
         public const string testasset = "sometest";
 

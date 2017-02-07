@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 252085882
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d5aabf4dc614bf1c0883b69a8e2623f6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4d24bf54f46935ed9e6cf78ac481bb9d
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/AssetDatabase/Sprite/Tile/32x32_yellow_outlined_solid.png
+- Assets/AssetDatabase/Sprite/Tile/32x32_yellow_outlined_alpha.png
+Dependencies: []

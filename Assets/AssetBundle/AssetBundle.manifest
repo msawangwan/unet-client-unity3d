@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2594451496
+CRC: 3895228674
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -10,4 +10,7 @@ AssetBundleManifest:
       Dependencies: {}
     Info_2:
       Name: data/prototype/test
+      Dependencies: {}
+    Info_3:
+      Name: sprite/tile
       Dependencies: {}
